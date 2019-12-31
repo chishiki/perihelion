@@ -79,6 +79,7 @@ require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/model/seo.model.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/model/session.model.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/model/script.model.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/model/site.model.php');
+require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/model/state.model.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/model/theme.model.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/model/tile.model.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/model/user.model.php');
