@@ -1,0 +1,18 @@
+# CONFIG
+
+/deploy/vault/config/*
+!/deploy/vault/config/instance.config.template.php
+
+# DATA
+
+/data/*
+!/data/perihelion-schema.sql
+
+# VENDOR
+
+/deploy/src/perihelion/vendor/*
+!/deploy/src/perihelion/vendor/readme.md
+
+# PROJECT
+
+.idea/*
