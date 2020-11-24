@@ -196,4 +196,39 @@ class User extends ORM {
 
 }
 
+final class UserList {
+
+	private $users;
+
+	public function __construct() {
+
+		$nucleus = Nucleus::getInstance();
+
+		$where = array();
+		$where[] = 'perihelion_UserRole.siteID = :siteID';
+		$where[] = 'perihelion_User.userActive = 1';
+
+		$query = 'SELECT perihelion_UserRole.userID AS userID ';
+		$query .= 'FROM perihelion_UserRole LEFT JOIN perihelion_User ';
+		$query .= 'ON perihelion_UserRole.userID = perihelion_User.userID ';
+		$query .= 'WHERE ' . implode(' AND ',$where) . 'ORDER BY perihelion_User.userDisplayName ASC';
+
+		$statement = $nucleus->database->prepare($query);
+		$statement->bindParam(':siteID', $_SESSION['siteID'], PDO::PARAM_INT);
+		$statement->execute();
+
+		while ($row = $statement->fetch()) {
+			$this->users[] = $row['userID'];
+		}
+
+	}
+
+	public function getUsers() {
+
+		return $this->users;
+
+	}
+
+}
+
 ?>
