@@ -202,6 +202,8 @@ final class UserList {
 
 	public function __construct() {
 
+		$this->users = array();
+
 		$nucleus = Nucleus::getInstance();
 
 		$where = array();
@@ -211,7 +213,7 @@ final class UserList {
 		$query = 'SELECT perihelion_UserRole.userID AS userID ';
 		$query .= 'FROM perihelion_UserRole LEFT JOIN perihelion_User ';
 		$query .= 'ON perihelion_UserRole.userID = perihelion_User.userID ';
-		$query .= 'WHERE ' . implode(' AND ',$where) . 'ORDER BY perihelion_User.userDisplayName ASC';
+		$query .= 'WHERE ' . implode(' AND ',$where) . ' ORDER BY perihelion_User.userDisplayName ASC';
 
 		$statement = $nucleus->database->prepare($query);
 		$statement->bindParam(':siteID', $_SESSION['siteID'], PDO::PARAM_INT);
