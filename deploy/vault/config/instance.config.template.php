@@ -48,6 +48,10 @@
 	$navbarClasses = array('navbar-expand-xl','navbar-light','bg-light');
 	Config::write('navbar.classes', $navbarClasses);
 
+	// Manager Menu
+	$managerMenuRoles = array('siteAdmin');
+	Config::write('manager.menu.access', $managerMenuRoles);
+
 	/* ===================== */
 	
 ?>

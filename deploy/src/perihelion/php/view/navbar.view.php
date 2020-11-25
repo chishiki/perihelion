@@ -125,8 +125,14 @@ class NavBarView {
 		$lup = Lang::languageUrlPrefix();
 		$role = Auth::getUserRole();
 
-		$dropdownAnchor = 'navbar' . ucfirst($role);
-		
+		$canViewCoreManagerMenus = false;
+		$dropdownAnchor = 'settings';
+
+		if (in_array($role,Config::read('manager.menu.access'))) {
+			$canViewCoreManagerMenus = true;
+			$dropdownAnchor = 'navbar' . ucfirst($role);
+		}
+
 		$h = "<li class=\"nav-item dropdown\">\n";
 		
     		$h .= '<a href="#"';
@@ -140,26 +146,30 @@ class NavBarView {
 
 			$h .= '<div class="dropdown-menu" aria-labelledby="navbarDropdownMasterMenu">';
 
-				$designerUserRoleArray = array('siteDesigner','siteManager','siteAdmin');
-				if (in_array($role,$designerUserRoleArray)) {
-					$h .= '<a class="dropdown-item disabled" href="#" tabindex="-1" aria-disabled="true">' . Lang::getLang("siteDesigner") . '</a>';
-					$h .= '<a class="dropdown-item" href="/' . $lup . 'designer/content/">' . Lang::getLang('contentManagement') . '</a>';
-					$h .= '<div class="dropdown-divider"></div>';
+				if ($canViewCoreManagerMenus) {
+
+					$designerUserRoleArray = array('siteDesigner','siteManager','siteAdmin');
+					if (in_array($role,$designerUserRoleArray)) {
+						$h .= '<a class="dropdown-item disabled" href="#" tabindex="-1" aria-disabled="true">' . Lang::getLang("siteDesigner") . '</a>';
+						$h .= '<a class="dropdown-item" href="/' . $lup . 'designer/content/">' . Lang::getLang('contentManagement') . '</a>';
+						$h .= '<div class="dropdown-divider"></div>';
+					}
+
+					$managerUserRoleArray = array('siteManager','siteAdmin');
+					if (in_array($role,$managerUserRoleArray)) {
+						$h .= '<a class="dropdown-item disabled" href="#" tabindex="-1" aria-disabled="true">' . Lang::getLang("siteManager") . '</a>';
+						$h .= '<a class="dropdown-item" href="/' . $lup . 'manager/settings/">' . Lang::getLang('settings') . '</a>';
+						$h .= '<div class="dropdown-divider"></div>';
+					}
+
+					if ($role == 'siteAdmin') {
+						$h .= '<a class="dropdown-item disabled" href="#" tabindex="-1" aria-disabled="true">' . Lang::getLang("siteAdmin") . '</a>';
+						$h .= '<a class="dropdown-item" href="/' . $lup . 'admin/audit/">' . Lang::getLang('tools') . '</a>';
+						$h .= '<div class="dropdown-divider"></div>';
+					}
+
 				}
-				
-				$managerUserRoleArray = array('siteManager','siteAdmin');
-				if (in_array($role,$managerUserRoleArray)) {
-					$h .= '<a class="dropdown-item disabled" href="#" tabindex="-1" aria-disabled="true">' . Lang::getLang("siteManager") . '</a>';
-					$h .= '<a class="dropdown-item" href="/' . $lup . 'manager/settings/">' . Lang::getLang('settings') . '</a>';
-					$h .= '<div class="dropdown-divider"></div>';
-				}
-				
-				if ($role == 'siteAdmin') {
-					$h .= '<a class="dropdown-item disabled" href="#" tabindex="-1" aria-disabled="true">' . Lang::getLang("siteAdmin") . '</a>';
-					$h .= '<a class="dropdown-item" href="/' . $lup . 'admin/audit/">' . Lang::getLang('tools') . '</a>';
-					$h .= '<div class="dropdown-divider"></div>';
-				}
-				
+
 				$h .= '<a class="dropdown-item disabled" href="#" tabindex="-1" aria-disabled="true">' . Lang::getLang("profile") . '</a>';
 				$h .= '<a class="dropdown-item" href="/' . $lup . 'profile/">' . Lang::getLang('emailAndPassword') . '</a>';
 				$h .= '<a class="dropdown-item" href="/' . $lup . 'logout/">' . Lang::getLang('logout') . '</a>';
