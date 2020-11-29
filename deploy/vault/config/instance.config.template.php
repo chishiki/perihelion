@@ -48,6 +48,10 @@
 	$navbarClasses = array('navbar-expand-xl','navbar-light','bg-light');
 	Config::write('navbar.classes', $navbarClasses);
 
+	// Boilerplate Content
+	Config::write('terms.content.id', 3);
+	Config::write('privacy.content.id', 4);
+
 	// Manager Menu
 	$managerMenuRoles = array('siteAdmin');
 	Config::write('manager.menu.access', $managerMenuRoles);
