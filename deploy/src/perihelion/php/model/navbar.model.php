@@ -34,13 +34,6 @@ class NavBar {
 		while ($row = $statement->fetch()) { $menuItems[] = $row['menuItemID']; }
 		$navBarItems = $this->navBarArray($menuItems);
 
-		foreach ($this->moduleArray as $moduleName) {
-		    $class = $moduleName . '_module';
-		    $module = new $class($this->urlArray, $this->inputArray, $this->inputArray);
-    		$moduleNavBarItems = $module->model();
-    		$navBarItems = array_merge($navBarItems, $moduleNavBarItems['navbar']);
-	    }
-
 		return $navBarItems;
 			
 	}

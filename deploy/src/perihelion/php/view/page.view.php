@@ -146,11 +146,19 @@ class PageView {
 	
 	private function header() {
 
-		$site = new Site($_SESSION['siteID']);
-		$navbar = new NavBarView($this->urlArray, $this->inputArray, $this->moduleArray, $site);
-		$navbarClasses = Config::read('navbar.classes');
-		$h = $navbar->navbarView($navbarClasses);
-		return $h;
+		foreach ($this->moduleArray as $moduleName) {
+			$class = ucfirst($moduleName) . 'NavbarView';
+			if (class_exists($class)) {
+				$navbar = new $class($this->urlArray, $this->inputArray, $this->inputArray);
+				return $navbar->navbar();
+			}
+		}
+		if (!isset($navbar)) {
+			$site = new Site($_SESSION['siteID']);
+			$navbar = new NavBarView($this->urlArray, $this->inputArray, $this->moduleArray, $site);
+			$navbarClasses = Config::read('navbar.classes');
+			return $navbar->navbarView($navbarClasses);
+		}
 
 	}
 	
