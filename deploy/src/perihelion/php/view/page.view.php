@@ -163,42 +163,18 @@ class PageView {
 	}
 	
 	private function footer() {
-		
-		$site = new Site($_SESSION['siteID']);
 
-		$copyrightHolder = Config::read('copyright.holder');
-		$copyrightURL = Config::read('copyright.url');
-		$copyrightStartYear = Config::read('copyright.start');
-
-		$currentYear = date('Y');
-		$copyrightYears = $copyrightStartYear;
-		if ($currentYear > $copyrightStartYear) { $copyrightYears = $copyrightStartYear . '~' . $currentYear; }
-
-		$lang = Lang::languageUrlPrefix();
-		
-			$h = '<div id="footer_container">';
-				$h .= '<div class="container-fluid">';
-					$h .= '<footer>';
-						$h .= '<p style="text-align:right;font-size:smaller;margin-top:10px;">';
-
-							$h .= '&copy; ' . $copyrightYears . ' <a href="' . $copyrightURL . '">' . Lang::getLang($copyrightHolder) . '</a> | ';
-
-							$h .= '<a href="/' . $lang . 'tos/">' . Lang::getLang('tos') . '</a> | ';
-							$h .= '<a href="/' . $lang . 'privacy/">' . Lang::getLang('privacy') . '</a>';
-
-							if (Auth::isLoggedIn()) { $action = 'logout'; } else { $action = 'login'; }
-							$h .= ' | <a href="/' . $lang . $action . '/">' . Lang::getLang($action) . '</a>';
-
-							if ($site->siteLangJapanese || $_SESSION['lang']!='en') {
-								$h .= ' | ' . ViewUtilities::switchLanguageLink();
-							}
-
-						$h .= '</p>';
-					$h .= '</footer>';
-				$h .= '</div>';
-			$h .= '</div>';
-		
-		return $h;
+		foreach ($this->moduleArray as $moduleName) {
+			$class = ucfirst($moduleName) . 'FooterView';
+			if (class_exists($class)) {
+				$f = new $class($this->urlArray, $this->inputArray, $this->inputArray);
+				return $f->footer();
+			}
+		}
+		if (!isset($f)) {
+			$f = new FooterView();
+			return $f->footer();
+		}
 
 	}
 

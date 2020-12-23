@@ -97,6 +97,7 @@ require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/view/contact.view.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/view/content.view.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/view/enquiry.view.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/view/file.view.php');
+require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/view/footer.view.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/view/form.view.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/view/geoArea.view.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/view/group.view.php');

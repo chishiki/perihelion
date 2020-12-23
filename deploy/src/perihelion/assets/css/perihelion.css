@@ -28,3 +28,9 @@
 #hachimitsu {
 	display:none;
 }
+
+div.perihelion-footer p {
+	text-align:right;
+	font-size:smaller;
+	margin-top:10px;
+}
