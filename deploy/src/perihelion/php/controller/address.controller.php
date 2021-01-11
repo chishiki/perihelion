@@ -26,6 +26,11 @@ class AddressController {
 
 			$addy = new Address();
 			foreach ($this->input AS $property => $value) { if (isset($addy->$property)) { $addy->$property = $value; } }
+
+			$ad = new AddressDefault($addressObject, $addressObjectID, true);
+			$defaultAddress = $ad->address();
+			if (empty($defaultAddress)) { $addy->addressDefault = 1; }
+			
 			Address::insert($addy);
 			
 			header("Location: $baseURL");
