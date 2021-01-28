@@ -105,7 +105,10 @@ class Controller {
 				case 'file':
 				
 					if (ctype_digit($this->urlArray[1])) {
-						
+
+						$file = new File($this->urlArray[1]);
+						$fileName = $file->fileName;
+						header('Content-Disposition: attachment; filename="' . $fileName . '"');
 						File::fileDownload($this->urlArray[1]);
 						break;
 						
@@ -182,12 +185,19 @@ class Controller {
 				case 'pdf':
 
 					$doc = '<h1>Perihelion PDF</h1>';
+					$fileObject = null;
+					$fileObjectID = null;
+
 					foreach ($this->moduleArray AS $moduleName) {
 						if ($this->urlArray[1] == $moduleName) {
 							$pdfClass = ucfirst($moduleName) . 'PDF';
 							if (class_exists($pdfClass)) {
 								$pdf = new $pdfClass($this->urlArray,$this->inputArray);
 								$doc = $pdf->doc();
+								if (method_exists($pdfClass, 'getFileObject') && method_exists($pdfClass, 'getFileObjectID')) {
+									$fileObject = $pdf->getFileObject();
+									$fileObjectID = $pdf->getFileObjectID();
+								}
 							}
 						}
 					}
@@ -201,6 +211,21 @@ class Controller {
 
 					$printPDF = new PrintPDF($this->urlArray, $this->moduleArray);
 					$filename = $printPDF->filename('pdf');
+
+					if ($fileObject && $fileObjectID) {
+
+						$fileArray = $this->saveObjectPDF($filename, $fileObject, $fileObjectID);
+						$mpdf->Output($fileArray['filePath'],'F');
+						$fileSize = filesize($fileArray['filePath']);
+						$fileID = $fileArray['fileID'];
+
+						$file = new File($fileID);
+						$file->fileSize = $fileSize;
+						$cond = array('fileID' => $fileID);
+						File::update($file, $cond, true, false,'perihelion_');
+
+					}
+
 					$mpdf->Output($filename,\Mpdf\Output\Destination::DOWNLOAD);
 				 
 				case 'print':
@@ -267,7 +292,34 @@ class Controller {
 		return($splashy);
 	
 	}
-	
+
+	private function saveObjectPDF($filename, $fileObject, $fileObjectID) {
+
+		$file = new File();
+
+		$file->filePath = substr($_SERVER['DOCUMENT_ROOT'],0,strrpos($_SERVER['DOCUMENT_ROOT'],'/'))."/vault/files/";
+		$file->fileName = $filename;
+		$file->fileOriginalName = $filename;
+		$file->fileType = 'pdf';
+		$file->fileSize = 0;
+		$file->fileObject = $fileObject;
+		$file->fileObjectID = $fileObjectID;
+		$file->fileTitleEnglish = $filename;
+		$file->fileTitleJapanese = $filename;
+
+		$file->fileID = File::insert($file,true,'perihelion_');
+		$file->filePath = $file->filePath . $file->fileID . '.' . $file->fileType;
+		$cond = array('fileID' => $file->fileID);
+		File::update($file, $cond, true,false, 'perihelion_');
+
+		$fileArray = array();
+		$fileArray['filePath'] = $file->filePath;
+		$fileArray['fileID'] = $file->fileID;
+
+		return $fileArray;
+
+	}
+
 }
 
 ?>
