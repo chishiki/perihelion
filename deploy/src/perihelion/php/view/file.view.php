@@ -54,8 +54,8 @@ class FileView {
 						
 							$h .= '<tr>';
 								$h .= '<th>' . Lang::getLang('file') . '</th>';
-								$h .= '<th>' . Lang::getLang('url') . '</th>';
 								$h .= '<th class="hidden-xs hidden-sm">' . Lang::getLang('originalName') . '</th>';
+								$h .= '<th class="hidden-xs hidden-sm">' . Lang::getLang('user') . '</th>';
 								$h .= '<th class="hidden-xs">' . Lang::getLang('date') . '</th>';
 								$h .= '<th class="text-right hidden-xs">' . Lang::getLang('size') . '</th>';
 								if ($fileObject == 'Site') { $h .= '<th class="text-center hidden-xs">' . Lang::getLang('object') . '</th>'; }
@@ -65,14 +65,15 @@ class FileView {
 							foreach ($files as $fileID) {
 								
 								$file = new File($fileID);
+								$u = new User($file->fileSubmittedByUserID);
 								$delete = $baseFormURL . 'delete/' . $fileID . '/';
 				
 								if ($file->fileSize < 1024) { $size = 1; } else { $size = $file->fileSize / 1024;}
 								
 								$h .= '<tr>';
-									$h .= '<td class="hidden-xs"><a class="btn btn-secondary btn-sm" href="/file/' . $file->fileID . '/" target="blank" download><span class="fas fa-download"></span></a></td>';
-									$h .= '<td class="hidden-xs"><a href="/file/' . $file->fileID . '/" target="blank">/file/' . $file->fileID . '/</a></td>';
+									$h .= '<td class="hidden-xs"><a class="btn btn-primary btn-sm" href="/file/' . $file->fileID . '/" target="blank" download="' . $file->fileName . '"><span class="fas fa-download"></span></a></td>';
 									$h .= '<td class="hidden-xs hidden-sm">' . $file->fileOriginalName . '</td>';
+									$h .= '<td class="hidden-xs hidden-sm">' . $u->getUserDisplayName() . '</td>';
 									$h .= '<td class="hidden-xs">' . date('Y-m-d',strtotime($file->fileSubmissionDateTime)) . '</td>';
 									$h .= '<td class="text-right hidden-xs">' . number_format($size) . 'K</td>';
 									if ($fileObject == 'Site') { $h .= '<td class="hidden-xs">' . $file->fileObject . ($file->fileObject!='Site'?" [' . $file->fileObjectID . ']":"") . '</td>'; }
