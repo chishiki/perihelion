@@ -127,4 +127,31 @@ class Audit {
 	
 }
 
+final class AuditTrail {
+
+	public function getAuditTrail($auditObject = null, $auditObjectID = null) {
+
+		$where = array();
+		$where[] = 'siteID = :siteID';
+		if ($auditObject) { $where[] = 'auditObject = :auditObject'; }
+		if ($auditObject && $auditObjectID) { $where[] = 'auditObjectID = :auditObjectID'; }
+
+		$query = 'SELECT auditID, auditDateTime, auditUserID, auditIP, auditAction, auditNote ';
+		$query .= 'FROM perihelion_Audit WHERE ' . implode(' AND ',$where) . ' ORDER BY auditID DESC';
+
+		$nucleus = Nucleus::getInstance();
+		$statement = $nucleus->database->prepare($query);
+		$statement->bindParam(':siteID', $_SESSION['siteID'], PDO::PARAM_INT);
+		if ($auditObject) { $statement->bindParam(':auditObject', $auditObject, PDO::PARAM_STR); }
+		if ($auditObject && $auditObjectID) { $statement->bindParam(':auditObjectID', $auditObjectID, PDO::PARAM_INT); }
+		$statement->execute();
+
+		$auditTrail = array();
+		while ($row = $statement->fetch()) { $auditTrail[] = $row; }
+		return $auditTrail;
+
+	}
+
+}
+
 ?>
