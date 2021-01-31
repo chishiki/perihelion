@@ -272,17 +272,17 @@ class Controller {
 				<head>
 					<script>
 						<!--
-							function toPerihelion(){ window.location = "https://perihelion.xyz/"; }
+							function toPerihelion(){ window.location = "' . Config::read('copyright.url') . '"; }
 						//-->
 					</script>
-					<title>Zenidev LLC: Perihelion</title>
+					<title>Perihelion</title>
 					<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
 					<link rel="icon" type="image/x-icon" href="/assets/images/favicons/favicon-1.ico"/>
 				</head>
 				
 				<body style="background-color:#fff;padding-top:150px;" onLoad="setTimeout(\'toPerihelion()\', 3000)">
 					<div style="text-align:center;">
-						<a href="https://perihelion.xyz/"><img src="/assets/images/zenidev-logo.png" style="max-width:100%;border-style:none;"></a>
+						<a href="https://perihelion.xyz/"><img src="/assets/images/perihelion-logo.png" style="max-width:100%;border-style:none;"></a>
 					</div>
 				</body>
 				

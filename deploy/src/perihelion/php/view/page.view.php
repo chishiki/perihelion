@@ -56,7 +56,7 @@ class PageView {
 		$h .= '<meta name="robots" content="' . $robots->meta() . '">'; // allow sites to set
 		$h .= '<meta name="description" content="' . $pageDescription . '">';
 		$h .= '<meta name="keywords" content="' . $pageKeywords . '">';
-		$h .= '<meta name="author" content="Zenidev LLC">';
+		$h .= '<meta name="author" content="' . Config::read('copyright.holder') . '">';
 		$h .= '<meta name="generator" content="Perihelion">';
 		$h .= '<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">';
 		$h .= '<meta name="apple-mobile-web-app-capable" content="yes">';

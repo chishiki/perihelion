@@ -45,9 +45,8 @@ class EnquiryController {
 				$userID = $_SESSION['userID'];
 				$site = new Site($siteID);
 				
-				$to = 'support@zenidev.com';
-				$from = 'noreply@zenidev.com';
-				// $from = $site->siteAutomatedEmailSenderName . ' <' . $site->siteAutomatedEmailAddress . '>';
+				$to = Config::read('support.email');
+				$from = Config::read('support.replyto.email');
 				$subject = ($hachimitsu?'[hachimitsu] ':'') . '[' . $post['enquiry-name'] . ' has requested more information about perihelion.zenidev.com]';
 				$content = ($hachimitsu?'<p>[hachimitsu]</p>':'') . '<p><pre>' . print_r($post,true) . '</pre></p><p>' . $_SERVER['REMOTE_ADDR'] . '</p>';
 				$content = Mail::htmlMailContentWrapper($content);

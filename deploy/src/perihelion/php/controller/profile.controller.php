@@ -84,8 +84,8 @@ class ProfileController {
 					$mailSender = $siteEmail;
 					$mailSubject = "Your account details have been updated.";
 					$mailMessage = $user->userEmail . "'s account details have been changed.\n\n";
-					$mailMessage .= "If you did not change your account details, this may mean that an unauthorized user is accessing your Perihelion account. Please notify support@zenidev.com immediately.\n\n";
-					$mailMessage .= "If you forget your password you can always reset it: http://" . $site->siteURL . "/account-recovery/\n\n";
+					$mailMessage .= "If you did not change your account details, this may mean that an unauthorized user is accessing your Perihelion account. Please notify " . Config::read('support.email') . " immediately.\n\n";
+					$mailMessage .= "If you forget your password you can always reset it: https://" . $site->siteURL . "/account-recovery/\n\n";
 					foreach ($mailRecipientArray AS $mailRecipient) { Mail::sendEmail($mailRecipient, $mailSender, $mailSubject, $mailMessage); }
 
 					$conditions = array('userID' => $_SESSION['userID']);

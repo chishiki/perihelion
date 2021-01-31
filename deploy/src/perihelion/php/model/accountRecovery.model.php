@@ -62,9 +62,9 @@ class AccountRecovery extends ORM {
 		} elseif (!$userID) {
 			$errorArray['userEmail'][] = "We do not seem to have an account for that email address.";
 		} elseif ($user->userBlackList) {
-			$errorArray['userEmail'][] = "There seems to be a problem with your account. Please contact support@zenidev.com.";
+			$errorArray['userEmail'][] = 'There seems to be a problem with your account. Please contact ' . Config::read('support.email') . '.';
 		} elseif (!$userRole->getUserRole() && $_SESSION['siteID'] != 1) {
-			$errorArray['userEmail'][] = 'Please contact support@zenidev.com for access to this domain.';
+			$errorArray['userEmail'][] = 'Please contact ' . Config::read('support.email') . ' for access to this domain.';
 		}
 		
 		return $errorArray;

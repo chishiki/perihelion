@@ -14,9 +14,9 @@ class Auth {
 		if (!$userID || (!password_verify($password, $user->userPassword))) {
 			$errorArray['login'][] = 'Authentication failed. Please try again or <a href="/account-recovery/">recover your account details</a>.';
 		} elseif (!$userRole->getUserRole() && $_SESSION['siteID'] != 1) {
-			$errorArray['login'][] = 'Please contact support@zenidev.com for access to this domain.';
+			$errorArray['login'][] = 'Please contact ' . Config::read('support.email') . ' for access to this domain.';
 		} elseif ($user->userBlackList) {
-			$errorArray['login'][] = "There seems to be a problem with your account. Please contact support@zenidev.com.";
+			$errorArray['login'][] = 'There seems to be a problem with your account. Please contact ' . Config::read('support.email') . '.';
 		}
 
 		return $errorArray;

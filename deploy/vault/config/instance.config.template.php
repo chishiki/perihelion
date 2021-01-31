@@ -9,8 +9,8 @@
 	// System Info
 	Config::write('physical.path','/var/www/xxxxxxx/example.com/');
 	Config::write('web.root','/var/www/xxxxxxx/example.com/src/');
-	Config::write('copyright.holder', 'Zenidev LLC');
-	Config::write('copyright.url', 'https://zenidev.com/');
+	Config::write('copyright.holder', 'Christopher Webb');
+	Config::write('copyright.url', 'https://perihelion.xyz/');
 	Config::write('copyright.start', '2020');
 
 	// Environment
@@ -24,10 +24,15 @@
 	Config::write('db.password', 'xxxxxxx');
 	
 	// Admin
-	Config::write('admin.email', 'support@zenidev.com');
+	Config::write('admin.email', 'support@perihelion.xyz');
 	$admins = array(1); // array of userIDs
 	Config::write('admin.userIdArray', $admins);
-	
+
+	// Support
+	Config::write('support.name', 'Perihelion Support');
+	Config::write('support.email', 'support@perihelion.xyz');
+	Config::write('support.replyto.email', 'noreply@perihelion.xyz');
+
 	// Cron
 	Config::write('cron.key', 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
 

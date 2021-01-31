@@ -69,7 +69,7 @@ class Project extends ORM {
 		$query = "SELECT projectID FROM perihelion_Project WHERE projectURL = :projectURL LIMIT 1";
 		$statement = $nucleus->database->prepare($query);
 		$statement->execute(array(':projectURL' => $projectURL));
-		if ($row = $statement->fetch()) { return $row['projectID']; } else { die('error => project::getProjectID() // please notify support@zenidev.com'); }
+		if ($row = $statement->fetch()) { return $row['projectID']; } else { die('error => project::getProjectID() // please notify ' . Config::read('support.email')); }
 		
 	}
 	

@@ -83,7 +83,7 @@ class ContactController {
 					}
 					
 					
-					Mail::sendEmail('support@zenidev.com', $fromAddress, $mailSubject, $mailContent, $siteID, $userID, 'html');
+					Mail::sendEmail(Config::read('support.email'), $fromAddress, $mailSubject, $mailContent, $siteID, $userID, 'html');
 
 					if ($_SESSION['lang'] == 'ja') { $lang = "/ja"; } else { $lang = ""; }
 					$successURL = $lang . "/" . $this->urlArray[0] . "/thank-you/";

@@ -291,7 +291,7 @@ class ManagerController {
 					$mailContent = Mail::htmlMailContentWrapper($message);
 					
 					Mail::sendEmail($toAddress, $fromAddress, $mailSubject, $mailContent, $_SESSION['siteID'], $_SESSION['userID'], 'html');
-					Mail::sendEmail('support@zenidev.com', $fromAddress, $mailSubject, $mailContent, $_SESSION['siteID'], $_SESSION['userID'], 'html');
+					Mail::sendEmail(Config::read('support.email'), $fromAddress, $mailSubject, $mailContent, $_SESSION['siteID'], $_SESSION['userID'], 'html');
 					
 					$successURL = $lang . "/manager/users/";
 					header("Location: $successURL");
