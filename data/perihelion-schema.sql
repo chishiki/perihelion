@@ -31,7 +31,34 @@ CREATE TABLE `perihelion_AccountRecovery` (
   `accountRecoveryMash` varchar(40) NOT NULL,
   `accountRecoveryVisited` int(1) NOT NULL,
   PRIMARY KEY (`accountRecoveryID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `perihelion_Address`
+--
+
+DROP TABLE IF EXISTS `perihelion_Address`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `perihelion_Address` (
+  `addressID` int(12) NOT NULL AUTO_INCREMENT,
+  `siteID` int(12) NOT NULL,
+  `creator` int(12) NOT NULL,
+  `created` datetime NOT NULL,
+  `updated` datetime NOT NULL,
+  `deleted` int(1) NOT NULL,
+  `streetAddress1` varchar(100) NOT NULL,
+  `streetAddress2` varchar(100) NOT NULL,
+  `city` varchar(50) NOT NULL,
+  `state` varchar(50) NOT NULL,
+  `country` varchar(2) NOT NULL,
+  `postalCode` varchar(20) NOT NULL,
+  `addressObject` varchar(25) NOT NULL,
+  `addressObjectID` int(12) NOT NULL,
+  `addressDefault` varchar(1) NOT NULL,
+  PRIMARY KEY (`addressID`)
+) ENGINE=InnoDB AUTO_INCREMENT=1244 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -510,6 +537,8 @@ CREATE TABLE `perihelion_MenuItem` (
   `menuItemOrder` int(4) DEFAULT NULL,
   `menuItemDisplayAuth` int(1) DEFAULT NULL,
   `menuItemDisplayAnon` int(1) DEFAULT NULL,
+  `menuItemDisabled` int(1) NOT NULL DEFAULT '0',
+  `menuItemClasses` varchar(100) NOT NULL,
   PRIMARY KEY (`menuItemID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -658,7 +687,7 @@ CREATE TABLE `perihelion_Site` (
   `siteInstagram` varchar(255) NOT NULL,
   `siteSkype` varchar(255) NOT NULL,
   `siteAutomatedEmailAddress` varchar(255) NOT NULL,
-  `siteAutomatedEmailSenderName` varchar(30) NOT NULL,
+  `siteAutomatedEmailSenderName` varchar(50) NOT NULL,
   `siteContactFormToAddress` varchar(255) NOT NULL,
   `siteNavMenuID` int(8) NOT NULL,
   `siteIndexContentID` int(8) NOT NULL,
@@ -671,6 +700,9 @@ CREATE TABLE `perihelion_Site` (
   `siteLangJapanese` tinyint(1) NOT NULL,
   `siteIsDevInstance` tinyint(1) NOT NULL,
   `taxRate` decimal(6,4) NOT NULL,
+  `pingdomStatus` varchar(20) NOT NULL,
+  `pingdomReport` varchar(20) NOT NULL,
+  `siteDefaultTimeZone` varchar(45) NOT NULL,
   `siteUsesDataTables` int(1) NOT NULL,
   PRIMARY KEY (`siteID`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
