@@ -41,6 +41,7 @@ class Site extends ORM {
 	public $pingdomStatus;
 	public $pingdomReport;
 	public $siteDefaultTimeZone;
+	public $siteUsesDataTables;
 
 	public function __construct($siteID = 0) {
 
@@ -83,6 +84,7 @@ class Site extends ORM {
 		$this->pingdomStatus = '';
 		$this->pingdomReport = '';
 		$this->siteDefaultTimeZone = 'UTC';
+		$this->siteUsesDataTables = 0;
 
 		if ($siteID != 0) {
 		

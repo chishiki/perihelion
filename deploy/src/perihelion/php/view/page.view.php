@@ -98,11 +98,16 @@ class PageView {
 		$h .= '<script type="text/javascript" src="https://kit.fontawesome.com/' . Config::read('fa.kit') . '.js"></script>';
 		$h .= '<script type="text/javascript" src="/perihelion/vendor/ckeditor/ckeditor.js"></script>';
 		$h .= '<script type="text/javascript" src="/perihelion/vendor/masonry/dist/masonry.pkgd.min.js"></script>';
+		$h .= '<script type="text/javascript" src="/perihelion/assets/js/perihelion.js"></script>';
+
 		if ($site->siteUsesGoogleMaps) {
 			$h .= '<script async defer src="https://maps.googleapis.com/maps/api/js?key=' . $site->siteGoogleApiKey . '&callback=initMap" type="text/javascript"></script>';
 		}
-		$h .= '<script type="text/javascript" src="/perihelion/assets/js/perihelion.js"></script>';
-		
+
+		if ($site->siteUsesDataTables) {
+			$h .= '<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.23/fh-3.1.7/datatables.min.js"></script>';
+		}
+
 		foreach ($this->moduleArray AS $moduleName) {
 
 			$jsPhysicalPath = Config::read('web.root') . 'satellites/' . $moduleName . '/assets/js/*.js';

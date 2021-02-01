@@ -671,6 +671,7 @@ CREATE TABLE `perihelion_Site` (
   `siteLangJapanese` tinyint(1) NOT NULL,
   `siteIsDevInstance` tinyint(1) NOT NULL,
   `taxRate` decimal(6,4) NOT NULL,
+  `siteUsesDataTables` int(1) NOT NULL,
   PRIMARY KEY (`siteID`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
