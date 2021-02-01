@@ -648,6 +648,7 @@ CREATE TABLE `perihelion_Site` (
   `siteGoogleAnalyticsID` varchar(20) NOT NULL,
   `siteGoogleAdSenseID` varchar(20) NOT NULL,
   `siteGoogleApiKey` varchar(40) NOT NULL,
+  `siteUsesGoogleMaps` int(1) NOT NULL,
   `siteTheme` varchar(30) NOT NULL,
   `themeID` int(12) NOT NULL,
   `siteTwitter` varchar(20) NOT NULL,
