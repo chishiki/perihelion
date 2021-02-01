@@ -203,8 +203,15 @@ class SiteView {
 											</div>
 										</div>
 
-									';
+										<hr />
 									
+										<div class="form-group form-check">
+											<input type="checkbox" class="form-check-input" id="siteUsesGoogleMaps" name="siteUsesGoogleMaps"' . ($site->siteUsesGoogleMaps?' checked':'') . '>
+											<label class="form-check-label" for="siteUsesGoogleMaps">' . Lang::getLang('siteUsesGoogleMaps') . '</label>
+										</div>
+										
+									';
+
 									$h .= "<hr />";
 
 									$h .= "<div class=\"form-group row\">";

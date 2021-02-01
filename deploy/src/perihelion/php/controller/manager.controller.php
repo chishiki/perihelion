@@ -74,7 +74,12 @@ class ManagerController {
 				if (isset($this->inputArray['siteGoogleAnalyticsID'])) { $site->siteGoogleAnalyticsID = $this->inputArray['siteGoogleAnalyticsID']; }
 				if (isset($this->inputArray['siteGoogleAdSenseID'])) { $site->siteGoogleAdSenseID = $this->inputArray['siteGoogleAdSenseID']; }
 				if (isset($this->inputArray['siteGoogleApiKey'])) { $site->siteGoogleApiKey = $this->inputArray['siteGoogleApiKey']; }
-				
+				if (isset($this->inputArray['siteUsesGoogleMaps'])) {
+					$site->siteUsesGoogleMaps = 1;
+				} else {
+					$site->siteUsesGoogleMaps = 0;
+				}
+
 				Site::update($site,$conditions);
 				$this->messageArray[] = Lang::getLang('siteGoogleUpdateSuccessful');
 

@@ -6,6 +6,7 @@
 # DATA
 
 /data/*
+!/data/perihelion-change-log.sql
 !/data/perihelion-schema.sql
 
 # VENDOR

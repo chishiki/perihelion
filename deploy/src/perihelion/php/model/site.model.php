@@ -16,6 +16,7 @@ class Site extends ORM {
 	public $siteGoogleAnalyticsID;
 	public $siteGoogleAdSenseID;
 	public $siteGoogleApiKey;
+	public $siteUsesGoogleMaps;
 	public $themeID;
 	public $siteTwitter;
 	public $siteFacebook;
@@ -57,6 +58,7 @@ class Site extends ORM {
 		$this->siteGoogleAnalyticsID = '';
 		$this->siteGoogleAdSenseID = '';
 		$this->siteGoogleApiKey = '';
+		$this->siteUsesGoogleMaps = 0;
 		$this->themeID = 0;
 		$this->siteTwitter = '';
 		$this->siteFacebook = '';
