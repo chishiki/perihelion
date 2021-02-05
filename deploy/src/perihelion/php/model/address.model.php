@@ -72,6 +72,20 @@ class Address extends ORM {
 		}
 		
 	}
+
+	public function stringAddress($lang = null) {
+
+		if (is_null($lang)) {  $lang = $_SESSION['lang']; }
+
+		if ($lang == 'ja') {
+			$addy = $this->state . $this->city . $this->streetAddress1 . $this->streetAddress2 . ' 〒' . $this->postalCode;
+		} else {
+			$addy = $this->streetAddress1 . ' ' . $this->streetAddress2 . ', ' . $this->city . ', ' . $this->state . ', ' . $this->country . ' ' . $this->postalCode;
+		}
+
+		return $addy;
+
+	}
 		
 }
 
