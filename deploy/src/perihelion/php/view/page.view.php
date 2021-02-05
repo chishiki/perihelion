@@ -101,7 +101,11 @@ class PageView {
 		$h .= '<script type="text/javascript" src="/perihelion/assets/js/perihelion.js"></script>';
 
 		if ($site->siteUsesGoogleMaps) {
-			$h .= '<script async defer src="https://maps.googleapis.com/maps/api/js?key=' . $site->siteGoogleApiKey . '&callback=initMap" type="text/javascript"></script>';
+			$h .= '<script src="https://maps.googleapis.com/maps/api/js?key=' . $site->siteGoogleApiKey . '&sensor=false&libraries=places" type="text/javascript"></script>';
+		}
+
+		if ($site->siteUsesLocationPicker) {
+			$h .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-locationpicker/0.1.12/locationpicker.jquery.min.js"></script>';
 		}
 
 		if ($site->siteUsesDataTables) {

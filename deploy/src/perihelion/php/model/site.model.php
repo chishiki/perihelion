@@ -17,6 +17,9 @@ class Site extends ORM {
 	public $siteGoogleAdSenseID;
 	public $siteGoogleApiKey;
 	public $siteUsesGoogleMaps;
+	public $siteUsesLocationPicker;
+	public $defaultLatitude;
+	public $defaultLongitude;
 	public $themeID;
 	public $siteTwitter;
 	public $siteFacebook;
@@ -60,6 +63,9 @@ class Site extends ORM {
 		$this->siteGoogleAdSenseID = '';
 		$this->siteGoogleApiKey = '';
 		$this->siteUsesGoogleMaps = 0;
+		$this->siteUsesLocationPicker = 0;
+		$this->defaultLatitude = 00.000000;
+		$this->defaultLongitude = 000.000000;
 		$this->themeID = 0;
 		$this->siteTwitter = '';
 		$this->siteFacebook = '';

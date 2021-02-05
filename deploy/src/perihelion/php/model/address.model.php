@@ -40,6 +40,8 @@ class Address extends ORM {
 	public $addressObject;
 	public $addressObjectID;
 	public $addressDefault;
+	public $latitude;
+	public $longitude;
 
 	public function __construct($addressID = null) {
 
@@ -58,6 +60,8 @@ class Address extends ORM {
 		$this->addressObject = '';
 		$this->addressObjectID = 0;
 		$this->addressDefault = 0;
+		$this->latitude = 0;
+		$this->longitude = 0;
 
 		if ($addressID) {
 		

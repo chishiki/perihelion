@@ -79,6 +79,11 @@ class ManagerController {
 				} else {
 					$site->siteUsesGoogleMaps = 0;
 				}
+				if (isset($this->inputArray['siteUsesLocationPicker'])) {
+					$site->siteUsesLocationPicker = 1;
+				} else {
+					$site->siteUsesLocationPicker = 0;
+				}
 
 				Site::update($site,$conditions);
 				$this->messageArray[] = Lang::getLang('siteGoogleUpdateSuccessful');
