@@ -101,7 +101,7 @@ class PageView {
 		$h .= '<script type="text/javascript" src="/perihelion/assets/js/perihelion.js"></script>';
 
 		if ($site->siteUsesGoogleMaps) {
-			$h .= '<script src="https://maps.googleapis.com/maps/api/js?key=' . $site->siteGoogleApiKey . '&sensor=false&libraries=places" type="text/javascript"></script>';
+			$h .= '<script src="https://maps.googleapis.com/maps/api/js?key=' . $site->siteGoogleApiKey . '&libraries=places" type="text/javascript"></script>';
 		}
 
 		if ($site->siteUsesLocationPicker) {
