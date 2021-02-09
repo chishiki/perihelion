@@ -25,3 +25,37 @@ ALTER TABLE `perihelion_Address`
     ADD COLUMN `latitude` DECIMAL(8,6) NOT NULL AFTER `addressDefault`,
     ADD COLUMN `longitude` DECIMAL(9,6) NOT NULL AFTER `latitude`;
 
+/* @chishiki 2021-02-10 */
+
+ALTER TABLE perihelion_AccountRecovery ENGINE = InnoDB;
+ALTER TABLE perihelion_Audit ENGINE = InnoDB;
+ALTER TABLE perihelion_BlacklistIP ENGINE = InnoDB;
+ALTER TABLE perihelion_BlacklistWord ENGINE = InnoDB;
+ALTER TABLE perihelion_Carousel ENGINE = InnoDB;
+ALTER TABLE perihelion_Contact ENGINE = InnoDB;
+ALTER TABLE perihelion_ContactForm ENGINE = InnoDB;
+ALTER TABLE perihelion_Content ENGINE = InnoDB;
+ALTER TABLE perihelion_Contract ENGINE = InnoDB;
+ALTER TABLE perihelion_ContractSignature ENGINE = InnoDB;
+ALTER TABLE perihelion_File ENGINE = InnoDB;
+ALTER TABLE perihelion_Font ENGINE = InnoDB;
+ALTER TABLE perihelion_Image ENGINE = InnoDB;
+ALTER TABLE perihelion_Lang ENGINE = InnoDB;
+ALTER TABLE perihelion_LanguageException ENGINE = InnoDB;
+ALTER TABLE perihelion_Link ENGINE = InnoDB;
+ALTER TABLE perihelion_Mail ENGINE = InnoDB;
+ALTER TABLE perihelion_Menu ENGINE = InnoDB;
+ALTER TABLE perihelion_MenuItem ENGINE = InnoDB;
+ALTER TABLE perihelion_NewsletterSubscription ENGINE = InnoDB;
+ALTER TABLE perihelion_Note ENGINE = InnoDB;
+ALTER TABLE perihelion_SEO ENGINE = InnoDB;
+ALTER TABLE perihelion_Script ENGINE = InnoDB;
+ALTER TABLE perihelion_Session ENGINE = InnoDB;
+ALTER TABLE perihelion_Site ENGINE = InnoDB;
+ALTER TABLE perihelion_Theme ENGINE = InnoDB;
+ALTER TABLE perihelion_Tile ENGINE = InnoDB;
+ALTER TABLE perihelion_User ENGINE = InnoDB;
+ALTER TABLE perihelion_UserRole ENGINE = InnoDB;
+ALTER TABLE perihelion_Video ENGINE = InnoDB;
+
+
