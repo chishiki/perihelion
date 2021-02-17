@@ -171,27 +171,6 @@ class ManagerController {
 				
 				$siteID = $_SESSION['siteID'];
 				$userID = $this->urlArray[3];
-				
-				$thisSitesOwners = AccountingClient::accountingClientArray();
-				$selectedOwners = $this->inputArray['accountingClientUser'];
-				$unselectedOwners = array_diff($thisSitesOwners,$selectedOwners);
-
-				// if unselected owner exists in AccountingClientUser.... destroy it.
-				foreach ($unselectedOwners AS $unslectedOwnerID) {
-					$acu = new AccountingClientUser($unslectedOwnerID,$userID);
-					if ($acu->exists()) {
-						$conditions = array('clientID' => $unslectedOwnerID,'userID' => $userID);
-						AccountingClientUser::delete($acu,$conditions);
-					}
-				}
-
-				// if selected owner does not exist in AccountingClientUser.... build it.
-				foreach ($this->inputArray['accountingClientUser'] AS $clientID) {
-					$acu = new AccountingClientUser($clientID,$this->inputArray['userID']);
-					if (!$acu->exists()) {
-						AccountingClientUser::insert($acu, false);
-					}
-				}
 
 				$currentUserRole = new UserRole($siteID,$userID);
 				$currentRole = $currentUserRole->userRole;
