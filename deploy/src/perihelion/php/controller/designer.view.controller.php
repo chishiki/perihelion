@@ -95,7 +95,8 @@ class DesignerViewController {
 		if ($this->urlArray[1] == 'files') {
 			
 			$view = new FileView($this->urlArray,$this->inputArray,$this->errorArray);
-			return $nav . $view->fileManager('Site',$_SESSION['siteID']);
+			$fileBaseURL = '/' . Lang::prefix() . 'designer/files/';
+			return $nav . $view->fileManager('Site',$_SESSION['siteID'],$fileBaseURL);
 			
 		}
 		

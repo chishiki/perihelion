@@ -14,7 +14,9 @@ class FileView {
 
 	public function fileManager($fileObject, $fileObjectID, $baseFormURL) {
 
-		$h = '<form id="perihelionFileManagerForm" name="perihelionFileManagerForm"  method="post" action="" . $baseFormURL . "" enctype="multipart/form-data">';
+		$h = '<div class="container">';
+
+		$h .= '<form id="perihelionFileManagerForm" name="perihelionFileManagerForm"  method="post" action="" . $baseFormURL . "" enctype="multipart/form-data">';
 	
 			$h .= '<input type="hidden" name="fileObject" value="' . $fileObjectID  . '">';
 			$h .= '<input type="hidden" name="fileObjectID" value="' . $fileObjectID  . '">';
@@ -88,6 +90,8 @@ class FileView {
 				$h .= '</div>';
 			$h .= '</div>';
 		}
+
+		$h .= '</div>';
 
 		return $h;
 
