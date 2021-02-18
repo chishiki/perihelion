@@ -129,6 +129,17 @@ class PageView {
 			
 		}
 
+		if (Config::read('javascript.required') == true) {
+			$h .= '
+			<noscript>
+				<style>
+					div { display:none !important; }
+					h1.enable-javascript { text-align:center; }
+				</style>
+			</noscript>
+			';
+		}
+
 		$h .= '</head>';
 
 		return $h;
@@ -150,6 +161,15 @@ class PageView {
 		$h .= $this->footer();
 
 		if (!in_array($this->urlArray[0],$scriptFilter)) { $h .= $this->scripts('footer'); }
+
+		if (Config::read('javascript.required') == true) {
+			$h .= '
+				<noscript>
+					<h1 class="enable-javascript">' . Lang::getLang('youMustEnableJavaScript') . '</h1>
+				</noscript>
+			';
+		}
+
 		$h .= '</body>';
 		
 		return $h;

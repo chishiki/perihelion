@@ -58,4 +58,7 @@ ALTER TABLE perihelion_User ENGINE = InnoDB;
 ALTER TABLE perihelion_UserRole ENGINE = InnoDB;
 ALTER TABLE perihelion_Video ENGINE = InnoDB;
 
+/* @chishiki 2021-02-19 */
 
+SET @langTimeStamp := now();
+INSERT INTO perihelion_Lang VALUES ('youMustEnableJavaScript', 'You must enable JavaScript to use this site.', 0, 'JavaScriptを有効に設定してからご利用ください。', 0, @langTimeStamp);

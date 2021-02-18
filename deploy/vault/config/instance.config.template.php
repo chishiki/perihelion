@@ -12,6 +12,7 @@
 	Config::write('copyright.holder', 'Christopher Webb');
 	Config::write('copyright.url', 'https://perihelion.xyz/');
 	Config::write('copyright.start', '2020');
+	Config::write('javascript.required', true);
 
 	// Environment
     Config::write('environment', 'dev'); // dev|prod
