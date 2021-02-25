@@ -152,7 +152,7 @@ class PageView {
 		$scriptFilter = array('designer','manager','admin','support');
 		
 		if (empty($this->urlArray[0])) { $body_class = 'index'; } else { $body_class = $this->urlArray[0]; }
-		$h = '<body class="' . $body_class . ' lang-' . $_SESSION['lang'] . '">';
+		$h = '<body class="' . $body_class . ' lang-' . $_SESSION['lang'] . ' ' . Config::read('environment') . '">';
 		if (!in_array($this->urlArray[0],$scriptFilter)) { $h .= $this->scripts('header'); }
 		$h .= $this->header();
 		$h .= $this->messages();
