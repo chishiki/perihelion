@@ -233,7 +233,7 @@ class PageView {
 		
 		$h = '';
 		if (!empty($this->errorArray)) {
-			$h .= '<div class="container-fluid">';
+			$h .= '<div class="perihelion-errors container-fluid">';
     			foreach ($this->errorArray AS $errorGroup) {
     				$h .= '<div class="row">';
     				    $h .= '<div class="col-12">';
@@ -251,7 +251,7 @@ class PageView {
 		
 		$h = '';
 		if (!empty($this->messageArray)) {
-			$h .= '<div class="container-fluid">';
+			$h .= '<div class="perihelion-messages container-fluid">';
 				$h .= '<div class="row">';
 					$h .= '<div class="col-12">';
 						$h .= '<div class="alert alert-info" role="alert">';
