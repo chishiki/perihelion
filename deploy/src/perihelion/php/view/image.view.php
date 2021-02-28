@@ -385,7 +385,7 @@ class ImageView {
 
 	}
 
-	public function newImageList($baseFormURL, $imageObject, $imageObjectID, $baseFormURL, $pagination) {
+	public function newImageList($baseFormURL, $imageObject, $imageObjectID, $pagination) {
 
 	}
 
