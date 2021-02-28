@@ -376,7 +376,19 @@ class ImageView {
 		return $h;
 		
 	}
-	
+
+	public function newImageManager($baseFormURL, $imageObject = null, $imageObjectID = null, $multiple = true, $capture = false, $pagination = null) {
+
+	}
+
+	public function newImageForm($baseFormURL, $imageObject, $imageObjectID, $multiple, $capture) {
+
+	}
+
+	public function newImageList($baseFormURL, $imageObject, $imageObjectID, $baseFormURL, $pagination) {
+
+	}
+
 }
 
 ?>
