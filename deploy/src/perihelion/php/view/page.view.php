@@ -114,6 +114,8 @@ class PageView {
 
 		foreach ($this->moduleArray AS $moduleName) {
 
+			$versionDateTime = new DateTime();
+
 			$jsPhysicalPath = Config::read('web.root') . 'satellites/' . $moduleName . '/assets/js/*.js';
 			foreach (glob($jsPhysicalPath) AS $script) {
 
@@ -123,7 +125,7 @@ class PageView {
 				foreach ($jsPathPieces AS $k => $v) {
 					if ($k > ($numberOfSlashes - 5)) { $jsPath .= '/' . $v; }
 				}
-				$h .= '<script type="text/javascript" src="' . $jsPath . '"></script>';
+				$h .= '<script type="text/javascript" src="' . $jsPath . '?version=' . $versionDateTime->format('Ymd') . '"></script>';
 
 			}
 			
