@@ -1,5 +1,28 @@
 <?php
 
+/*
+CREATE TABLE `perihelion_Image` (
+`imageID` int(12) NOT NULL AUTO_INCREMENT,
+  `imageDisplayOrder` int(4) NOT NULL,
+  `siteID` int(8) NOT NULL,
+  `imageSubmittedByUserID` int(12) NOT NULL,
+  `imageSubmissionDateTime` datetime NOT NULL,
+  `imagePath` varchar(255) NOT NULL,
+  `s3url` varchar(100) NOT NULL,
+  `imageObject` varchar(20) NOT NULL,
+  `imageObjectID` int(8) NOT NULL,
+  `imageDisplayClassification` varchar(20) NOT NULL,
+  `imageOriginalName` varchar(50) NOT NULL,
+  `imageType` varchar(30) NOT NULL,
+  `imageSize` int(11) NOT NULL,
+  `imageDimensionX` int(5) NOT NULL,
+  `imageDimensionY` int(5) NOT NULL,
+  `imageDisplayInGallery` int(1) NOT NULL,
+  `imageMetaData` varchar(255) NOT NULL,
+  PRIMARY KEY (`imageID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+*/
+
 final class Image extends ORM {
 
 	public $imageID;
@@ -18,7 +41,8 @@ final class Image extends ORM {
 	public $imageDimensionX;
 	public $imageDimensionY;
 	public $imageDisplayInGallery;
-	
+	public $imageMetaData;
+
 	public function __construct($imageID = 0) {
 		
 		
@@ -38,7 +62,8 @@ final class Image extends ORM {
 	    $this->imageDimensionX = 0;
 	    $this->imageDimensionY = 0;
 	    $this->imageDisplayInGallery = 0;
-	    
+	    $this->imageMetaData = '';
+
 	    if ($imageID) {
 		
 			$nucleus = Nucleus::getInstance();
@@ -431,6 +456,107 @@ final class Image extends ORM {
 	public static function thumbFormats() {
 		$thumbSizes = array('jpg','png');
 		return $thumbSizes;
+	}
+
+}
+
+final class ImageUploader {
+
+	public static function uploadImages($imageUploadArray, $imageObject, $imageObjectID = 0) {
+
+		$imgArray = array();
+
+		foreach ($imageUploadArray AS $inputFieldName => $parameterArray) {
+			foreach ($parameterArray AS $parameter => $keysValues) {
+				foreach ($keysValues AS $key => $value) {
+					$imgArray[$key][$parameter] = $value;
+				}
+			}
+		}
+
+		foreach ($imgArray AS $metaData => $img) {
+
+			if ($img['error'] == 0) {
+
+				$extension = pathinfo($img['name'], PATHINFO_EXTENSION);
+
+				$image = new Image();
+				$image->imagePath = Config::read('physical.path') . 'vault/images/';
+				$image->imageObject = $imageObject;
+				$image->imageObjectID = $imageObjectID;
+				$image->imageOriginalName = $img['name'];
+				$image->imageType = strtolower($extension);
+				$image->imageSize = $img['size'];
+				$image->imageMetaData = $metaData;
+				$imageID = Image::insert($image);
+
+				$image = new Image($imageID);
+				$newFileName = $imageID . '.' . $image->imageType;
+				$newFilePath = $image->imagePath . $newFileName;
+				$image->imagePath = $newFilePath;
+				$cond = array('imageID' =>  $imageID);
+				Image::update($image, $cond);
+
+				move_uploaded_file($img['tmp_name'], $newFilePath);
+
+			}
+
+		}
+
+	}
+
+}
+
+final class ImageFetch {
+
+	private $imageID;
+
+	public function __construct($imageObject, $imageObjectID, $imageMetaData) {
+
+		$this->imageID = null;
+
+		$where = array();
+		$where[] = 'siteID = :siteID';
+		if ($imageObject) { $where[] = 'imageObject = :imageObject'; }
+		if ($imageObjectID) { $where[] = 'imageObjectID = :imageObjectID'; }
+		if ($imageMetaData) { $where[] = 'imageMetaData = :imageMetaData'; }
+
+		$query = 'SELECT imageID FROM perihelion_Image WHERE ' . implode(' AND ',$where) . ' LIMIT 1';
+
+		$nucleus = Nucleus::getInstance();
+		$statement = $nucleus->database->prepare($query);
+		$statement->bindParam(':siteID', $_SESSION['siteID'], PDO::PARAM_INT);
+		if ($imageObject) { $statement->bindParam(':imageObject', $imageObject, PDO::PARAM_STR); }
+		if ($imageObjectID) { $statement->bindParam(':imageObjectID', $imageObjectID, PDO::PARAM_INT); }
+		if ($imageMetaData) { $statement->bindParam(':imageMetaData', $imageMetaData, PDO::PARAM_STR); }
+		$statement->execute();
+
+		if ($row = $statement->fetch()) {
+			$this->imageID = $row['imageID'];
+		}
+
+	}
+
+	public function imageExists() {
+		if ($this->imageID) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public function getImageID() {
+		return $this->imageID;
+	}
+
+	public function getImageSrc() {
+		$image = new Image($this->imageID);
+		return $image->src();
+	}
+
+	public function getImagePath() {
+		$image = new Image($this->imageID);
+		return $image->imagePath;
 	}
 
 }
