@@ -18,85 +18,70 @@ class AuthView {
 
 	public function login() {
 
-		$h = "<div class=\"container\">";
+		$error = false;
+		$errorMessage = '';
+		if (isset($this->errorArray['login'])) {
+			$error = true;
+			foreach ($this->errorArray['login'] AS $message) { $errorMessage .= '<small>' . $message . '</small> '; }
+		}
 
-			$h .= "<div id=\"login\" class=\"mainbox col-12 col-md-6 offset-md-3\">";
-				$h .= "<div class=\"card\" >";
-					
-					$h .= "<h5 class=\"card-header\">" . strtoupper(Lang::getLang('login')) . "</h5>";
-					
-					$h .= "<div class=\"card-body\">";
-					
-						$h .= "<form role=\"form\" id=\"login\" name=\"login\" method=\"post\" action=\"/" . Lang::prefix() . "login/\">";
-					
-							$h .= "<div class=\"form-row mb-2\">";
+		$userSelector = '';
+		$password = '';
+		if (isset($this->inputArray['userSelector'])) { $userSelector = $this->inputArray['userSelector']; }
+		if (isset($this->inputArray['password'])) { $password = $this->inputArray['password']; }
 
-							     $h .= '<div class="col-12">';
-							     
-    							     $h .= "<div class=\"input-group\">";
-    								
-    								    $h .= '<div class="input-group-prepend">';
-    								        $h .= '<span class="input-group-text"><span class="fas fa-envelope"></span></span>';
-    								    $h .= '</div>';
-    								
-    									$h .= "<input id=\"userSelector\" type=\"text\" class=\"form-control" . (isset($this->errorArray['login'])?" is-invalid":"") . "\" name=\"userSelector\" value=\"";
-    										if (isset($this->inputArray['userSelector'])) { $h .= $this->inputArray['userSelector']; }
-    									$h .= "\" placeholder=\"username or email\" autofocus>";
-    									
-    								  $h .= "</div>";
-								
-								$h .= "</div>";
-								
-							$h .= "</div>";
+		$h = '
 
-							$h .= "<div class=\"form-row mb-2\">";
-							
-    							$h .= '<div class="col-12">';
-    								
-    							    $h .= "<div class=\"input-group\">";
-    									
-    							        $h .= '<div class="input-group-prepend">';
-    							             $h .= '<span class="input-group-text"><span class="fas fa-lock"></span></span>';
-    							        $h .= '</div>';
-    							    
-    									$h .= "<input id=\"password\" type=\"password\" class=\"form-control" . (isset($this->errorArray['login'])?" is-invalid":"") . "\" name=\"password\" value=\"";
-    										if (isset($this->inputArray['password'])) { $h .= $this->inputArray['password']; }
-    									$h .= "\" placeholder=\"password\">";
-    									
-    								$h .= "</div>";
-    								
-    								if (isset($this->errorArray['login'])) {
-    									foreach ($this->errorArray['login'] AS $message) { $h .= "<small>" . $message . "</small> "; }
-    								}
-    								
-    							$h .= "</div>";
-							
-							$h .= "</div>";
-
-							$h .= '<div class="form-row">';
-                                $h .= '<div class="col-12">';
-								    $h .= "<input type=\"submit\" name=\"loginSubmit\" id=\"loginSubmit\" class=\"btn btn-secondary float-right\" value=\"" . Lang::getLang('login') . "\">";
-								$h .= "</div>";
-							$h .= "</div>";
-
-						$h .= "</form>";
-						
-						$h .= "<div class=\"form-row\">";
-							$h .= "<div class=\"col-12\">";
-								$h .= "<div style=\"border-top:1px solid #888;padding-top:15px;margin-top:15px;font-size:85%;\">";
-									$h .= Lang::getLang('havingTroubleLoggingIn') . " <a href=\"/account-recovery/\">" . Lang::getLang('accountRecovery') . "</a>";
-								$h .= "</div>";
-							$h .= "</div>";
-						$h .= "</div>";
-						
-					$h .= "</div>";
-
-				$h .= "</div>";
-			$h .= "</div>";
-
-		$h .= "</div>";
-		$h .= "<!-- END AUTH CONTAINER -->";
+			<div class="container">
+				<div class="row">
+					<div id="login" class="mainbox col-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3">
+						<div class="card">
+							<h5 class="card-header">' . strtoupper(Lang::getLang('login')) . '</h5>
+							<div class="card-body">
+								<form name="login" method="post" action="/' . Lang::prefix() . 'login/">
+									<div class="form-row mb-2">
+										<div class="col-12">
+											<div class="input-group">
+												<div class="input-group-prepend">
+													<span class="input-group-text"><span class="fas fa-envelope"></span></span>
+												</div>
+												<input type="text" id="userSelector" name="userSelector" class="form-control' . ($error?' is-invalid':'') . '" value="' . $userSelector . '" placeholder="username or email" autofocus>
+											</div>
+										</div>
+									</div>
+									<div class="form-row mb-2">
+										<div class="col-12">
+											<div class="input-group">
+												<div class="input-group-prepend">
+													<span class="input-group-text"><span class="fas fa-lock"></span></span>
+												</div>
+												<input id="password" type="password" class="form-control' . ($error?' is-invalid':'') . '" name="password" value="' . $password . '" placeholder="password">
+											</div>
+										' . $errorMessage . '
+										</div>
+									</div>
+									<div class="form-row">
+										<div class="col-12 col-sm-6 offset-sm-6 col-md-4 offset-md-8">
+											<button type="submit" name="loginSubmit" id="loginSubmit" class="btn btn-secondary btn-block enter-trigger">' . Lang::getLang('login') . '</button>
+										</div>
+									</div>
+								</form>
+								<div class="row">
+									<div class="col-12">
+										<div class="border-top text-muted my-2 pt-2">
+											' . Lang::getLang('havingTroubleLoggingIn') . '
+											<a href="/' . Lang::prefix() . 'account-recovery/">' . Lang::getLang('accountRecovery') . '</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 			
+		';
+
 		return $h;
 	
 	}
