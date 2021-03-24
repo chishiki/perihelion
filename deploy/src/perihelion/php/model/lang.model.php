@@ -118,6 +118,14 @@ class Lang extends ORM {
 		$url = '/' . ($_SESSION['lang']!='ja'?'ja/':'') . $currentURL;
 		return $url;
 	}
+
+	public static function switchLanguageAnchor() {
+		if ($_SESSION['lang'] == 'en') {
+			return '日本語';
+		} else {
+			return 'English';
+		}
+	}
 	
 }
 
