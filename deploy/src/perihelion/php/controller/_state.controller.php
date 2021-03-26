@@ -48,6 +48,15 @@ class StateController {
 		if (isset($state)) {
 
 			$state->setState();
+
+			foreach ($this->moduleArray AS $module)  {
+				$moduleSessionController = ucfirst($module) . 'SessionController';
+				if (class_exists($moduleSessionController)) {
+					$moduleSessionData = new $moduleSessionController();
+					$moduleSessionData->setSession();
+				}
+			}
+
 			$this->errorArray = $state->getErrors();
 			$this->messageArray = $state->getMessages();
 
