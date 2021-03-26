@@ -198,17 +198,27 @@ class PageView {
 	
 	private function footer() {
 
+		$footer = '';
+
+		if (Config::read('environment') == 'dev' && Auth::isLoggedIn()) {
+			$sessionData = '<pre>' . print_r($_SESSION, true) . '</pre>';
+			$card = new CardView('dev_session_data',array('container-fluid my-3'),null,array('col-12'),Lang::getLang('devData'),$sessionData,true);
+			$footer .= $card->card();
+		}
+		
 		foreach ($this->moduleArray as $moduleName) {
 			$class = ucfirst($moduleName) . 'FooterView';
 			if (class_exists($class)) {
 				$f = new $class($this->urlArray, $this->inputArray, $this->inputArray);
-				return $f->footer();
+				$footer .= $f->footer();
 			}
 		}
 		if (!isset($f)) {
 			$f = new FooterView();
-			return $f->footer();
+			$footer .= $f->footer();
 		}
+		
+		return $footer;
 
 	}
 
