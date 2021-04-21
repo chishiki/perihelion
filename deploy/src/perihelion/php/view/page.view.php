@@ -93,6 +93,7 @@ class PageView {
 		
 		$h .= '<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>';
 		$h .= '<script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>';
+		$h .= '<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>';
 		$h .= '<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>';
 		$h .= '<script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>';
 		$h .= '<script type="text/javascript" src="https://kit.fontawesome.com/' . Config::read('fa.kit') . '.js"></script>';
