@@ -25,35 +25,49 @@
 .font-32 { font-size:32px; }
 
 .bold { font-weight: bold; }
+.italic { font-style: italic; }
 .underline { text-decoration: underline; }
 
 .red { color:#ff0000; }
 .blue { color:#00008b; }
 .gray, .grey { color:#808080; }
 
+.gray-background, grey-background { background-color:#dddddd; }
+
 .border { border:1px solid #000; }
 .top-border { border-bottom:1px solid #000; }
 .bottom-border { border-bottom:1px solid #000; }
 
 .pt-none { padding-top:0; }
-.pt-5 { padding-top:5px; }
-.pt-10px { padding-top:10px; }
-.pt-20px { padding-top:20px; }
+.pt-5, .pt-5px { padding-top:5px; }
+.pt-10, .pt-10px { padding-top:10px; }
+.pt-20, .pt-20px { padding-top:20px; }
 
 .pb-none  { margin-bottom:0; }
-.pb-5px { margin-bottom:5px; }
-.pb-10px { margin-bottom:10px; }
-.pb-20 { padding-bottom:20px; }
+.pb-5, .pb-5px { margin-bottom:5px; }
+.pb-10, .pb-10px { margin-bottom:10px; }
+.pb-20, .pb-20px { padding-bottom:20px; }
 
 .mt-none  { margin-top:0; }
-.mt-5px { margin-top:5px; }
-.mt-10px { margin-top:10px; }
-.mt-20px { margin-top:20px; }
+.mt-5, .mt-5px { margin-top:5px; }
+.mt-10, .mt-10px { margin-top:10px; }
+.mt-20, .mt-20px { margin-top:20px; }
 
 .mb-none  { margin-bottom:0; }
-.mb-5px { margin-bottom:5px; }
-.mb-10px { margin-bottom:10px; }
-.mb-20px { margin-bottom:20px; }
+.mb-5, .mb-5px { margin-bottom:5px; }
+.mb-10, .mb-10px { margin-bottom:10px; }
+.mb-20, .mb-20px { margin-bottom:20px; }
+
+.mr-none  { margin-right:0; }
+.mr-5, .mr-5px { margin-right:5px; }
+.mr-10, .mr-10px { margin-right:10px; }
+.mr-20, .mr-20px { margin-right:20px; }
+
+.ml-none  { margin-left:0; }
+.ml-5, .ml-5px { margin-left:5px; }
+.ml-10, .ml-10px { margin-left:10px; }
+.ml-20, .ml-20px { margin-left:20px; }
+.ml-25, .ml-25px { margin-left:25px; }
 
 table.bordered {
     border:1px solid #000;
@@ -99,6 +113,7 @@ table.stripes td {
 .width-30 { width:30%; }
 .width-33 { width:33%; }
 .width-40 { width:40%; }
+.width-45 { width:45%; }
 .width-50 { width:50%; }
 .width-60 { width:60%; }
 .width-66 { width:66%; }
@@ -108,8 +123,14 @@ table.stripes td {
 .width-90 { width:90%; }
 .width-100 { width:100%; }
 
-.width-50px { width:50px; }
-.width-75px { width:75px; }
-.width-100px { width:100px; }
-.width-200px { width:200px; }
-.width-300px { width:300px; }
+.w-50, .width-50px { width:50px; }
+.w-75, .width-75px { width:75px; }
+.w-100, .width-100px { width:100px; }
+.w-150, .width-150px { width:150px; }
+.w-200, .width-200px { width:200px; }
+.w-300, .width-300px { width:300px; }
+.w-400, .width-400px { width:400px; }
+.w-500, .width-500px { width:500px; }
+.w-600, .width-600px { width:600px; }
+
+.w-auto, .width-auto { width:auto; }
