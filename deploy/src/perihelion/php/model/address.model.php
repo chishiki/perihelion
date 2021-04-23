@@ -81,10 +81,17 @@ class Address extends ORM {
 
 		if (is_null($lang)) {  $lang = $_SESSION['lang']; }
 
+		$addy = '';
+
 		if ($lang == 'ja') {
 			$addy = $this->state . $this->city . $this->streetAddress1 . $this->streetAddress2 . ' 〒' . $this->postalCode;
 		} else {
-			$addy = $this->streetAddress1 . ' ' . $this->streetAddress2 . ', ' . $this->city . ', ' . $this->state . ', ' . $this->country . ' ' . $this->postalCode;
+			$addyBits = array();
+			if ($this->streetAddress1) { $addyBits[] = $this->streetAddress1 . ($this->streetAddress2?' '.$this->streetAddress2:''); }
+			if ($this->city) { $addyBits[] = $this->city; }
+			if ($this->state) { $addyBits[] = $this->state; }
+			if ($this->country) { $addyBits[] = $this->country . ($this->postalCode?' '.$this->postalCode:''); }
+			if (!empty($addyBits)) { $addy = implode(', ', $addyBits); }
 		}
 
 		return $addy;
