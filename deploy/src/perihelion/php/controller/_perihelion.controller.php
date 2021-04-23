@@ -202,10 +202,10 @@ class Controller {
 						}
 					}
 
-					require_once dirname(__FILE__, 5) . '/vendor/autoload.php';
+					require_once Config::read('physical.path') . 'vendor/autoload.php';
 
 					$mpdf = new \Mpdf\Mpdf(['fontdata' => ['meiryo' => ['R' => 'Meiryo W53 Regular.ttf']],'default_font' => 'meiryo']);
-					$stylesheet = file_get_contents(dirname(__FILE__, 5) . '/web/perihelion/assets/css/print.css');
+					$stylesheet = file_get_contents(Config::read('web.root') . 'perihelion/assets/css/print.css');
 					$mpdf->WriteHTML($stylesheet,\Mpdf\HTMLParserMode::HEADER_CSS);
 					$mpdf->WriteHTML($doc);
 
