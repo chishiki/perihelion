@@ -14,15 +14,20 @@ class AddressView {
 
 	public function addressManager($addressObject, $addressObjectID, $baseFormURL, $useLocationPicker = false) {
 
-		$h = $this->addressForm($addressObject, $addressObjectID, $baseFormURL, $useLocationPicker);
-		$h .= $this->addressList($addressObject, $addressObjectID, $baseFormURL);
+		$h = $this->addressList($addressObject, $addressObjectID, $baseFormURL);
+		$h .= '<hr />';
+		$h .= $this->addressForm($addressObject, $addressObjectID, $baseFormURL, $useLocationPicker);
 		return $h;
 
 	}
 
 	public function addressForm($addressObject, $addressObjectID, $baseFormURL, $useLocationPicker = false) {
-		
-		$h = '<form id="address_manager_' . strtolower($addressObject) . '" class="address-manager-form" name="address-manager"  method="post" action="' . $baseFormURL . 'create/">';
+
+		$h = '<div class="card bg-light">';
+		$h .= '<div class="card-header">' . Lang::getLang('addNewAddress') . '</div>';
+		$h .= '<div class="card-body">';
+
+		$h .= '<form id="address_manager_' . strtolower($addressObject) . '" class="address-manager-form" name="address-manager"  method="post" action="' . $baseFormURL . 'create/">';
 	
 			$h .= '<input type="hidden" name="addressObject" value="' . $addressObject . '">';
 			$h .= '<input type="hidden" name="addressObjectID" value="' . $addressObjectID  . '">';
@@ -131,7 +136,10 @@ class AddressView {
 				</div>
 			</form>
 		';
-		
+
+		$h .= '</div>';
+		$h .= '</div>';
+
 		return $h;
 		
 	}
@@ -194,6 +202,12 @@ class AddressView {
 								
 							}
 							
+						} else {
+
+							$h .= '<tr class="table-warning">';
+								$h .= '<td colspan="9">' . Lang::getLang('noAddressesHaveBeenAdded') . '</td>';
+							$h .= '</tr>';
+
 						}
 						
 					$h .= '</table>';
