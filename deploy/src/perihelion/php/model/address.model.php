@@ -142,7 +142,7 @@ class AddressDefault {
 		$statement = $nucleus->database->prepare($query);
 		$statement->execute(array(':siteID' => $_SESSION['siteID'], ':addressObject' => $addressObject, ':addressObjectID' => $addressObjectID));
 		
-		$this->address = array();
+		if ($idOnly) { $this->address = 0; } else { $this->address = array(); }
 		if ($row = $statement->fetch()) { 
 			if ($idOnly) { $this->address = $row['addressID']; } else { $this->address = $row; }
 		}
