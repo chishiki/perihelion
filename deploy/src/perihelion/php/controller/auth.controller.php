@@ -85,7 +85,8 @@ class AuthController {
 			case 'logout':
 			
 				Auth::logout();
-				header("Location: /");
+				$redirect = '/' . Lang::prefix();
+				header("Location: $redirect");
 				break;
 				
 			case 'reset-password':
