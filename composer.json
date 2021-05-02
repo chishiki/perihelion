@@ -24,39 +24,5 @@
     "wiki": "https://github.com/chishiki/perihelion/wiki",
     "source": "https://github.com/chishiki/perihelion",
     "docs": "https://github.com/chishiki/perihelion/wiki"
-  },
-  "repositories": [
-    {
-      "type": "package",
-      "package": {
-        "name": "logicify/jquery-locationpicker-plugin",
-        "version": "0.1.16",
-        "source": {
-            "url": "https://github.com/Logicify/jquery-locationpicker-plugin.git",
-            "type": "git",
-            "reference": "master"
-        }
-      }
-    },
-    {
-      "type": "package",
-      "package": {
-        "name": "ckeditor/ckeditor4",
-        "version": "4.15.1",
-        "source": {
-            "url": "https://github.com/ckeditor/ckeditor4.git",
-            "type": "git",
-            "reference": "master"
-        }
-      }
-    }
-  ],
-  "require": {
-    "php": ">=7.4",
-    "aws/aws-sdk-php": "*",
-    "ckeditor/ckeditor4": "*",
-    "logicify/jquery-locationpicker-plugin": "*",
-    "desandro/masonry": "*",
-    "mpdf/mpdf": "*"
   }
 }
