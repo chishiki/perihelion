@@ -2,13 +2,12 @@
   "name": "chishiki/perihelion",
   "description": "Perihelion is an open-source PHP framework suitable for full-featured web application development.",
   "version": "0.1.0",
-  "type": "project",
   "keywords": [
     "php",
     "framework",
     "perihelion"
   ],
-  "homepage": "https://perihelion.xyz",
+  "homepage": "https://perihelion.xyz/",
   "time": "2020-11-20",
   "license": "MIT",
   "authors": [
