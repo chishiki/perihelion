@@ -202,8 +202,22 @@ class PageView {
 		$footer = '';
 
 		if (Config::read('environment') == 'dev' && Auth::isLoggedIn()) {
-			$sessionData = '<pre>' . print_r($_SESSION, true) . '</pre>';
-			$card = new CardView('dev_session_data',array('container-fluid my-3'),null,array('col-12'),Lang::getLang('devData'),$sessionData,true);
+
+			$devDataArray = array(
+				'$_SESSION' => $_SESSION,
+				'$loc' => $this->urlArray,
+				'$input' => $this->inputArray,
+				'$modules' => $this->moduleArray,
+				'$errors' => $this->errorArray,
+				'$messages' => $this->messageArray
+			);
+
+			$devData = '';
+			foreach ($devDataArray AS $key => $value) {
+				$devData .= '<div class="card mb-3"><div class="card-header">' . $key . '</div><div class="card-body"><pre>' . print_r($value, true) . '</pre></div></div>';
+			}
+
+			$card = new CardView('dev_session_data',array('container-fluid my-3'),null,array('col-12'),Lang::getLang('devData'),$devData,true);
 			$footer .= $card->card();
 		}
 		
