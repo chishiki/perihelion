@@ -40,8 +40,16 @@ class StateController {
 		
 		foreach ($this->moduleArray AS $moduleName) {
 			if ($loc[0] == $moduleName) {
-		        $moduleStateController = ucfirst($moduleName) . 'Controller';
+
+				// want to convert modules names with hyphens to CamelCase here
+				// eg: perihelion-satellite => PerihelionSatellite
+				$moduleNameArray = explode('-', $moduleName);
+				$moduleNameArrayMap = array_map('ucfirst', $moduleNameArray);
+				$moduleCamelCaseName = implode('', $moduleNameArrayMap);
+
+		        $moduleStateController = $moduleCamelCaseName . 'Controller';
 		        $state = new $moduleStateController($loc,$input,$mods);
+
 		    }
 		}
 

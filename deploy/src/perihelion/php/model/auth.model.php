@@ -67,6 +67,7 @@ class Auth {
 	
 		// add to audit trail
 		$ioa = new Audit();
+		$lang = $_SESSION['lang'];
 	
 		// kill session
 		session_unset();
@@ -87,7 +88,11 @@ class Auth {
 		$ioa->auditObject = 'auth';
 		$ioa->auditResult = 'successful';
 		Audit::createAuditEntry($ioa);
-		
+
+		session_start();
+		$_SESSION['userID'] = 0;
+		$_SESSION['siteID'] = Site::siteID();
+		$_SESSION['lang'] = $lang;
 
 	}
 	
