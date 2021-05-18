@@ -17,7 +17,7 @@ class CarouselView {
 	public function carouselList() {
 		
 		$carouselArray = Carousel::carouselArray();
-		
+
 		$h = "<div id=\"perihelionCarousels\">";
 			$h .= "<div class=\"container\">";
 				$h .= "<div class=\"row\">";
@@ -81,318 +81,135 @@ class CarouselView {
 
 	public function carouselForm($action, $carouselID = null) {
 		
-		if ($action == 'update' && $carouselID) {
-			$carousel = new Carousel($carouselID);
-			$actionURL = '/' . Lang::languageUrlPrefix() . 'designer/carousels/update/' . $carouselID . '/';
-			$carouselPanels = CarouselPanel::carouselPanelArray($carouselID);
-			$carouselPanelHeading = 'updateCarousel';
-		} else {
-			$carousel = new Carousel();
-			$actionURL = '/' . Lang::languageUrlPrefix() . 'designer/carousels/create/';
-			$carouselPanels = array();
-			$carouselPanelHeading = 'createCarousel';
-		}
+		$carousel = new Carousel($carouselID);
+		$actionURL = '/' . Lang::languageUrlPrefix() . 'designer/carousels/' . $action . '/' . ($action=='update'?$carouselID.'/':'');
+		$carouselPanels = CarouselPanel::carouselPanelArray($carouselID);
+		$carouselPanelHeading = 'carouselSettings';
+
 		if (!empty($this->inputArray)) {
-			foreach ($this->inputArray AS $key => $value) {
-				if (isset($carousel->$key)) { $carousel->$key = $value; }
+			foreach ($this->inputArray AS $key => $value) { if (isset($carousel->$key)) { $carousel->$key = $value; } }
+		}
+
+		$h = '<form role="form" class="form-horizontal" action="' . $actionURL . '" method="post" enctype="multipart/form-data">';
+
+		// CAROUSEL FORM
+
+		$carouselFormHeader = Lang::getLang($carouselPanelHeading);
+		$carouselForm = ($action=='update'&&$carouselID?'<input type="hidden" name="carouselID" value="' . $carouselID . '">':'');
+
+		$fgtpTitleEnglish = new FormGroupTextParameters(array('col-12','col-md-6'),'carouselTitleEnglish','text','carousel_title_english','carouselTitleEnglish','',$carousel->carouselTitleEnglish,false,false);
+		$fgtpSubtitleEnglish = new FormGroupTextParameters(array('col-12','col-md-6'),'carouselSubtitleEnglish','text','carousel_subtitle_english','carouselSubtitleEnglish','',$carousel->carouselSubtitleEnglish,false,false);
+
+		$fgtpTitleJapanese = new FormGroupTextParameters(array('col-12','col-md-6'),'carouselTitleJapanese','text','carousel_title_japanese','carouselTitleJapanese','',$carousel->carouselTitleJapanese,false,false);
+		$fgtpSubtitleJapanese = new FormGroupTextParameters(array('col-12','col-md-6'),'carouselSubtitleJapanese','text','carousel_subtitle_japanese','carouselSubtitleJapanese','',$carousel->carouselSubtitleJapanese,false,false);
+
+		$fgtpObject = new FormGroupTextParameters(array('col-12','col-md-6'),'carouselObject','text','carousel_object','carouselObject','',$carousel->carouselObject,true,false);
+		$fgtpObjectID = new FormGroupTextParameters(array('col-12','col-md-3'),'carouselObjectID','text','carousel_object_id','carouselObjectID','',$carousel->carouselObjectID,true,false);
+		$fgciCarouselPublished = new FormGroupCheckboxInlineParameters(array('col-12','col-md-3'),'carouselPublished','carousel_published','carouselPublished',1,($carousel->carouselPublished?true:false),false);
+
+		$carouselForm .= '
+			<div class="form-row">' . FormElements::formGroupText($fgtpTitleEnglish) . FormElements::formGroupText($fgtpSubtitleEnglish) . '</div>
+			<hr />
+			<div class="form-row">' . FormElements::formGroupText($fgtpTitleJapanese) . FormElements::formGroupText($fgtpSubtitleJapanese) . '</div>
+			<hr />
+			<div class="form-row">' . FormElements::formGroupText($fgtpObject) . FormElements::formGroupText($fgtpObjectID) . FormElements::formGroupCheckboxInline($fgciCarouselPublished) . '</div>
+		';
+		$carouselFormCard = new CardView('perihelionCarouselForm', array('container'), '', array('col-12'), $carouselFormHeader, $carouselForm, false);
+		$h .= $carouselFormCard->card();
+
+		$carouselPanelFormHeader = Lang::getLang('carouselPanelManager');
+
+		// CAROUSEL PANEL FORM TABS
+
+		$carouselPanelItems = array();
+		if (!empty($carouselPanels)) {
+			foreach ($carouselPanels AS $carouselPanelID) {
+				$cp = new CarouselPanel($carouselPanelID);
+				$item = '<li class="nav-item">';
+					$item .= '<a href="#panel' . $carouselPanelID . '" class="nav-link' . ($carouselPanels[0]==$carouselPanelID?" active":"") . '" role="tab" data-toggle="tab">';
+						$item .= '#' . $carouselPanelID . ' [' . $cp->carouselPanelDisplayOrder . ']' . ($cp->carouselPanelPublished?' &#10004;':'');
+					$item .= '</a>';
+				$item .= '</li>';
+				$carouselPanelItems[] = $item;
 			}
 		}
-		
-		$h = "<div id=\"perihelionCarouselForm\">";
-			$h .= "<div class=\"container\">";
-				$h .= "<div class=\"row\">";
-					$h .= "<div class=\"col-sm-12\">";
+		$item = '<li class="nav-item">';
+			$item .= '<a href="#addCarouselPanel" class="nav-link' . (empty($carouselPanels)?" active":"") . '" data-toggle="tab">';
+				$item .= '<span class="fas fa-plus"></span> '. Lang::getLang('addNewPanels');
+			$item .= '</a>';
+		$item .= '</li>';
+		$carouselPanelItems[] = $item;
+		$carouselPanelTabs = '<ul class="nav nav-tabs" role="tablist">' . implode('',$carouselPanelItems) . '</ul>';
 
-						$h .= "<div class=\"card\" >";
-							
-							$h .= "<div class=\"card-header\">";
-								$h .= "<div class=\"card-title\">";
-									$h .= Lang::getLang($carouselPanelHeading);
-								$h .= "</div>";
-							$h .= "</div>";
+		// CAROUSEL PANEL FORM PANES
+		$carouselPanelPaneItems = array();
+		if (!empty($carouselPanels)) {
 
-							$h .= "<div class=\"card-body\">";
-								
-								$h .= '<form role="form" class="form-horizontal" action="' . $actionURL . '" method="post" enctype="multipart/form-data">';
+			foreach($carouselPanels as $carouselPanelID) {
 
-									if ($action == 'update' && $carouselID) { $h .= '<input type="hidden" name="carouselID" value="' . $carouselID . '">'; }
+				$cp = new CarouselPanel($carouselPanelID);
 
-									$h .= '<h3 style="margin-top:0px;">Carousel</h3>';
+				$fgtpPanelTitleEnglish = new FormGroupTextParameters(array('col-12','col-md-4'),'carouselPanelTitleEnglish','text','carousel_panel_title_english_'.$carouselPanelID,'carouselPanelTitleEnglish['.$carouselPanelID.']','',$cp->carouselPanelTitleEnglish,false,false);
+				$fgtpPanelSubtitleEnglish = new FormGroupTextParameters(array('col-12','col-md-4'),'carouselPanelSubtitleEnglish','text','carousel_panel_subtitle_english_'.$carouselPanelID,'carouselPanelSubtitleEnglish['.$carouselPanelID.']','',$cp->carouselPanelSubtitleEnglish,false,false);
+				$fgtpPanelAltEnglish = new FormGroupTextParameters(array('col-12','col-md-4'),'carouselPanelAltEnglish','text','carousel_panel_alt_english_'.$carouselPanelID,'carouselPanelAltEnglish['.$carouselPanelID.']','',$cp->carouselPanelAltEnglish,false,false);
+				$fgtpPanelUrlEnglish = new FormGroupTextParameters(array('col-12'),'carouselPanelUrlEnglish','text','carousel_panel_url_english_'.$carouselPanelID,'carouselPanelUrlEnglish['.$carouselPanelID.']','',$cp->carouselPanelUrlEnglish,false,false);
 
-									$h .= '<div class="card">
+				$fgtpPanelTitleJapanese = new FormGroupTextParameters(array('col-12','col-md-4'),'carouselPanelTitleJapanese','text','carousel_panel_title_japanese_'.$carouselPanelID,'carouselPanelTitleJapanese['.$carouselPanelID.']','',$cp->carouselPanelTitleJapanese,false,false);
+				$fgtpPanelSubtitleJapanese = new FormGroupTextParameters(array('col-12','col-md-4'),'carouselPanelSubtitleJapanese','text','carousel_panel_subtitle_japanese_'.$carouselPanelID,'carouselPanelSubtitleJapanese['.$carouselPanelID.']','',$cp->carouselPanelSubtitleJapanese,false,false);
+				$fgtpPanelAltJapanese = new FormGroupTextParameters(array('col-12','col-md-4'),'carouselPanelAltJapanese','text','carousel_panel_alt_japanese_'.$carouselPanelID,'carouselPanelAltJapanese['.$carouselPanelID.']','',$cp->carouselPanelAltJapanese,false,false);
+				$fgtpPanelUrlJapanese = new FormGroupTextParameters(array('col-12'),'carouselPanelUrlJapanese','text','carousel_panel_url_japanese_'.$carouselPanelID,'carouselPanelUrlJapanese['.$carouselPanelID.']','',$cp->carouselPanelUrlJapanese,false,false);
 
-										<div class="row">
-											<div class="col-md-6">
-												<div class="form-group row">
-													<label for="carouselTitleEnglish" class="col-form-label col-md-4">Title (English)</label>
-													<div class="col-md-8"><input type="text" name="carouselTitleEnglish" class="form-control" id="carouselTitleEnglish" placeholder="Title (English)" value="' . $carousel->carouselTitleEnglish . '"></div>
-												</div>
-											</div>
-											<div class="col-md-6">
-												<div class="form-group row">
-													<label for="carouselSubtitleEnglish" class="col-form-label col-md-4">Subtitle (English)</label>
-													<div class="col-md-8"><input type="text" name="carouselSubtitleEnglish" class="form-control" id="carouselSubtitleEnglish" placeholder="Subtitle (English)" value="' . $carousel->carouselSubtitleEnglish . '"></div>
-												</div>
-											</div>
-										</div>
-										
-										<hr />
-										
-										<div class="row">
-											<div class="col-md-6">
-												<div class="form-group row">
-													<label for="carouselTitleJapanese" class="col-form-label col-md-4">Title (Japanese)</label>
-													<div class="col-md-8"><input type="text" name="carouselTitleJapanese" class="form-control" id="carouselTitleJapanese" placeholder="Title (Japanese)" value="' . $carousel->carouselTitleJapanese . '"></div>
-												</div>
-											</div>
-											<div class="col-md-6">
-												<div class="form-group row">
-													<label for="carouselSubtitleJapanese" class="col-form-label col-md-4">Subtitle (Japanese)</label>
-													<div class="col-md-8"><input type="text" name="carouselSubtitleJapanese" class="form-control" id="carouselSubtitleJapanese" placeholder="Subtitle (Japanese)" value="' . $carousel->carouselSubtitleJapanese . '"></div>
-												</div>
-											</div>
-										</div>
-										
-										<hr />
-										
-										<div class="row">
-											<div class="col-md-6">
-												<div class="form-group row">
-													<label for="carouselObject" class="col-form-label col-md-4">Object</label>
-													<div class="col-md-8"><input type="text" name="carouselObject" class="form-control" id="carouselObject" placeholder="Object" value="' . $carousel->carouselObject . '" readonly></div>
-												</div>
-											</div>
-											<div class="col-md-3">
-												<div class="form-group row">
-													<label for="carouselObjectID" class="col-form-label col-md-3">ID</label>
-													<div class="col-md-9"><input type="text" name="carouselObjectID" class="form-control" id="carouselObjectID" placeholder="ID" value="' . $carousel->carouselObjectID . '" readonly></div>
-												</div>
-											</div>
-											<div class="col-md-3">
-												<div class="checkbox">
-													<label for="carouselPublished" class="col-form-label">
-													<input type="checkbox" name="carouselPublished" id="carouselPublished" value="1" ' . ($carousel->carouselPublished?' checked':'') . '>Published</label>
-												</div>
-											</div>
-										</div>
-		
-									</div>';
-		
-									$h .= '<h3 style="margin-top:0px;">Panels</h3>';
+				$fgtpPanelDisplayOrder = new FormGroupNumberDropdownParameters(array('col-12','col-md-4'),'carouselPanelDisplayOrder','carousel_panel_display_order_'.$carouselPanelID,'carouselPanelDisplayOrder['.$carouselPanelID.']',$cp->carouselPanelDisplayOrder,0,100,null,'0');
+				$fgciPanelPublished = new FormGroupCheckboxInlineParameters(array('col-12','col-md-4'),'carouselPanelPublished','carousel_panel_published_'.$carouselPanelID,'carouselPanelPublished[' . $carouselPanelID . ']',1,($cp->carouselPanelPublished?true:false),false);
+				$fgciPanelDelete = new FormGroupCheckboxInlineParameters(array('col-12','col-md-4'),'deleteCarouselPanel','carousel_panel_delete_'.$carouselPanelID,'deleteCarouselPanel[' . $carouselPanelID . ']',1,false,false);
 
-									$h .= '<div class="card">';
+				$pane = '<input type="hidden" name="carouselPanelID[]" value="' . $carouselPanelID . '">';
+				$pane .= '<div id="panel' . $carouselPanelID . '" class="tab-pane fade' . ($carouselPanels[0]==$carouselPanelID?' show active':'') . '" role="tabpanel">';
+					$pane .= '<div class="form-group"><div class="col-12"><img src="/image/' . $cp->imageID . '/" class="img-fluid" style="margin:10px auto 10px auto;"></div></div>';
+					$pane .= '<hr />';
+					$pane .= '<div class="form-row">' . FormElements::formGroupText($fgtpPanelTitleEnglish) . FormElements::formGroupText($fgtpPanelSubtitleEnglish) . FormElements::formGroupText($fgtpPanelAltEnglish) . '</div>';
+					$pane .= '<div class="form-row">' . FormElements::formGroupText($fgtpPanelUrlEnglish) . '</div>';
+					$pane .= '<hr />';
+					$pane .= '<div class="form-row">' . FormElements::formGroupText($fgtpPanelTitleJapanese) . FormElements::formGroupText($fgtpPanelSubtitleJapanese) . FormElements::formGroupText($fgtpPanelAltJapanese) . '</div>';
+					$pane .= '<div class="form-row">' . FormElements::formGroupText($fgtpPanelUrlJapanese) . '</div>';
+					$pane .= '<hr />';
+					$pane .= '<div class="form-row">' . FormElements::formGroupNumberDropdown($fgtpPanelDisplayOrder) . FormElements::formGroupCheckboxInline($fgciPanelPublished) . FormElements::formGroupCheckboxInline($fgciPanelDelete) . '</div>';
+				$pane .= '</div>';
 
-										$h .= '<ul class="nav nav-tabs" role="tablist" style="margin-bottom:10px;">';
-										
-											if (!empty($carouselPanels)) {
-												foreach ($carouselPanels AS $carouselPanelID) {
-													$cp = new CarouselPanel($carouselPanelID);
-													$h .= '<li role="presentation" class="nav-item">';
-														$h .= '<a href="#panel' . $carouselPanelID . '" aria-controls="card' . $carouselPanelID . '" class="nav-link' . ($carouselPanels[0]==$carouselPanelID?" active":"") . '" role="tab" data-toggle="tab">';
-															$h .= '#' . $carouselPanelID . ' ';
-															$h .= '[' . $cp->carouselPanelDisplayOrder . ']';
-															if ($cp->carouselPanelPublished) { $h .= ' &#10004;'; }
-														$h .= '</a>';
-													$h .= '</li>';
-												}
-											}
-											
-											$h .= '<li role="presentation" class="nav-item">';
-												$h .= '<a href="#addCarouselPanel" class="nav-link' . (empty($carouselPanels)?" active":"") . '" data-toggle="tab">';
-													$h .= '<span class="fas fa-plus"></span> ';
-													$h .= Lang::getLang('addNewPanels');
-												$h .= '</a>';
-											$h .= '</li>';
-											
-										$h .= '</ul>';
+				$carouselPanelPaneItems[] = $pane;
 
-										$h .= '<div class="tab-content">';
-											
-											
-											if (!empty($carouselPanels)) {
-												
-												foreach ($carouselPanels AS $carouselPanelID) {
-													
-													$cp = new CarouselPanel($carouselPanelID); 
-												
-													$h .= '<input type="hidden" name="carouselPanelID[]" value="' . $carouselPanelID . '">';
-												
-													$h .= '<div role="tabpanel" class="tab-pane' . ($carouselPanels[0]==$carouselPanelID?" active":"") . '" id="card' . $carouselPanelID . '">';
+			}
 
-														$h.= '
-														
-														<div class="row">
-															<div class="col-sm-4">
-																<div class="form-group row">
-																	<label for="carouselPanelTitleEnglish[' . $carouselPanelID . ']" class="col-form-label col-sm-4">Title (English)</label>
-																	<div class="col-sm-8"><input type="text" name="carouselPanelTitleEnglish[' . $carouselPanelID . ']" class="form-control" id="carouselPanelTitleEnglish-' . $carouselPanelID . '" placeholder="Title (English)" value="' . $cp->carouselPanelTitleEnglish . '"></div>
-																</div>
-															</div>
-															<div class="col-sm-4">
-																<div class="form-group row">
-																	<label for="carouselPanelSubtitleEnglish[' . $carouselPanelID . ']" class="col-form-label col-sm-4">Subtitle (English)</label>
-																	<div class="col-sm-8"><input type="text" name="carouselPanelSubtitleEnglish[' . $carouselPanelID . ']" class="form-control" id="carouselPanelSubtitleEnglish[' . $carouselPanelID . ']" placeholder="Subtitle (English)" value="' . $cp->carouselPanelSubtitleEnglish . '"></div>
-																</div>
-															</div>
-															<div class="col-sm-4">
-																<div class="form-group row">
-																	<label for="carouselPanelAltEnglish[' . $carouselPanelID . ']" class="col-form-label col-sm-4">Alternate Text</label>
-																	<div class="col-sm-8"><input type="text" name="carouselPanelAltEnglish[' . $carouselPanelID . ']" class="form-control" id="carouselPanelAltEnglish[' . $carouselPanelID . ']" placeholder="Alternate Text" value="' . $cp->carouselPanelAltEnglish . '"></div>
-																</div>
-															</div>
-														</div>
-														
-														';
-												
-												
-														$h .= '
-														
-														<div class="row">
-															<div class="col-sm-4">
-																<div class="form-group row">
-																	<label for="carouselPanelTitleJapanese[' . $carouselPanelID . ']" class="col-form-label col-sm-4">Title (Japanese)</label>
-																	<div class="col-sm-8"><input type="text" name="carouselPanelTitleJapanese[' . $carouselPanelID . ']" class="form-control" id="carouselPanelTitleJapanese[' . $carouselPanelID . ']" placeholder="Title (Japanese)" value="' . $cp->carouselPanelTitleJapanese . '"></div>
-																</div>
-															</div>
-															<div class="col-sm-4">
-																<div class="form-group row">
-																	<label for="carouselPanelSubtitleJapanese[' . $carouselPanelID . ']" class="col-form-label col-sm-4">Subtitle (Japanese)</label>
-																	<div class="col-sm-8">
-																		<input type="text" name="carouselPanelSubtitleJapanese[' . $carouselPanelID . ']" class="form-control" id="carouselPanelSubtitleJapanese[' . $carouselPanelID . ']" placeholder="Subtitle (Japanese)" value="' . $cp->carouselPanelSubtitleJapanese . '">
-																	</div>
-																</div>
-															</div>
-															<div class="col-sm-4">
-																<div class="form-group row">
-																	<label for="carouselPanelAltJapanese[' . $carouselPanelID . ']" class="col-form-label col-sm-4">Alternate Text (Japanese)</label>
-																	<div class="col-sm-8">
-																		<input type="text" name="carouselPanelAltJapanese[' . $carouselPanelID . ']" class="form-control" id="carouselPanelAltJapanese-' . $carouselPanelID . '" placeholder="Alternate Text (Japanese)" value="' . $cp->carouselPanelAltJapanese . '">
-																	</div>
-																</div>
-															</div>
-														</div>
+		}
+		$pane = '
+			<div id="addCarouselPanel" class="tab-pane fade' . (empty($carouselPanels)?' show active':'') . '" role="tabpanel">
+				<div class="form-row" style="margin-top:50px;margin-bottom:50px;">
+					<div class="form-group col-12 col-sm-6 offset-sm-3">
+						<label class="btn btn-secondary btn-lg btn-block btn-file">
+							<span id="perihelionImageManagerSubmitButtonText">' . Lang::getLang('selectImage') . '</span> 
+							<input type="file" id="perihelionImages" name="perihelionImages[]" style="display:none;" accept="image/*">
+						</label>
+					</div>
+				</div>
+			</div>
+		';
+		$carouselPanelPaneItems[] = $pane;
+		$carouselPanelPanes = '<div class="tab-content" id="carousel-panel-panes">' . implode('', $carouselPanelPaneItems) . '</div>';
+		$carouselPanelForm = $carouselPanelTabs . $carouselPanelPanes;
 
-														';
-												
-												
-														$h .= '
-														
-														<div class="row">
-														
-															<div class="col-sm-6">
-																<div class="form-group row">
-																	<label class="col-form-label col-sm-4" for="carouselPanelUrlEnglish[' . $carouselPanelID . ']">URL English</label>
-																	<div class="col-sm-8">
-																		<input type="text" id="carouselPanelUrlEnglish[' . $carouselPanelID . ']" name="carouselPanelUrlEnglish[' . $carouselPanelID . ']" class="form-control" id="carouselPanelUrlEnglish[' . $carouselPanelID . ']" placeholder="URL English" value="' . $cp->carouselPanelUrlEnglish . '">
-																	</div>
-																</div>
-															</div>
-															
-															<div class="col-sm-6">
-																<div class="form-group row">
-																	<label class="col-sm-4 col-form-label" for="carouselPanelUrlJapanese[' . $carouselPanelID . ']">URL Japanese</label>
-																	<div class="col-sm-8">
-																		<input type="text" id="carouselPanelUrlJapanese[' . $carouselPanelID . ']" name="carouselPanelUrlJapanese[' . $carouselPanelID . ']" class="form-control" id="carouselPanelUrlJapanese[' . $carouselPanelID . ']" placeholder="URL Japanese" value="' . $cp->carouselPanelUrlJapanese . '">
-																	</div>
-																</div>
-															</div>
-																
-														</div>
+		$carouselFormCard = new CardView('perihelionCarouselPanelForm', array('container','mt-3'), '', array('col-12'), $carouselPanelFormHeader, $carouselPanelForm, false);
+		$h .= $carouselFormCard->card();
 
-														';
-												
-												
-														$h .= '
-														
-														<div class="row">
-														
-															<div class="col-sm-4">
-																<div class="form-group row">
-																	<label class="col-form-label col-sm-6" for="carouselPanelDisplayOrder[' . $carouselPanelID . ']">Display Order</label>
-																	<div class="col-sm-6">';
-																	
-																		$displayOrderSelectName = 'carouselPanelDisplayOrder[' . $carouselPanelID . ']';
-																		$h .= FormElements::numberDropdown($displayOrderSelectName, $cp->carouselPanelDisplayOrder, 0, 100, 'form-control form-control-sm', '0');
-																	
-																	$h .= '</div>
-																</div>
-															</div>
-																
-															<div class="col-sm-4">
-																<div class="form-group row">
-																	<label class="col-sm-8 col-form-label" for="carouselPanelPublished[' . $carouselPanelID . ']">Panel Published</label>
-																	<div class="col-sm-4">
-																		<input id="carouselPanelPublished[' . $carouselPanelID . ']" name="carouselPanelPublished[' . $carouselPanelID . ']" type="checkbox" value="1"' . ($cp->carouselPanelPublished?" checked":"") . '>
-																	</div>
-																</div>
-															</div>
+		$h .= '
+		<div class="container mt-3">
+			<div class="form-row">
+				<div class="form-group col-12 col-sm-4 offset-sm-8"><button type="submit" class="btn btn-primary btn-block" name="submit">' . Lang::getLang($action) . '</button></div>
+			</div>
+		</div>
+		';
 
-															<div class="col-sm-4">
-																<div class="form-group row">
-																	<label class="col-sm-8 col-form-label" for="deleteCarouselPanel[' . $carouselPanelID . ']">Delete This Panel</label>
-																	<div class="col-sm-4">
-																		<input id="deleteCarouselPanel[' . $carouselPanelID . ']" name="deleteCarouselPanel[' . $carouselPanelID . ']" type="checkbox" value="' . $carouselPanelID . '">
-																	</div>
-																</div>
-															</div>
+		$h .= '</form>';
 
-														</div>
-
-														';
-												
-												
-														$h .= '
-														
-														<div class="row">
-															<div class="col-sm-12">
-																<img src="/image/' . $cp->imageID . '/" class="img-fluid" style="margin:10px auto 10px auto;">
-															</div>
-														</div>
-														
-														';
-												
-
-													$h .= '</div> <!-- #panel' . $carouselPanelID . ' .tab-pane -->';
-													
-												}
-												
-											}
-									
-											$h .= '
-											<div role="tabpanel" class="tab-pane' . (empty($carouselPanels)?" active":"") . '" id="addCarouselPanel">
-
-												<div class="form-group row" style="margin-top:50px;margin-bottom:50px;">
-													
-													<div class="col-sm-6 offset-sm-3">
-														<label class="btn btn-secondary btn-lg btn-block btn-file">
-															<span id="perihelionImageManagerSubmitButtonText">' . Lang::getLang('selectImage') . '</span> 
-															<input type="file" id="perihelionImages" name="perihelionImages[]" style="display:none;" accept="image/*">
-														</label>
-													</div>
-
-												</div>
-	
-											</div> <!-- #addCarouselPanel.tab-pane -->';
-
-										$h .= '</div>'; // .tab-content
-										
-									$h .= '</div>'; // .card	
-					
-									$h .= '
-									<div class="form-group row">
-										<div class="col-sm-4 offset-sm-8"><button type="submit" class="btn btn-primary btn-block" name="submit">' . Lang::getLang($action) . '</button></div>
-									</div>
-									';
-
-								$h .= '</form>';
-						
-							$h .= "</div>"; // .card-body
-						$h .= "</div>"; // .panel
-						
-					$h .= "</div>"; // #perihelionCarouselsCol
-				$h .= "</div>"; // #perihelionCarouselsRow
-			$h .= "</div>"; // #perihelionCarouselsContainer
-		$h .= "</div>"; // #perihelionCarousels
 		
 		return $h;
 

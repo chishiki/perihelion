@@ -80,15 +80,16 @@ class CarouselPanel extends ORM {
 
 	public static function carouselPanelArray($carouselID, $publishedOnly = false) {
 
-		$siteID = $_SESSION['siteID'];
-		
-		$nucleus = Nucleus::getInstance();
-		$query = "SELECT carouselPanelID FROM perihelion_CarouselPanel WHERE siteID = :siteID AND carouselID = :carouselID" . ($publishedOnly?" AND carouselPanelPublished = 1 ":" ") . "ORDER BY carouselPanelDisplayOrder ASC ";
-		$statement = $nucleus->database->prepare($query);
-		$statement->execute(array(':siteID' => $siteID, ':carouselID' => $carouselID));
-
 		$carouselPanelArray = array();
-		while ($row = $statement->fetch()) { $carouselPanelArray[] = $row['carouselPanelID']; }
+
+		if (ctype_digit($carouselID)) {
+			$nucleus = Nucleus::getInstance();
+			$query = "SELECT carouselPanelID FROM perihelion_CarouselPanel WHERE siteID = :siteID AND carouselID = :carouselID" . ($publishedOnly?" AND carouselPanelPublished = 1 ":" ") . "ORDER BY carouselPanelDisplayOrder ASC ";
+			$statement = $nucleus->database->prepare($query);
+			$statement->execute(array(':siteID' => $_SESSION['siteID'], ':carouselID' => $carouselID));
+			while ($row = $statement->fetch()) { $carouselPanelArray[] = $row['carouselPanelID']; }
+		}
+
 		return $carouselPanelArray;
 
 	}
