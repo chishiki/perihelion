@@ -215,147 +215,76 @@ class CarouselView {
 
 	}
 
-	public static function carousel($carouselObject, $carouselObjectID) {
-		
-		$h = "";
-		$imageArray = Image::getObjectImageArray($carouselObject, $carouselObjectID);
-		$carouselArray = array();
-		foreach ($imageArray as $imageID) {
-			$image = new Image($imageID);
-			if ($image->imageDisplayInGallery) { $carouselArray[] = $imageID; }
-		}
-		$panelCount = count($carouselArray);
-		
-		if ($panelCount == 1) {
-			
-			$h .= "<div class=\"container\" style=\"margin-bottom:20px;\">";
-				$h .= "<div class=\"row\">";
-					$h .= "<div class=\"col-md-12 text-center\">";
-						$h .= "<img src=\"/image/" . $carouselArray[0] . "/\">";
-					$h .= "</div>";
-				$h .= "</div>";
-			$h .= "</div>";
-			
-		} elseif ($panelCount > 1) {
-			
-			$h .= "<div class=\"container\" style=\"margin-bottom:20px;\">";
-			
-				$h .= "<div class=\"row\">";
-				
-					$h .= "<div class=\"col-md-12\">";
-				
-						$h .= "<div id=\"perihelion-carousel\" class=\"carousel slide\" data-ride=\"carousel\">";
-						
-							$h .= "<!-- Indicators -->";
-							
-							$h .= "<ol class=\"carousel-indicators  hidden-xs\">";
-								for ($i = 0; $i < $panelCount; $i++) {
-									$h .= "<li data-target=\"#perihelion-carousel\" data-slide-to=\"" . $i . "\"" . ($i==0?" class=\"active\"":"") . "></li>";
-								}
-							$h .= "</ol>";
-
-							$h .= "<!-- Wrapper for slides -->";
-							
-							$h .= "<div class=\"carousel-inner\" role=\"listbox\">";
-								for ($i = 0; $i < $panelCount; $i++) {
-									$h .= "<div class=\"item" . ($i==0?" active":"") . "\">";
-										$h .= "<img src=\"/image/" . $carouselArray[$i] . "/\">";
-									$h .= "</div>";
-								}
-							$h .= "</div>";
-
-							$h .= "<!-- Controls -->";
-							
-							$h .= "<a class=\"left carousel-control\" href=\"#perihelion-carousel\" role=\"button\" data-slide=\"prev\">";
-								$h .= "<span class=\"fas fa-chevron-left\" aria-hidden=\"true\"></span>";
-								$h .= "<span class=\"sr-only\">Previous</span>";
-							$h .= "</a>";
-							
-							$h .= "<a class=\"right carousel-control\" href=\"#perihelion-carousel\" role=\"button\" data-slide=\"next\">";
-								$h .= "<span class=\"fas fa-chevron-right\" aria-hidden=\"true\"></span>";
-								$h .= "<span class=\"sr-only\">Next</span>";
-							$h .= "</a>";
-							
-						$h .= "</div>";
-						
-					$h .= "</div>";
-					
-				$h .= "</div>";
-				
-			$h .= "</div>";
-
-		}
-		
-		return $h;
-
-	}
-
 	public static function displayCarousel($carouselID) {
 
 		$carousel = new Carousel($carouselID);
-		$panels = CarouselPanel::carouselPanelArray($carouselID, true);
-		$numberOfPanels = count($panels);
-		
-		$h = "<div class=\"";
-			// if () { $h .= "hidden-xs"; }
-			// if () { $h .= "carouselContainer"; }
-		$h .= "\"> <!-- START CAROUSEL CONTAINER -->";
+		$carouselPanels = CarouselPanel::carouselPanelArray($carouselID, true);
+		$numberOfPanels = count($carouselPanels);
 
-			$h .= "<div class=\"container\">";
-		
-				$h .= "<div id=\"myCarousel\" class=\"carousel slide\" data-ride=\"carousel\">";
-					
-					if ($numberOfPanels >= 2) { 
-						$h .= "<ol class=\"carousel-indicators hidden-xs hidden-sm\">";
-							$h .= "<li data-target=\"#myCarousel\" data-slide-to=\"0\" class=\"active\"></li>";
-							for ($i = 1; $i < $numberOfPanels; $i++) { $h .= "<li data-target=\"#myCarousel\" data-slide-to=\"" . $i . "\"></li>"; }
-						$h .= "</ol>";
+		$indicators = '';
+		if ($numberOfPanels > 1) {
+			$indicators = '<ol class="carousel-indicators hidden-xs hidden-sm">';
+			for ($i = 0; $i < $numberOfPanels; $i++) {
+				$indicators .= '<li data-target="#perihelion_carousel" data-slide-to="' . $i . '" class="' . ($i==0?'active':'') . '"></li>';
+			}
+			$indicators .= '</ol>';
+		}
+
+		$panels = '<div class="carousel-inner">';
+
+			for ($i = 0; $i < $numberOfPanels; $i++) {
+
+				$cp = new CarouselPanel($carouselPanels[$i]);
+
+				$imageID = $cp->imageID;
+				$alt = $cp->alt();
+				$title = $cp->title();
+				$subtitle = $cp->subtitle();
+				$url = $cp->url();
+
+				$panels .= '<div class="carousel-item' . ($i==0?' active':'') . '">';
+					if (!empty($url)) { $panels .= '<a href="' . $url  . '">'; }
+						$panels .= '<img src="/image/' . $imageID . '/" class="d-block w-100" alt="' . $alt . '" />';
+					if (!empty($url)) { $panels .= '</a>'; }
+					if (!empty($title) || !empty($subtitle)) {
+						$panels .= '<div class="carousel-caption d-none d-md-block">';
+							if (!empty($title)) { $panels .= '<h5>' . $title . '</h5>'; }
+							if (!empty($subtitle)) { $panels .= '<p>' . $subtitle . '</p>'; }
+						$panels .= '</div>';
 					}
-					
-					$h .= "<div class=\"carousel-inner\">";
-					
-						$i = 0;
-						foreach ($panels AS $carouselPanelID) {
-							
-							$cp = new CarouselPanel($carouselPanelID);
-							
-							$imageID = $cp->imageID;
-							$alt = $cp->alt();
-							$title = $cp->title();
-							$subtitle = $cp->subtitle();
-							$url = $cp->url();
+				$panels .= '</div>';
 
-							$h .= "<div class=\"" . ($i==0?"active ":"") . "item\">";
-								
-								if ($url != '') { $h .= "<a href=\"" . $url  . "\">"; }
-									$h .= "<img src=\"/image/" . $imageID . "/\" style=\"width:100%;\" class=\"full\" alt=\"" . $alt . "\" />";
-								if ($url != '') { $h .= "</a>"; }
+			}
 
-								if ($title && $subtitle) {
-									$h .= '<div class="carousel-caption">';
-										$h .= '<h3 class="carouselPanelTitle">' . $title . '</h3>';
-										$h .= '<h3 class="carouselPanelSubtitle">' . $subtitle . '</h3>';
-									$h .= '</div>';
-								}
-								
-							$h .= '</div>';
-							$i = $i + 1;
-						}
-					$h .= '</div>';
-					
-					if ($numberOfPanels >= 2) { 
-						$h .= '<!-- Carousel nav -->';
-						$h .= '<a class="carousel-control left" href="#myCarousel" data-slide="prev"><span class="fas fa-chevron-left"></span></a>';
-						$h .= '<a class="carousel-control right" href="#myCarousel" data-slide="next"><span class="fas fa-chevron-right"></span></a>';
-					}
-					
-				$h .= '</div> <!-- END .carousel-inner -->';
-				
-			$h .= "</div> <!-- END #myCarousel -->";
+		$panels .= '</div>';
 
-		$h .= "</div> <!-- END CAROUSEL CONTAINER -->";
+		$controls = '';
+		if ($numberOfPanels > 1) {
+			$controls = '
+				<a class="carousel-control-prev" href="#perihelion_carousel" role="button" data-slide="prev">
+					<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+					<span class="sr-only">Previous</span>
+				</a>
+				<a class="carousel-control-next" href="#perihelion_carousel" role="button" data-slide="next">
+					<span class="carousel-control-next-icon" aria-hidden="true"></span>
+					<span class="sr-only">Next</span>
+				</a>
+			';
+		}
+
+		$c = '
+			<div class="">
+				<div class="container">
+					<div id="perihelion_carousel" class="carousel slide" data-ride="carousel">
+					' . $indicators . '
+					<div class="carousel-inner">' . $panels . '</div>
+					' . $controls . '
+					</div>
+				</div>
+			</div>
+		';
 		
-		return $h;
+		return $c;
 
 	}
 
