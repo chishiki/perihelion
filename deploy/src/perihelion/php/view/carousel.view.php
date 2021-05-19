@@ -1,81 +1,82 @@
 <?php
 
-class CarouselView {
+final class CarouselView {
 
-	private $urlArray;
-	private $inputArray;
-	private $errorArray;
+	private $loc;
+	private $input;
+	private $errors;
 	
-	public function __construct($urlArray = array(), $inputArray = array(),  $errorArray = array()) {
+	public function __construct($loc = array(), $input = array(),  $errors = array()) {
 		
-		$this->urlArray = $urlArray;
-		$this->inputArray = $inputArray;
-		$this->errorArray = $errorArray;
+		$this->loc = $loc;
+		$this->input = $input;
+		$this->errors = $errors;
 		
 	}
 	
 	public function carouselList() {
+
+		$table = '
 		
+			<div class="row">
+				<div class="col-12 col-sm-6 offset-sm-6 col-md-3 offset-md-9 mb-3">
+					<a class="btn btn-block btn-outline-success btn-sm" href="/' . Lang::languageUrlPrefix() . 'designer/carousels/create/">
+						<span class="fas fa-plus"></span> ' . Lang::getLang('create') . '
+					</a>
+				</div>
+			</div>
+			<div class="table-responsive">
+				<table class="table table-bordered table-striped">
+					<thead class="thead-light">
+						<tr>
+							<th class="text-center">' . Lang::getLang('id') . '</th>
+							<th class="text-center">' . Lang::getLang('creator') . '</th>
+							<th class="text-center">' . Lang::getLang('created') . '</th>
+							<th class="text-center">' . Lang::getLang('title') . '</th>
+							<th class="text-center">' . Lang::getLang('object') . '</th>
+							<th class="text-center">' . Lang::getLang('objectID') . '</th>
+							<th class="text-center">' . Lang::getLang('action') . '</th>
+						</tr>
+					</thead>
+					<tbody>' . $this->carouselListRows() . '</tbody>
+				</table>
+			</div>
+
+		';
+
+		$card = new CardView('perihelion_carousel_list', array('container'), '', array('col-12'), Lang::getLang('carousels'), $table, false);
+		return $card->card();
+
+	}
+
+	private function carouselListRows() {
+
 		$carouselArray = Carousel::carouselArray();
 
-		$h = "<div id=\"perihelionCarousels\">";
-			$h .= "<div class=\"container\">";
-				$h .= "<div class=\"row\">";
-					$h .= "<div class=\"col-sm-12\">";
+		$rows = '';
+		foreach($carouselArray AS $carouselID) {
 
-							$h .= "<div class=\"card\" >";
-								
-								$h .= "<div class=\"card-header\">";
-									$h .= "<div class=\"card-title\">";
-										$h .= Lang::getLang('carousels');
-										$h .= " <a class=\"btn btn-secondary btn-sm float-right\" href=\"/" . Lang::languageUrlPrefix() . "designer/carousels/create/\"><span class=\"fas fa-plus\"></span></a>";
-									$h .= "</div>";
-								$h .= "</div>";
-								
-								$h .= "<div class=\"card-body\">";
+			$carousel = new Carousel($carouselID);
+			$dt = new DateTime($carousel->carouselCreationDateTime);
+			$author = new User($carousel->carouselCreatedByUserID);
 
-									$h .= "<div class=\"table-responsive\">";
-										$h .= "<table class=\"table table-bordered table-striped\">";
-											
-											$h .= "<tr>";
-												$h .= "<th>" . Lang::getLang('id') . "</th>";
-												$h .= "<th>" . Lang::getLang('creator') . "</th>";
-												$h .= "<th>" . Lang::getLang('created') . "</th>";
-												$h .= "<th>" . Lang::getLang('title') . "</th>";
-												$h .= "<th>" . Lang::getLang('object') . "</th>";
-												$h .= "<th>" . Lang::getLang('objectID') . "</th>";
-												$h .= "<th class=\"text-center\">" . Lang::getLang('action') . "</th>";
-											$h .= "</tr>";
+			$rows .= '
+				<tr>
+					<td class="text-center">' . $carouselID . '</td>
+					<td class="text-center">' . $author->getUserDisplayName() . '</td>
+					<td class="text-center">' . $dt->format('Y-m-d') . '</td>
+					<td class="text-center">' . $carousel->title() . '</td>
+					<td class="text-center">' . $carousel->carouselObject . '</td>
+					<td class="text-center">' . ($carousel->carouselObjectID?$carousel->carouselObjectID:'') . '</td>
+					<td class="text-center">
+						<a class="btn btn-block btn-outline-primary btn-sm" href="/' . Lang::languageUrlPrefix() . 'designer/carousels/update/' . $carouselID . '/">' . Lang::getLang('update') . '</a>
+					</td>
+				</tr>
+			';
 
-											foreach($carouselArray AS $carouselID) {
-												
-												$carousel = new Carousel($carouselID);
-												$author = new User($carousel->carouselCreatedByUserID);
-												
-												$h .= "<tr>";
-													$h .= "<td>" . $carouselID . "</td>";
-													$h .= "<td>" . $author->getUserDisplayName() . "</td>";
-													$h .= "<td>" . date('Y-m-d',strtotime($carousel->carouselCreationDateTime)) . "</td>";
-													$h .= "<td>" . $carousel->title() . "</td>";
-													$h .= "<td>" . $carousel->carouselObject . "</td>";
-													$h .= "<td>" . $carousel->carouselObjectID . "</td>";
-													$h .= "<td class=\"text-center\"><a class=\"btn btn-secondary btn-sm\" href=\"/" . Lang::languageUrlPrefix() . "designer/carousels/update/" . $carouselID . "/\">" . Lang::getLang('update') . "</a></td>";
-												$h .= "</tr>";
-												
-											}
+		}
 
-										$h .= "</table>";
-									$h .= "</div>";
-
-								$h .= "</div>";
-							$h .= "</div>";
-
-					$h .= "</div>";
-				$h .= "</div>";
-			$h .= "</div>";
-		$h .= "</div>";
-
-		return $h;
+		return $rows;
 
 	}
 
@@ -86,8 +87,8 @@ class CarouselView {
 		$carouselPanels = CarouselPanel::carouselPanelArray($carouselID);
 		$carouselPanelHeading = 'carouselSettings';
 
-		if (!empty($this->inputArray)) {
-			foreach ($this->inputArray AS $key => $value) { if (isset($carousel->$key)) { $carousel->$key = $value; } }
+		if (!empty($this->input)) {
+			foreach ($this->input AS $key => $value) { if (isset($carousel->$key)) { $carousel->$key = $value; } }
 		}
 
 		$h = '<form role="form" class="form-horizontal" action="' . $actionURL . '" method="post" enctype="multipart/form-data">';
@@ -114,7 +115,7 @@ class CarouselView {
 			<hr />
 			<div class="form-row">' . FormElements::formGroupText($fgtpObject) . FormElements::formGroupText($fgtpObjectID) . FormElements::formGroupCheckboxInline($fgciCarouselPublished) . '</div>
 		';
-		$carouselFormCard = new CardView('perihelionCarouselForm', array('container'), '', array('col-12'), $carouselFormHeader, $carouselForm, false);
+		$carouselFormCard = new CardView('perihelionCarouselForm', array('container'), '', array('col-12'), $carouselFormHeader, $carouselForm, ($action=='create'?false:true));
 		$h .= $carouselFormCard->card();
 
 		$carouselPanelFormHeader = Lang::getLang('carouselPanelManager');
