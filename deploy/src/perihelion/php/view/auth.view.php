@@ -1,34 +1,43 @@
 <?php
 
-class AuthView {
+class AuthView
+{
 
 	private $urlArray;
 	private $inputArray;
 	private $modules;
 	private $errorArray;
-	
-	public function __construct($urlArray = array(), $inputArray = array(), $modules = array(), $errorArray = array()) {
-		
+
+	public function __construct($urlArray = array(), $inputArray = array(), $modules = array(), $errorArray = array())
+	{
+
 		$this->urlArray = $urlArray;
 		$this->inputArray = $inputArray;
 		$this->modules = $modules;
 		$this->errorArray = $errorArray;
-		
+
 	}
 
-	public function login() {
+	public function login()
+	{
 
 		$error = false;
 		$errorMessage = '';
 		if (isset($this->errorArray['login'])) {
 			$error = true;
-			foreach ($this->errorArray['login'] AS $message) { $errorMessage .= '<small>' . $message . '</small> '; }
+			foreach ($this->errorArray['login'] as $message) {
+				$errorMessage .= '<small>' . $message . '</small> ';
+			}
 		}
 
 		$userSelector = '';
 		$password = '';
-		if (isset($this->inputArray['userSelector'])) { $userSelector = $this->inputArray['userSelector']; }
-		if (isset($this->inputArray['password'])) { $password = $this->inputArray['password']; }
+		if (isset($this->inputArray['userSelector'])) {
+			$userSelector = $this->inputArray['userSelector'];
+		}
+		if (isset($this->inputArray['password'])) {
+			$password = $this->inputArray['password'];
+		}
 
 		$h = '
 
@@ -45,7 +54,7 @@ class AuthView {
 												<div class="input-group-prepend">
 													<span class="input-group-text"><span class="fas fa-envelope"></span></span>
 												</div>
-												<input type="text" id="userSelector" name="userSelector" class="form-control' . ($error?' is-invalid':'') . '" value="' . $userSelector . '" placeholder="username or email" autofocus>
+												<input type="text" id="userSelector" name="userSelector" class="form-control' . ($error ? ' is-invalid' : '') . '" value="' . $userSelector . '" placeholder="username or email" autofocus>
 											</div>
 										</div>
 									</div>
@@ -55,7 +64,7 @@ class AuthView {
 												<div class="input-group-prepend">
 													<span class="input-group-text"><span class="fas fa-lock"></span></span>
 												</div>
-												<input id="password" type="password" class="form-control' . ($error?' is-invalid':'') . '" name="password" value="' . $password . '" placeholder="password">
+												<input id="password" type="password" class="form-control' . ($error ? ' is-invalid' : '') . '" name="password" value="' . $password . '" placeholder="password">
 											</div>
 										' . $errorMessage . '
 										</div>
@@ -83,61 +92,71 @@ class AuthView {
 		';
 
 		return $h;
-	
+
 	}
 
-	public function loginSuccessful() {
-		
+	public function loginSuccessful()
+	{
+
 		$site = new Site($_SESSION['siteID']);
 		$navbar = new NavBar($this->urlArray, $this->inputArray, array(), $site->siteNavMenuID);
 		$items = $navbar->getNavBarItems();
 
-		foreach ($this->modules AS $moduleName) {
+		if (!empty($moduleName)) {
+			foreach ($this->modules as $moduleName) {
 
-			$moduleDashboardView = ucfirst($moduleName) . 'DashboardView';
-			if (class_exists($moduleDashboardView)) {
-				$view = new $moduleDashboardView($this->urlArray);
-				$h = $view->dashboard();
-			} else {
+				// want to convert modules names with hyphens to CamelCase here
+				// eg: perihelion-satellite => PerihelionSatellite
+				$moduleNameArray = explode('-', $moduleName);
+				$moduleNameArrayMap = array_map('ucfirst', $moduleNameArray);
+				$moduleCamelCaseName = implode('', $moduleNameArrayMap);
 
-		$h = '<div id="login_successful" class="container">';
+				$moduleDashboardView = ucfirst($moduleCamelCaseName) . 'DashboardView';
+				if (class_exists($moduleDashboardView)) {
+					$view = new $moduleDashboardView($this->urlArray);
+					$h = $view->dashboard();
+				}
 
-			$h .= '<div class="col-12">';
-				$h .= '<div class="card" >';
-					
-					$h .= '<h5 class="card-header">' . Lang::getLang('loginSuccessful') . '</h5>';
-					
-					$h .= '<div class="card-body">';
+			}
+		}
 
-						$h .= '<ul>';
-						
-							foreach ($items AS $item) {
-							
-								$h .= '<li>';
-									if ($item['url'] == '#' || $item['disabled'] == 1) { $h .= $item['anchor']; } 
-									else { $h .= '<a href="' . $item['url'] . '">' . $item['anchor'] . '</a>'; }
+		if (!isset($h)) {
+
+			$h = '<div id="login_successful" class="container">';
+				$h .= '<div class="col-12">';
+					$h .= '<div class="card" >';
+						$h .= '<h5 class="card-header">' . Lang::getLang('loginSuccessful') . '</h5>';
+						$h .= '<div class="card-body">';
+							$h .= '<ul>';
+								foreach ($items as $item) {
+
+									$h .= '<li>';
+									if ($item['url'] == '#' || $item['disabled'] == 1) {
+										$h .= $item['anchor'];
+									} else {
+										$h .= '<a href="' . $item['url'] . '">' . $item['anchor'] . '</a>';
+									}
 									if (isset($item['children'])) {
 										$h .= '<ul>';
-											foreach ($item['children'] AS $child) {
-												$h .= '<li>';
-													if ($child['url'] == '#' || $child['disabled'] == 1) { $h .= $child['anchor']; } 
-													else { $h .= '<a href="' . $child['url'] . '">' . $child['anchor'] . '</a>'; }
-												$h .= '</li>';
+										foreach ($item['children'] as $child) {
+											$h .= '<li>';
+											if ($child['url'] == '#' || $child['disabled'] == 1) {
+												$h .= $child['anchor'];
+											} else {
+												$h .= '<a href="' . $child['url'] . '">' . $child['anchor'] . '</a>';
 											}
+											$h .= '</li>';
+										}
 										$h .= '</ul>';
 									}
-								$h .= '</li>';
-							}
-						
-						$h .= '</ul>';
-
+									$h .= '</li>';
+								}
+							$h .= '</ul>';
+						$h .= '</div>';
 					$h .= '</div>';
 				$h .= '</div>';
 			$h .= '</div>';
 
-		$h .= '</div>';
-
-			}
 		}
 
 		return $h;

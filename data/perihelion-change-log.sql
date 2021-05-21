@@ -62,3 +62,9 @@ ALTER TABLE perihelion_Video ENGINE = InnoDB;
 
 SET @langTimeStamp := now();
 INSERT INTO perihelion_Lang VALUES ('youMustEnableJavaScript', 'You must enable JavaScript to use this site.', 0, 'JavaScriptを有効に設定してからご利用ください。', 0, @langTimeStamp);
+
+/* @chishiki 2021-05-18 */
+
+SET @langTimeStamp := now();
+INSERT INTO perihelion_Lang VALUES ('carouselSettings', 'Carousel Settings', 0, 'カルーセル設定', 0, @langTimeStamp);
+INSERT INTO perihelion_Lang VALUES ('carouselPanelManager', 'Panel Manager', 0, 'パネル管理', 0, @langTimeStamp);
