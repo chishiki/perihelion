@@ -148,7 +148,7 @@ class Controller {
 
 					foreach ($this->moduleArray AS $moduleName) {
 						if ($this->urlArray[1] == $moduleName) {
-							$webhookClass = ucfirst($moduleName) . 'Webhook';
+							$webhookClass = ModuleUtilities::moduleToClassName($moduleName, 'Webhook');
 							if (class_exists($webhookClass)) {
 								$hook = new $webhookClass($this->urlArray,$this->inputArray);
 								$hook->process();
@@ -172,7 +172,7 @@ class Controller {
 				    $response = '{}';
 				    foreach ($this->moduleArray AS $moduleName) {
 				        if ($this->urlArray[1] == $moduleName) {
-				            $apiClass = ucfirst($moduleName) . 'API';
+							$apiClass = ModuleUtilities::moduleToClassName($moduleName, 'API');
 				            $api = new $apiClass($this->urlArray,$this->inputArray);
 				            $response = $api->response();
 				        }
@@ -190,7 +190,7 @@ class Controller {
 
 					foreach ($this->moduleArray AS $moduleName) {
 						if ($this->urlArray[1] == $moduleName) {
-							$pdfClass = ucfirst($moduleName) . 'PDF';
+							$pdfClass = ModuleUtilities::moduleToClassName($moduleName, 'PDF');
 							if (class_exists($pdfClass)) {
 								$pdf = new $pdfClass($this->urlArray,$this->inputArray);
 								$doc = $pdf->doc();
@@ -238,7 +238,7 @@ class Controller {
 					$doc = 'perihelion print';
 					foreach ($this->moduleArray AS $moduleName) {
 				        if ($this->urlArray[1] == $moduleName) {
-				            $printClass = ucfirst($moduleName) . 'Print';
+							$printClass = ModuleUtilities::moduleToClassName($moduleName, 'Print');
 				            if (class_exists($printClass)) {
 				            	$print = new $printClass($this->urlArray,$this->inputArray);
 				            	$doc = $print->doc();

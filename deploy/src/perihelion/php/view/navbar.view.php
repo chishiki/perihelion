@@ -94,7 +94,7 @@ class NavBarView {
 				// if a module navbar search form exists then use it
 				foreach ($this->moduleArray AS $moduleName) {
 			        if ($this->urlArray[0] == $moduleName) {
-			        	$navbarSearchViewClass = ucfirst($moduleName) . 'SearchView';
+						$navbarSearchViewClass = ModuleUtilities::moduleToClassName($moduleName, 'SearchView');
 			            $sv = new $navbarSearchViewClass($this->urlArray,$this->inputArray,$this->moduleArray,array(),array());
 			            $sq = new SearchQuery();
 			            if (isset($_SESSION['search']['searchQueryString']) && !empty($_SESSION['search']['searchQueryString'])) {

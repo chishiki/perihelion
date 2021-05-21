@@ -28,7 +28,7 @@ class CSVController {
 			
 			if ($this->urlArray[1] == $moduleName) {
 
-		        $moduleExportController = ucfirst($moduleName) . 'ExportController';
+				$moduleExportController = ModuleUtilities::moduleToClassName($moduleName, 'ExportController');
 		        $mec = new $moduleExportController($this->urlArray, $this->inputArray, $this->moduleArray);
 		        
 		        $filename = $mec->filename();

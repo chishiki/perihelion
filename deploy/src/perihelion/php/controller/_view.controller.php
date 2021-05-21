@@ -55,16 +55,8 @@ class ViewController {
 
 		foreach ($this->moduleArray AS $moduleName) {
 			if ($loc[0] == $moduleName) {
-
-				// want to convert modules names with hyphens to CamelCase here
-				// eg: perihelion-satellite => PerihelionSatellite
-				$moduleNameArray = explode('-', $moduleName);
-				$moduleNameArrayMap = array_map('ucfirst', $moduleNameArray);
-				$moduleCamelCaseName = implode('', $moduleNameArrayMap);
-
-		        $moduleViewController = $moduleCamelCaseName . 'ViewController';
+				$moduleViewController = ModuleUtilities::moduleToClassName($moduleName, 'ViewController');
 		        $view = new $moduleViewController($loc, $input, $mods, $errors, $msg);
-		        
 		    }
 		}
 		

@@ -34,7 +34,7 @@ class IndexViewController {
 		}
 		
 		foreach ($this->moduleArray AS $moduleName) {
-			$moduleIndexView = ucfirst($moduleName) . 'IndexView';
+			$moduleIndexView = ModuleUtilities::moduleToClassName($moduleName, 'IndexView');
 			$view = new $moduleIndexView($this->urlArray);
 			$h .= $view->getView();
 		}

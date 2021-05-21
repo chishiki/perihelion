@@ -85,7 +85,7 @@ final class UserRoleUtilities {
 
 		foreach ($this->modules AS $moduleName) {
 
-			$userRoleClass = ucfirst($moduleName) . 'UserRoles';
+			$userRoleClass = ModuleUtilities::moduleToClassName($moduleName, 'UserRoles');
 			if (class_exists($userRoleClass)) {
 				$moduleUR = new $userRoleClass();
 				$moduleUserRoles = $moduleUR->roles();

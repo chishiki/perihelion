@@ -182,9 +182,9 @@ class PageView {
 	private function header() {
 
 		foreach ($this->moduleArray as $moduleName) {
-			$class = ucfirst($moduleName) . 'NavbarView';
-			if (class_exists($class)) {
-				$navbar = new $class($this->urlArray, $this->inputArray, $this->inputArray);
+			$navbarViewClass = ModuleUtilities::moduleToClassName($moduleName, 'NavbarView');
+			if (class_exists($navbarViewClass)) {
+				$navbar = new $navbarViewClass($this->urlArray, $this->inputArray, $this->inputArray);
 				return $navbar->navbar();
 			}
 		}
@@ -222,9 +222,9 @@ class PageView {
 		}
 		
 		foreach ($this->moduleArray as $moduleName) {
-			$class = ucfirst($moduleName) . 'FooterView';
-			if (class_exists($class)) {
-				$f = new $class($this->urlArray, $this->inputArray, $this->inputArray);
+			$footerViewClass = ModuleUtilities::moduleToClassName($moduleName, 'FooterView');
+			if (class_exists($footerViewClass)) {
+				$f = new $footerViewClass($this->urlArray, $this->inputArray, $this->inputArray);
 				$footer .= $f->footer();
 			}
 		}

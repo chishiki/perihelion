@@ -40,16 +40,8 @@ class StateController {
 		
 		foreach ($this->moduleArray AS $moduleName) {
 			if ($loc[0] == $moduleName) {
-
-				// want to convert modules names with hyphens to CamelCase here
-				// eg: perihelion-satellite => PerihelionSatellite
-				$moduleNameArray = explode('-', $moduleName);
-				$moduleNameArrayMap = array_map('ucfirst', $moduleNameArray);
-				$moduleCamelCaseName = implode('', $moduleNameArrayMap);
-
-		        $moduleStateController = $moduleCamelCaseName . 'Controller';
+				$moduleStateController = ModuleUtilities::moduleToClassName($moduleName, 'Controller');
 		        $state = new $moduleStateController($loc,$input,$mods);
-
 		    }
 		}
 
@@ -57,8 +49,8 @@ class StateController {
 
 			$state->setState();
 
-			foreach ($this->moduleArray AS $module)  {
-				$moduleSessionController = ucfirst($module) . 'SessionController';
+			foreach ($this->moduleArray AS $moduleName)  {
+				$moduleSessionController = ModuleUtilities::moduleToClassName($moduleName, 'SessionController');
 				if (class_exists($moduleSessionController)) {
 					$moduleSessionData = new $moduleSessionController();
 					$moduleSessionData->setSession();
