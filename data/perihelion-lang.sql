@@ -815,4 +815,9 @@ INSERT INTO `perihelion_Lang` VALUES
 ('customer','Customer',0,'カスタマー',0,@now),
 ('stripeCustomers','Stripe Customers',0,'顧客 (ストライプ)',0,@now),
 ('cancel','Cancel',0,'キャンセル',0,@now),
-('navbarSiteAdmin','Admin',0,'管理',0,@now);
+('navbarSiteAdmin','Admin',0,'管理者',0,@now),
+('carouselSettings','Carousel Settings',0,'カルーセル設定',0,@now),
+('carouselPanelManager','Panel Manager',0,'パネル管理',0,@now),
+('addNewPanels','Add New Panel',0,'新規追加',0,@now),
+('selectImage','Select Image',0,'イメージ選択',0,@now);
+
