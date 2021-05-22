@@ -1,14 +1,14 @@
 # CONFIG
 
 /deploy/vault/config/*
+# only the example configuration file will be tracked and committed
 !/deploy/vault/config/instance.config.template.php
 
 # DATA
 
 /data/*
-!/data/perihelion-change-log.sql
-!/data/perihelion-schema.sql
-!/data/perihelion-install.sql
+# only files that begin with "perihelion-" will be tracked and committed
+!/data/perihelion-*
 
 # VENDOR
 
