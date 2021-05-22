@@ -1,6 +1,11 @@
 <?php
 
-require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/vendor/aws/aws-autoloader.php');
+$awsAutoloaderPath = $_SERVER['DOCUMENT_ROOT'] . '/perihelion/vendor/aws/aws-autoloader.php';
+if (file_exists($awsAutoloaderPath)) { require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/vendor/aws/aws-autoloader.php'); }
+// required to use aws-sdk-php
+// https://aws.amazon.com/sdk-for-php/
+// https://docs.aws.amazon.com/sdk-for-php/v3/developer-guide/welcome.html
+// https://github.com/aws/aws-sdk-php
 	
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/controller/_perihelion.controller.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/controller/_state.controller.php');
