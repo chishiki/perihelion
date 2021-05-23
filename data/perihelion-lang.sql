@@ -819,5 +819,6 @@ INSERT INTO `perihelion_Lang` VALUES
 ('carouselSettings','Carousel Settings',0,'カルーセル設定',0,@now),
 ('carouselPanelManager','Panel Manager',0,'パネル管理',0,@now),
 ('addNewPanels','Add New Panel',0,'新規追加',0,@now),
-('selectImage','Select Image',0,'イメージ選択',0,@now);
+('selectImage','Select Image',0,'イメージ選択',0,@now),
+('returnToList','Return to List',0,'一覧に戻る',0,@now);
 
