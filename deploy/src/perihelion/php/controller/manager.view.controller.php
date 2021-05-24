@@ -2,17 +2,19 @@
 
 class ManagerViewController {
 
-	private $urlArray;
-	private $inputArray;
-	private $errorArray;
-	private $messageArray;
+	private $loc;
+	private $input;
+	private $modules;
+	private $errors;
+	private $messages;
 	
-	public function __construct($urlArray, $inputArray, $errorArray, $messageArray) {
+	public function __construct($loc, $input, $modules, $errors, $messages) {
 
-		$this->urlArray = $urlArray;
-		$this->inputArray = $inputArray;
-		$this->errorArray = $errorArray;
-		$this->messageArray = $messageArray;
+		$this->loc = $loc;
+		$this->input = $input;
+		$this->modules = $modules;
+		$this->errors = $errors;
+		$this->messages = $messages;
 		
 		$authorizedRoles = array('siteAdmin','siteManager');
 		$role = Auth::getUserRole();
@@ -21,58 +23,64 @@ class ManagerViewController {
 	}
 	
 	public function getView() {
-		
-		$menu = new MenuView($this->urlArray,$this->inputArray,$this->errorArray);
+
+		$loc = $this->loc;
+		$input = $this->input;
+		$modules = $this->modules;
+		$errors = $this->errors;
+		$messages = $this->messages;
+
+		$menu = new MenuView($this->loc,$this->input,$this->errors);
 		$nav = $menu->siteSettingsNav();
 		
-		if ($this->urlArray[1] == 'settings') {
-			$view = new SiteView($this->urlArray,$this->inputArray,$this->errorArray,$this->messageArray);
+		if ($this->loc[1] == 'settings') {
+			$view = new SiteView($loc, $input, $modules, $errors, $messages);
 			return $nav . $view->siteSettingsForm();
 		}
 		
-		if ($this->urlArray[1] == 'google') {
-			$view = new SiteView($this->urlArray,$this->inputArray,$this->errorArray,$this->messageArray);
+		if ($this->loc[1] == 'google') {
+			$view = new SiteView($loc, $input, $modules, $errors, $messages);
 			return $nav . $view->siteGoogleForm();
 		}
 		
-		if ($this->urlArray[1] == 'social') {
-			$view = new SiteView($this->urlArray,$this->inputArray,$this->errorArray,$this->messageArray);
+		if ($this->loc[1] == 'social') {
+			$view = new SiteView($loc, $input, $modules, $errors, $messages);
 			return $nav . $view->siteSocialForm();
 		}
 		
-		if ($this->urlArray[1] == 'email') {
-			$view = new SiteView($this->urlArray,$this->inputArray,$this->errorArray,$this->messageArray);
+		if ($this->loc[1] == 'email') {
+			$view = new SiteView($loc, $input, $modules, $errors, $messages);
 			return $nav . $view->siteEmailForm();
 		}
 		
-		if ($this->urlArray[1] == 'modules') {
-			$view = new SiteView($this->urlArray,$this->inputArray,$this->errorArray,$this->messageArray);
+		if ($this->loc[1] == 'modules') {
+			$view = new SiteView($loc, $input, $modules, $errors, $messages);
 			return $nav . $view->siteModulesForm();
 		}
 
-		if ($this->urlArray[1] == 'users') {
-			$view = new UserView($this->urlArray,$this->inputArray,$this->errorArray);
-			if ($this->urlArray[2] == 'create') {
+		if ($this->loc[1] == 'users') {
+			$view = new UserView($this->loc,$this->input,$this->errors);
+			if ($this->loc[2] == 'create') {
 				return $nav . $view->userForm();
-			} elseif ($this->urlArray[2] == 'update' && ctype_digit($this->urlArray[3])) {
-				return $nav . $view->userForm($this->urlArray[3]);
-			} elseif ($this->urlArray[2] == 'revoke-access') {
-				return $nav . $view->revokeAccessConfirmationForm($this->urlArray[3]);
-			} elseif ($this->urlArray[2] == 'grant-access') {
-				return $nav . $view->grantAccessForm($this->urlArray[3]);
+			} elseif ($this->loc[2] == 'update' && ctype_digit($this->loc[3])) {
+				return $nav . $view->userForm($this->loc[3]);
+			} elseif ($this->loc[2] == 'revoke-access') {
+				return $nav . $view->revokeAccessConfirmationForm($this->loc[3]);
+			} elseif ($this->loc[2] == 'grant-access') {
+				return $nav . $view->grantAccessForm($this->loc[3]);
 			} else {
 				return $nav . $view->userList($_SESSION['siteID']);
 			}
 		}
 
-		if ($this->urlArray[1] == 'contacts') {
+		if ($this->loc[1] == 'contacts') {
 			
-			$view = new ContactView($this->urlArray,$this->inputArray,$this->errorArray);
+			$view = new ContactView($this->loc,$this->input,$this->errors);
 			
-			if ($this->urlArray[2] == 'view' && ctype_digit($this->urlArray[3])) {
-				$contact = new Contact($this->urlArray[3]);
+			if ($this->loc[2] == 'view' && ctype_digit($this->loc[3])) {
+				$contact = new Contact($this->loc[3]);
 				if ($contact->siteID == $_SESSION['siteID']) {
-					return $nav . $view->contactView($this->urlArray[3]);
+					return $nav . $view->contactView($this->loc[3]);
 				}
 			} else {
 				return $nav . $view->contactList();
@@ -81,23 +89,23 @@ class ManagerViewController {
 			
 		}
 		
-		if ($this->urlArray[1] == 'audit') {
+		if ($this->loc[1] == 'audit') {
 			
-			$view = new AuditView($this->urlArray,$this->inputArray,$this->errorArray);
+			$view = new AuditView($this->loc,$this->input,$this->errors);
 			return $nav . $view->auditTrail('manager');
 			
 		}
 		
-		if ($this->urlArray[1] == 'uptime') {
+		if ($this->loc[1] == 'uptime') {
 
-			$view = new UptimeView($this->urlArray,$this->inputArray,$this->errorArray);
+			$view = new UptimeView($this->loc,$this->input,$this->errors);
 			return $nav . $view->uptime('manager');
 
 		}
 		
-		if ($this->urlArray[1] == 'newsletter') {
+		if ($this->loc[1] == 'newsletter') {
 			
-			$view = new NewsletterView($this->urlArray,$this->inputArray,$this->errorArray,$this->messageArray);
+			$view = new NewsletterView($this->loc,$this->input,$this->errors,$this->messages);
 			return $nav . $view->subscriberList();
 			
 		}

@@ -37,7 +37,7 @@ class ViewController {
 		if ($loc[0] == 'designer' && in_array($role,$designerUserRoleArray)) { $view = new DesignerViewController($loc, $input, $errors, $msg); }
 		if ($loc[0] == 'enquiry') { $view = new EnquiryViewController($loc, $input, $errors); }
 		if ($loc[0] == 'manage-menus') { $view = new MenuViewController($loc, $input, $errors); }
-		if ($loc[0] == 'manager' && in_array($role,$managerUserRoleArray)) { $view = new ManagerViewController($loc, $input, $errors, $msg); }
+		if ($loc[0] == 'manager' && in_array($role,$managerUserRoleArray)) { $view = new ManagerViewController($loc, $input, $mods, $errors, $msg); }
 		if ($loc[0] == 'newsletter') { $view = new NewsletterViewController($loc, $input, $errors, $msg); }
 		if ($loc[0] == 'profile') { $view = new ProfileViewController($loc, $input, $errors); }
 		if ($loc[0] == 'project') { $view = new ProjectViewController($loc, $input, $errors); }
