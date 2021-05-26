@@ -46,13 +46,16 @@ INSERT INTO `perihelion_Site` VALUES
     '', -- siteGoogleAdSenseID
     '', -- siteGoogleApiKey
     0, -- siteUsesGoogleMaps
+	0, -- siteUsesLocationPicker
+    0, -- defaultLatitude
+    0, -- defaultLongitude
     '', -- siteTheme
     1, -- themeID
     'perihelionkk', -- siteTwitter
     'perihelionkk', -- siteFacebook
     'perihelionkk', -- siteLinkedIn
-    'perihelionkk', -- sitePinterest
-    'perihelionsystems', -- siteInstagram
+    '', -- sitePinterest
+    'perihelion_kk', -- siteInstagram
     '', -- siteSkype
     '', -- siteAutomatedEmailAddress
     '', -- siteAutomatedEmailSenderName
