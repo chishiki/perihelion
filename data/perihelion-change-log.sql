@@ -68,3 +68,28 @@ INSERT INTO perihelion_Lang VALUES ('youMustEnableJavaScript', 'You must enable 
 SET @langTimeStamp := now();
 INSERT INTO perihelion_Lang VALUES ('carouselSettings', 'Carousel Settings', 0, 'カルーセル設定', 0, @langTimeStamp);
 INSERT INTO perihelion_Lang VALUES ('carouselPanelManager', 'Panel Manager', 0, 'パネル管理', 0, @langTimeStamp);
+
+/* @chishiki 2021-06-01 */
+
+ALTER TABLE `perihelion_Content`
+    CHANGE COLUMN `contentID` `contentID` INT(12) NOT NULL ,
+    CHANGE COLUMN `siteID` `siteID` INT(12) NOT NULL ,
+    CHANGE COLUMN `entryCategoryID` `contentCategoryID` INT(12) NOT NULL ,
+    ADD COLUMN `creator` INT(12) NOT NULL AFTER `siteID`,
+    ADD COLUMN `created` DATETIME NOT NULL AFTER `creator`,
+    ADD COLUMN `updated` DATETIME NOT NULL AFTER `created`,
+    ADD COLUMN `deleted` INT(1) NOT NULL AFTER `updated`;
+
+CREATE TABLE `perihelion_ContentCategory` (
+    `contentCategoryID` int(12) NOT NULL AUTO_INCREMENT,
+    `siteID` int(12) NOT NULL,
+    `creator` int(12) NOT NULL,
+    `created` datetime NOT NULL,
+    `updated` datetime NOT NULL,
+    `deleted` int(1) NOT NULL,
+    `contentCategoryParentID` int(12) NOT NULL,
+    `contentCategoryURL` varchar(100) NOT NULL,
+    `contentCategoryEnglish` varchar(100) NOT NULL,
+    `contentCategoryJapanese` varchar(100) NOT NULL,
+    PRIMARY KEY (`contentCategoryID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

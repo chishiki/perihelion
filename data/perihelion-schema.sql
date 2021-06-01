@@ -195,13 +195,17 @@ CREATE TABLE `perihelion_ContactForm` (
 DROP TABLE IF EXISTS `perihelion_Content`;
 
 CREATE TABLE `perihelion_Content` (
-  `contentID` int(8) NOT NULL AUTO_INCREMENT,
-  `siteID` int(8) NOT NULL,
+  `contentID` int(12) NOT NULL,
+  `siteID` int(12) NOT NULL,
+  `creator` int(12) NOT NULL,
+  `created` datetime NOT NULL,
+  `updated` datetime NOT NULL,
+  `deleted` int(1) NOT NULL,
   `entrySiteID` int(8) NOT NULL,
   `contentURL` varchar(100) NOT NULL,
   `entrySeoURL` varchar(255) NOT NULL,
   `contentCategoryKey` varchar(255) NOT NULL,
-  `entryCategoryID` int(8) NOT NULL,
+  `contentCategoryID` int(12) NOT NULL,
   `entrySubmittedByUserID` int(12) NOT NULL,
   `entrySubmissionDateTime` datetime NOT NULL,
   `entryPublishStartDate` date NOT NULL,
@@ -226,6 +230,24 @@ CREATE TABLE `perihelion_Content` (
   `contentDeletedByUserID` int(12) NOT NULL,
   `contentLock` int(1) NOT NULL,
   PRIMARY KEY (`contentID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+
+DROP TABLE IF EXISTS `perihelion_ContentCategory`;
+
+CREATE TABLE `perihelion_ContentCategory` (
+  `contentCategoryID` int(12) NOT NULL AUTO_INCREMENT,
+  `siteID` int(12) NOT NULL,
+  `creator` int(12) NOT NULL,
+  `created` datetime NOT NULL,
+  `updated` datetime NOT NULL,
+  `deleted` int(1) NOT NULL,
+  `contentCategoryParentID` int(12) NOT NULL,
+  `contentCategoryURL` varchar(100) NOT NULL,
+  `contentCategoryEnglish` varchar(100) NOT NULL,
+  `contentCategoryJapanese` varchar(100) NOT NULL,
+  PRIMARY KEY (`contentCategoryID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 

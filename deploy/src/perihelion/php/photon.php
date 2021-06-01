@@ -55,6 +55,7 @@ require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/model/config.model.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/model/contact.model.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/model/contactForm.model.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/model/content.model.php');
+require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/model/contentCategory.model.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/model/contract.model.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/model/contractSignature.model.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/model/cookie.model.php');
