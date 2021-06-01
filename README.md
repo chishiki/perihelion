@@ -17,19 +17,22 @@ sudo apt upgrade
 sudo apt dist-upgrade
 sudo apt autoremove
 sudo apt install apache2
-sudo apt-get install -y memcached libmemcached-tools
-sudo apt-get install php
-sudo apt-get install libapache2-mod-php
-sudo apt-get install php-mysql
-sudo apt-get install php-curl
-sudo apt-get install php-geoip
-sudo apt-get install php-cli
-sudo apt-get install php-gd
-sudo apt-get install php-mbstring
-sudo apt-get install php-xml
-sudo apt-get install php-memcached
-sudo a2enmod php7.2
-apt-get install grc
+sudo apt install memcached
+sudo apt install libmemcached-tools
+sudo add-apt-repository ppa:ondrej/php
+sudo apt install php7.4
+sudo apt install php7.4-bcmath
+sudo apt install php7.4-curl 
+sudo apt install php7.4-gd
+sudo apt install php7.4-geoip
+sudo apt install php7.4-mbstring
+sudo apt install php7.4-memcached
+sudo apt install php7.4-mysql
+sudo apt install php7.4-xml
+sudo apt install php7.4-zip
+sudo apt install grc
+sudo add-apt-repository ppa:certbot/certbot
+sudo apt-get install python-certbot-apache
 ```
 
 #### RDS (MySQL)
