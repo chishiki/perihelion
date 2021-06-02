@@ -820,5 +820,8 @@ INSERT INTO `perihelion_Lang` VALUES
 ('carouselPanelManager','Panel Manager',0,'パネル管理',0,@now),
 ('addNewPanels','Add New Panel',0,'新規追加',0,@now),
 ('selectImage','Select Image',0,'イメージ選択',0,@now),
-('returnToList','Return to List',0,'一覧に戻る',0,@now);
+('returnToList','Return to List',0,'一覧に戻る',0,@now),
+('devEnvironment','Dev Environment',0,'開発環境',0,@now),
+('loginSuccessful','Login Successful',0,'ログインが出来ました',0,@now),
+('devData','Dev Data',0,'開発データ',0,@now);
 

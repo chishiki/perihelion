@@ -93,3 +93,12 @@ CREATE TABLE `perihelion_ContentCategory` (
     `contentCategoryJapanese` varchar(100) NOT NULL,
     PRIMARY KEY (`contentCategoryID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+/* @chishiki 2021-06-02 */
+
+SET @now := now();
+INSERT INTO perihelion_Lang VALUES ('devEnvironment', 'Dev Environment', 0, '開発環境', 0, @now);
+INSERT INTO perihelion_Lang VALUES ('loginSuccessful','Login Successful',0,'ログインが出来ました',0,@now);
+INSERT INTO perihelion_Lang VALUES ('devData','Dev Data',0,'開発データ',0,@now);
+
+UPDATE perihelion_Content SET creator = 1, created = @now, updated = @now, deleted = 0 WHERE contentID > 0;

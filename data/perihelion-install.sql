@@ -10,7 +10,7 @@ INSERT INTO `perihelion_Carousel` VALUES
 
 INSERT INTO `perihelion_Content` VALUES
 (
-    1,@siteID,@siteID,'','home','page',0,1,@now,'0000-00-00','2073-12-18',@now,'Index','インデックス',
+    1,@siteID,@userID,@now,@now,0,@siteID,'','home','page',0,1,@now,'0000-00-00','2073-12-18',@now,'Index','インデックス',
     '<div class=\"container-fluid\"><div class=\"row\"><div class=\"col-12 col-md-8 offset-md-2\">Perihelion is a content management system for building dynamic responsive websites and a prototype and systems development framework that enables the rapid development and deployment of highly customizable modular functionality.</div></div></div>',
     '<div class=\"container-fluid\"><div class=\"row\"><div class=\"col-12 col-md-8 offset-md-2\">ペリヘリオンは動的なレスポンシブWebサイトを構築するためのコンテントマネージメントシステムであり、高度にカスタマイズ可能なモジュール機能の迅速な開発と展開を可能にするプロトタイプおよびシステム開発フレームワークです。</div></div></div>',
     0,0,1,0,'','','Index','インデックス','Index','インデックス',0,'0000-00-00 00:00:00',0,0
