@@ -153,28 +153,28 @@ class PageView {
 		
 		$integratedErrorMessages = array('contact','contact-us','enquiry','get-in-touch','designer','manager','admin','profile');
 		$scriptFilter = array('designer','manager','admin','support');
-		
-		if (empty($this->urlArray[0])) { $body_class = 'index'; } else { $body_class = $this->urlArray[0]; }
-		$h = '<body class="' . $body_class . ' lang-' . $_SESSION['lang'] . ' ' . Config::read('environment') . '">';
-		if (!in_array($this->urlArray[0],$scriptFilter)) { $h .= $this->scripts('header'); }
-		$h .= $this->header();
-		$h .= $this->messages();
-		if (!in_array($this->urlArray[0],$integratedErrorMessages)) { $h .= $this->errors(); }
-		$h .= $html;
-		$h .= $this->footer();
 
-		if (!in_array($this->urlArray[0],$scriptFilter)) { $h .= $this->scripts('footer'); }
+		$bodyClasses = array();
+		if (empty($this->urlArray[0])) { $bodyClasses[] = 'index'; } else { $bodyClasses[] = $this->urlArray[0]; }
+		$bodyClasses[] = 'site-' . $_SESSION['siteID'];
+		$bodyClasses[] = 'lang-' . $_SESSION['lang'];
+		$bodyClasses[] = Config::read('environment');
 
-		if (Config::read('javascript.required') == true) {
-			$h .= '
-				<noscript>
-					<h1 class="enable-javascript">' . Lang::getLang('youMustEnableJavaScript') . '</h1>
-				</noscript>
-			';
-		}
-
+		$h = '<body class="' . implode(' ',$bodyClasses) . '">';
+			$h .= '<div id="perihelion-body">';
+				if (!in_array($this->urlArray[0],$scriptFilter)) { $h .= $this->scripts('header'); }
+				$h .= $this->header();
+				$h .= $this->messages();
+				if (!in_array($this->urlArray[0],$integratedErrorMessages)) { $h .= $this->errors(); }
+				$h .= '<div id="perihelion-main">' . $html . '</div>';
+				$h .= $this->footer();
+				if (!in_array($this->urlArray[0],$scriptFilter)) { $h .= $this->scripts('footer'); }
+				if (Config::read('javascript.required') == true) {
+					$h .= '<noscript><h1 class="enable-javascript">' . Lang::getLang('youMustEnableJavaScript') . '</h1></noscript>';
+				}
+			$h .= '</div>';
 		$h .= '</body>';
-		
+
 		return $h;
 		
 	}
