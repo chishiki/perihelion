@@ -161,12 +161,12 @@ class PageView {
 		$bodyClasses[] = Config::read('environment');
 
 		$h = '<body class="' . implode(' ',$bodyClasses) . '">';
-			$h .= '<div id="perihelion-body">';
+			$h .= '<div id="perihelion_body">';
 				if (!in_array($this->urlArray[0],$scriptFilter)) { $h .= $this->scripts('header'); }
 				$h .= $this->header();
 				$h .= $this->messages();
 				if (!in_array($this->urlArray[0],$integratedErrorMessages)) { $h .= $this->errors(); }
-				$h .= '<div id="perihelion-main">' . $html . '</div>';
+				$h .= '<div id="perihelion_main">' . $html . '</div>';
 				$h .= $this->footer();
 				if (!in_array($this->urlArray[0],$scriptFilter)) { $h .= $this->scripts('footer'); }
 				if (Config::read('javascript.required') == true) {
