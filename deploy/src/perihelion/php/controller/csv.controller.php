@@ -39,10 +39,13 @@ class CSVController {
 		    
 		}
 
-		header('Content-Type: text/csv; charset=utf-8');
+		header('Content-Encoding: UTF-8');
+		header('Content-Type: text/csv; charset=UTF-8');
 		header('Content-Disposition: attachment; filename=' . $filename . '.csv');
 		header('Cache-Control: no-cache, must-revalidate');
+
 		$output = fopen('php://output', 'w');
+		fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF));
 		fputcsv($output, $columns);
 		foreach ($rows AS $row) { fputcsv($output, $row); }
 		

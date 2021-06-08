@@ -139,9 +139,6 @@ class Controller {
 
 				case 'csv':
 
-					header('Content-Encoding: UTF-8');
-					header('Content-Type: text/csv; charset=UTF-8');
-
 					$csv = new CSVController($this->urlArray, $this->inputArray, $this->moduleArray);
 					$csv->export();
 					
