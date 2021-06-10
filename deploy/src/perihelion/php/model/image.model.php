@@ -2,9 +2,13 @@
 
 /*
 CREATE TABLE `perihelion_Image` (
-`imageID` int(12) NOT NULL AUTO_INCREMENT,
+  `imageID` int(12) NOT NULL AUTO_INCREMENT,
   `imageDisplayOrder` int(4) NOT NULL,
   `siteID` int(8) NOT NULL,
+  `creator` int(12) NOT NULL,
+  `created` datetime NOT NULL,
+  `updated` datetime NOT NULL,
+  `deleted` int(1) NOT NULL,
   `imageSubmittedByUserID` int(12) NOT NULL,
   `imageSubmissionDateTime` datetime NOT NULL,
   `imagePath` varchar(255) NOT NULL,
@@ -20,7 +24,7 @@ CREATE TABLE `perihelion_Image` (
   `imageDisplayInGallery` int(1) NOT NULL,
   `imageMetaData` varchar(255) NOT NULL,
   PRIMARY KEY (`imageID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4
 */
 
 final class Image extends ORM {
@@ -28,6 +32,10 @@ final class Image extends ORM {
 	public $imageID;
 	public $imageDisplayOrder;
 	public $siteID;
+	public $creator;
+	public $created;
+	public $updated;
+	public $deleted;
 	public $imageSubmittedByUserID;
 	public $imageSubmissionDateTime;
 	public $imagePath;
@@ -45,12 +53,17 @@ final class Image extends ORM {
 
 	public function __construct($imageID = 0) {
 		
-		
+		$dt = new DateTime();
+
 	    $this->imageID = 0;
 	    $this->imageDisplayOrder = 0;
 	    $this->siteID = $_SESSION['siteID'];
+	    $this->creator = $_SESSION['userID'];
+	    $this->created = $dt->format('Y-m-d H:i:s');
+	    $this->updated = $dt->format('Y-m-d H:i:s');
+	    $this->deleted = 0;
 	    $this->imageSubmittedByUserID = $_SESSION['userID'];
-	    $this->imageSubmissionDateTime = date('Y-m-d H:i:s');
+	    $this->imageSubmissionDateTime = $dt->format('Y-m-d H:i:s');
 	    $this->imagePath = '';
 	    $this->s3url = '';
 	    $this->imageObject = '';
@@ -90,92 +103,6 @@ final class Image extends ORM {
 		
 	}
 
-	public function thumbSrc($width) {
-
-		$origSrc = $this->src();
-		$thumbPath = Config::read('physical.path') . 'vault/images/' . date('Y') . '/' . $this->imageID . '-' . $width . 'px.' . $this->imageType;
-		
-		if (file_exists($thumbPath)) {
-			
-			$thumbSrc = $origSrc . $width . "/";
-			return $thumbSrc;
-			
-		} else {
-			
-			$thumbFormats =  self::thumbFormats();
-			$thumbSizes = self::thumbSizes();
-			if (in_array($this->imageType,$thumbFormats) && in_array($width,$thumbSizes)) {
-				self::createThumbnail($this->imagePath, $this->imageType, $thumbPath, $width);
-			}
-			return $origSrc;
-			
-		}
-
-	}
-
-	public static function uploadImageFile($imageArray, $imageObject, $imageObjectID) { // used in project controller
-
-	
-		$errorArray = array();
-		
-		$allowedExts = array("gif","GIF","jpeg","JPEG","jpg","JPG","png","PNG","ico","ICO");
-		$extension = end(explode(".", $imageArray["name"]));
-		
-		$imageType = $imageArray["type"];
-		
-		if (
-			(
-				$imageType == "image/jpeg" || 
-				$imageType == "image/jpg" || 
-				$imageType == "image/png" || 
-				$imageType == "image/gif" || 
-				$imageType == "image/ico"
-			)
-		    && ($imageArray["size"] < 10485760)
-			&& in_array($extension, $allowedExts)
-		) {
-
-			if ($imageArray["error"] > 0) {
-			
-				return $imageArray['error'];
-				
-			} else {
-			
-				$image = new Image();
-				$image->imagePath = Config::read('physical.path') . 'vault/images/';
-				$image->imageObject = $imageObject;
-				$image->imageObjectID = $imageObjectID;
-				$image->imageOriginalName = $imageArray["name"];
-				$image->imageType = substr($imageArray["type"],6);
-				if ($image->imageType == 'jpeg') { $image->imageType = 'jpg'; }
-				$image->imageSize = $imageArray['size'];
-				$image->imageDimensionX = 0;
-				$image->imageDimensionY = 0;
-
-				$imageID = self::insert($image);
-				$conditions['imageID'] = $imageID;
-				$newImagePath = $image->imagePath . $imageID . '.' . $image->imageType;
-				
-				
-				if (move_uploaded_file($imageArray['tmp_name'], $newImagePath)) {
-					unset($image->imageID);
-					$image->imagePath = '/' . $newImagePath;
-					self::update($image, $conditions);
-				} else {
-					$errorArray[$image->imageOriginalName] = "There was an error uploading " . $image->imageOriginalName . ".";
-					self::delete($image, $conditions);
-				}
-
-				return $errorArray;
-				
-			}
-			
-		} else {
-			return 'IMAGE UPLOAD ERROR: Your image must be less than 10MB.';
-		}
-
-	}
-	
 	public static function createThumbnail($source, $filetype, $destination, $desiredWidth) {
 
 		// SUPPORTS JPG AND PNG ONLY
@@ -216,14 +143,6 @@ final class Image extends ORM {
 
 	}
 
-	public static function objectHasImage($imageObject, $imageObjectID) {
-		$nucleus = Nucleus::getInstance();
-		$query = "SELECT * FROM perihelion_Image WHERE imageObject = :imageObject AND imageObjectID = :imageObjectID";
-		$statement = $nucleus->database->prepare($query);
-		$statement->execute(array(':imageObject' => $imageObject, ':imageObjectID' => $imageObjectID));
-		if ($row = $statement->fetch()) { return true; } else { return false; }
-	}
-
 	public static function getObjectImageArray($imageObject, $imageObjectID, $limit = null) {
 		
 		// don't trust limit
@@ -237,19 +156,7 @@ final class Image extends ORM {
 		return $objectImageArray;
 		
 	}
-	
-	public static function getObjectImageGalleryArray($imageObject, $imageObjectID) {
 
-		$nucleus = Nucleus::getInstance();
-		$query = "SELECT imageID FROM perihelion_Image WHERE siteID = :siteID AND imageObject = :imageObject AND imageObjectID = :imageObjectID AND imageDisplayInGallery = '1' ORDER BY imageDisplayOrder ASC";
-		$statement = $nucleus->database->prepare($query);
-		$statement->execute(array(':siteID' => $_SESSION['siteID'], ':imageObject' => $imageObject, ':imageObjectID' => $imageObjectID));
-		$objectImageArray = array();
-		while ($row = $statement->fetch()) { $objectImageArray[] = $row['imageID']; }
-		return $objectImageArray;
-		
-	}
-	
 	public static function getMainImageID($imageObject, $imageObjectID) {
 	
 		$site = new Site($_SESSION['siteID']);
@@ -592,6 +499,147 @@ final class ImageMostRecent {
 
 	public function imageID() {
 		return $this->imageID;
+	}
+
+}
+
+/* REFACTOR BEGINS HERE */
+
+final class NewImageList {
+
+	private $images;
+
+	public function __construct(NewImageListParameters $arg) {
+
+		$this->images = array();
+
+		$where = array();
+
+		$where[] = 'deleted = 0';
+		if ($arg->siteID) { $where[] = 'siteID = :siteID'; }
+		if ($arg->imageObject) { $where[] = 'imageObject = :imageObject'; }
+		if ($arg->imageObjectID) { $where[] = 'imageObjectID = :imageObjectID'; }
+
+		$orderBy = array();
+		foreach ($arg->orderBy AS $field => $sort) { $orderBy[] = $field . ' ' . $sort; }
+
+		switch ($arg->resultSet) {
+			case 'robust': $selector = '*'; break;
+			default: $selector = 'imageID';
+		}
+
+		$query = 'SELECT ' . $selector . ' FROM perihelion_Image WHERE ' . implode(' AND ',$where) . ' ORDER BY ' . implode(', ',$orderBy);
+		if ($arg->limit) { $query .= ' LIMIT ' . $arg->limit . ($arg->offset?', '.$arg->offset:''); }
+
+		$nucleus = Nucleus::getInstance();
+		$statement = $nucleus->database->prepare($query);
+
+		if ($arg->siteID) { $statement->bindParam(':siteID', $arg->siteID, PDO::PARAM_INT); }
+		if ($arg->imageObject) { $statement->bindParam(':imageObject', $arg->imageObject, PDO::PARAM_STR); }
+		if ($arg->imageObjectID) { $statement->bindParam(':imageObjectID', $arg->imageObjectID, PDO::PARAM_INT); }
+
+		$statement->execute();
+
+		while ($row = $statement->fetch()) {
+			if ($arg->resultSet == 'robust') {
+				$this->images[] = $row;
+			} else {
+				$this->images[] = $row['imageID'];
+			}
+		}
+
+	}
+
+	public function images() {
+
+		return $this->images;
+
+	}
+
+	public function imageCount() {
+
+		return count($this->images);
+
+	}
+
+}
+
+final class NewImageListParameters {
+
+	public $siteID;
+	public $imageObject;
+	public $imageObjectID;
+
+	public $resultSet;
+	public $orderBy;
+	public $limit;
+	public $offset;
+
+	public function __construct() {
+
+		$this->siteID = $_SESSION['siteID'];
+		$this->imageObject = null;
+		$this->imageObjectID = null;
+
+		$this->resultSet = 'id'; // [id|robust]
+		$this->orderBy = array('imageID' => 'DESC');
+		$this->limit = null;
+		$this->offset = null;
+
+	}
+
+}
+
+final class NewImageViewParameters {
+
+	public $siteID;
+	public $imageObject;
+	public $imageObjectID;
+
+	public $cardHeader;
+	public $cardContainer;
+	public $breadcrumbs;
+	public $navtabs;
+
+	public $includeForm;
+	public $formURL;
+	public $formContainerDivClasses;
+	public $formSelectDivClasses;
+	public $formSubmitDivClasses;
+	public $allowMultiple; // note: capture and multiple do not typically work together
+	public $allowCapture; // note: capture and multiple do not typically work together
+
+	public $includeList;
+	public $listContainerDivClasses;
+	public $pagination;
+	public $imagesPerPage;
+	public $currentPage;
+
+	public function __construct() {
+
+		$this->siteID = $_SESSION['siteID'];
+		$this->imageObject = null;
+		$this->imageObjectID = null;
+
+		$this->cardHeader = Lang::getLang('imageManager');
+		$this->cardContainer = array('container-fluid');
+		$this->breadcrumbs = '';
+		$this->navtabs = '';
+
+		$this->includeForm = true;
+		$this->formURL = $_SERVER['REQUEST_URI'];
+		$this->formContainerDivClasses = array('container-fluid');
+		$this->formSelectDivClasses = array('col-12','col-sm-6','col-md-4','offset-md-4','col-lg-3','offset-lg-6');
+		$this->formSubmitDivClasses = array('col-12','col-sm-6','col-md-4','col-lg-3');
+		$this->allowMultiple = true; // note: capture and multiple do not typically work together
+		$this->allowCapture = false; // note: capture and multiple do not typically work together
+
+		$this->includeList = true;
+		$this->listContainerDivClasses = array('container-fluid');
+		$this->pagination = false;
+		$this->imagesPerPage = 25;
+		$this->currentPage = 1;
+
 	}
 
 }

@@ -1,6 +1,6 @@
 <?php
 
-class ImageView {
+final class ImageView {
 
 	private $urlArray;
 	private $inputArray;
@@ -47,16 +47,9 @@ class ImageView {
 	}
 
 	public function imageManager($imageObject, $imageObjectID = null, $currentPage = 1) {
-		
-		// support all current site images
-		// can filter by object (Property|Content|Theme|Project|User|Site)
-		// can additionally filter by an object's objectID (where object != Site)
 
 		switch ($imageObject) {
 
-			// case ('Accommodation'):
-			// case ('AccountingClient'):
-			
 			case ('Content'):
 				
 				$content = new Content($imageObjectID);
@@ -66,10 +59,6 @@ class ImageView {
 				$baseFormURL = "/" . Lang::languageUrlPrefix() . "designer/content/update/" . $imageObjectID . "/images/";
 				break;
 
-			// case ('TrustDeposit'):
-			// case ('TrustExpense'):
-			// case ('TrustWithdrawal'):
-			
 			case ('Project'):
 			
 				$project = new Project($imageObjectID);
@@ -377,15 +366,155 @@ class ImageView {
 		
 	}
 
-	public function newImageManager($baseFormURL, $imageObject = null, $imageObjectID = null, $multiple = true, $capture = false, $pagination = null) {
+	public function newImageManager(NewImageViewParameters $arg) {
+
+		$manager = '';
+		if ($arg->includeForm) { $manager .= $this->newImageForm($arg); }
+		if ($arg->includeList) { $manager .= $this->newImageList($arg); }
+		$cardView = new CardView('new_image_manager_card', $arg->cardContainer, $arg->breadcrumbs, array('col-12'), $arg->cardHeader, $arg->navtabs.$manager, false);
+		return $cardView->card();
 
 	}
 
-	public function newImageForm($baseFormURL, $imageObject, $imageObjectID, $multiple, $capture) {
+	public function newImageForm(NewImageViewParameters $arg) {
+
+		$imageForm = '
+
+			<div id="new_image_form_container" class="' . implode(' ', $arg->formContainerDivClasses) . '">
+				
+				<form id="new_image_form" method="post" action="' . $arg->formURL . '" enctype="multipart/form-data">
+				
+					<input type="hidden" name="imageObject" value="' . ($arg->imageObject?$arg->imageObject:'') . '">
+					<input type="hidden" name="imageObjectID" value="' . ($arg->imageObjectID?$arg->imageObjectID:0) . '">
+				
+					<div class="form-group row">
+				
+						<div id="new_image_select" class="' . implode(' ', $arg->formSelectDivClasses) . '">
+				
+							<label id="new_image_select_label" class="btn btn-secondary btn-block btn-file">
+								<span id="new_image_select_prompt">' . Lang::getLang('selectImages') . '</span> 
+								<input id="new_image_select_input" class="d-none" type="file" name="images-to-upload[]" accept="image/*"' . ($arg->allowCapture?' capture="camera"':'') . ($arg->allowMultiple?' multiple':'') . '>
+							</label>
+				
+						</div>
+				
+						<div id="new_image_submit" class="' . implode(' ', $arg->formSubmitDivClasses) . '">
+				
+							<button type="submit" id="new_image_submit_button" name="submitted-images" class="btn btn-primary btn-block" disabled="true">
+								<span id="new_image_submit_icon" class="fas fa-upload"></span> 
+								<span id="new_image_submit_text">' . Lang::getLang('uploadImages') . '</span>
+							</button>
+				
+						</div>
+						
+					</div>
+				
+				</form>
+			
+			</div>
+		
+		';
+
+		return $imageForm;
 
 	}
 
-	public function newImageList($baseFormURL, $imageObject, $imageObjectID, $pagination) {
+	public function newImageList(NewImageViewParameters $arg) {
+
+		// pagination
+		/*
+		$count = count($images);
+		$perPage = 25;
+		$numberOfPages = ceil($count/$perPage);
+		if ($currentPage > $numberOfPages) { $currentPage = 1; }
+		$startAt = ($currentPage - 1) * 25;
+		$limit = "$startAt, $perPage";
+
+		*/
+
+		$listArg = new NewImageListParameters();
+		$listArg->imageObject = $arg->imageObject;
+		$listArg->imageObjectID = $arg->imageObjectID;
+		$imageList = new NewImageList($listArg);
+		$images = $imageList->images();
+
+		// PAGINATION
+		// eg legacy: PaginationView::paginate($numberOfPages,$currentPage,'/designer/images/')
+
+		$imageList = '
+
+			<div id="new_image_list_container" class="' . implode(' ', $arg->listContainerDivClasses) . '">
+	
+				<div class="table-responsive">
+				
+					<table class="table table-striped">
+			
+						<thead class="thead-light">
+			
+							<tr>
+								<th class="text-center">' . Lang::getLang('image') . '</th>
+								<th class="text-center">' . Lang::getLang('url') . '</th>
+								<th class="text-center">' . Lang::getLang('originalName') . '</th>
+								<th class="text-center">' . Lang::getLang('date') . '</th>
+								<th class="text-center">' . Lang::getLang('size') . '</th>
+								<!--<th class="text-center">' . Lang::getLang('object') . '</th>-->
+								<!--<th class="text-center">' . Lang::getLang('carousel') . '</th>-->
+								<!--<th class="text-center">' . Lang::getLang('order') . '</th>-->
+								<th class="text-center">' . Lang::getLang('main') . '</th>
+								<th class="text-center">' . Lang::getLang('action') . '</th>
+							</tr>
+						
+						</thead>
+						
+						<body>' . $this->newImageListRows($images) . '</body>
+						
+					</table>
+				
+				</div>
+			
+			</div>
+
+		';
+
+		// PAGINATION
+		// eg legacy: PaginationView::paginate($numberOfPages,$currentPage,'/designer/images/')
+
+		return $imageList;
+
+	}
+
+	public function newImageListRows($images) {
+
+		foreach ($images as $imageID) {
+
+			$image = new Image($imageID);
+
+			$createdDT = new DateTime($image->created);
+
+			$imageSize = $image->imageSize/1024;
+
+			$rows .= '
+				<tr>
+					<td class="text-center"><a href="/image/' . $imageID . '/" target="blank"><img src="/image/' . $image->imageID . '/90/" style="width:90px;" alt="' . $image->imageOriginalName . '"></a></td>
+					<td class="text-center"><a href="/image/' . $imageID . '/" target="blank" style="text-transform:lowercase;">/image/' . $imageID . '/</a></td>
+					<td class="text-center">' . $image->imageOriginalName . '</td>
+					<td class="text-center">' . $createdDT->format('Y-m-d H:i:s') . '</td>
+					<td class="text-center">' . number_format($imageSize) . 'K</td>
+					<!--<td class="text-center">' . $image->imageObject . '</td>-->
+					<!--<td class="text-center"><button type="button" class="btn btn-secondary btn-sm">' . $image->imageDisplayInGallery . '</button></td>-->
+					<!--<td class="text-center">' . $image->imageDisplayOrder . '</td>-->
+					<td class="text-center"><input type="radio" name="mainImage" value="' . $imageID . '"' . ($image->imageDisplayClassification=='mainImage'?' checked':'') . '></td>
+					<td class="text-center"><button type="button" class="btn btn-danger btn-sm"><span class="fas fa-trash-alt"></span></button></td>
+				</tr>
+			';
+
+		}
+
+		return $rows;
+
+
+
+
 
 	}
 

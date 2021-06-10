@@ -16,6 +16,8 @@ function getLocation() {
 	console.dir(loc);
 	
 	return loc;
+
+
 	
 }
 
@@ -37,7 +39,23 @@ function getUrlData(locSearch) {
 $(document).ready( // dom is ready
 
 	function() {
-		
+
+		const path = window.location.pathname.split('/');
+		var lang = 'en';
+		var langPrefix = '';
+		var langImagesSelected = ' Images Selected';
+		var langFilesSelected = ' Files Selected';
+
+		path.pop();
+		path.shift();
+		if (path[0] == 'ja') {
+			path.shift();
+			lang = 'ja';
+			langPrefix = '/ja';
+			langImagesSelected = 'つのイメージ';
+			langFilesSelected = 'つのファイル';
+		}
+
 		$('.clickable').click(
 			function() {
 				window.document.location = $(this).data('url');
@@ -75,6 +93,7 @@ $(document).ready( // dom is ready
 
 		$('#perihelionImages').on('change click keyup', perihelionImagesPrep);
 		function perihelionImagesPrep(event) {
+			console.log('perihelionImagesPrep');
 			images = event.target.files;
 			var fileCount = images.length;
 			if (fileCount < 1) {
@@ -108,7 +127,7 @@ $(document).ready( // dom is ready
 				$('#perihelionFileManagerSubmit').prop("disabled",false);
 			}
 		}
-		
+
 		$('#profileChangePassword').click(function() {
 			if( $(this).is(':checked')) {
 				$('#userPassword').removeAttr('disabled');
@@ -146,6 +165,20 @@ $(document).ready( // dom is ready
 			} else {
 				$('#freshPerihelionImagesSelectPromptText').text(images.length + ' Images Selected');
 				$('#freshPerihelionImagesSubmit').prop("disabled",false);
+			}
+		}
+
+		$('#new_image_select_input').on('change click keyup', newImagesPrep);
+
+		function newImagesPrep(event) {
+			images = event.target.files;
+			var fileCount = images.length;
+			if (fileCount < 1) {
+				$('#new_image_select_prompt').text('Select Images');
+				$('#new_image_submit_button').prop("disabled",true);
+			} else {
+				$('#new_image_select_prompt').text(fileCount+langImagesSelected);
+				$('#new_image_submit_button').prop("disabled",false);
 			}
 		}
 

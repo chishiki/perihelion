@@ -102,3 +102,17 @@ INSERT INTO perihelion_Lang VALUES ('loginSuccessful','Login Successful',0,'ロ�
 INSERT INTO perihelion_Lang VALUES ('devData','Dev Data',0,'開発データ',0,@now);
 
 UPDATE perihelion_Content SET creator = 1, created = @now, updated = @now, deleted = 0 WHERE contentID > 0;
+
+/* @chishiki 2021-05-10 */
+
+ALTER TABLE `perihelion_Image`
+    ADD COLUMN `creator` INT(12) NOT NULL AFTER `siteID`,
+    ADD COLUMN `created` DATETIME NOT NULL AFTER `creator`,
+    ADD COLUMN `updated` DATETIME NOT NULL AFTER `created`,
+    ADD COLUMN `deleted` INT(1) NOT NULL AFTER `updated`;
+
+UPDATE perihelion_Image SET creator = imageSubmittedByUserID, created = imageSubmissionDateTime, updated = imageSubmissionDateTime WHERE imageID > 0;
+
+SET @now := now();
+INSERT INTO perihelion_Lang VALUES ('imageManager', 'Image Manager', 0, 'イメージ管理', 0, @now);
+INSERT INTO perihelion_Lang VALUES ('selectImages', 'Select Images', 0, 'イメージ選択', 0, @now);
