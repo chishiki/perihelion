@@ -285,9 +285,9 @@ class DesignerController {
 			
 		}
 
-		if ($this->urlArray[0] == 'designer' && $this->urlArray[1] == 'images' && isset($_FILES['perihelionImages'])) {
+		if ($this->urlArray[0] == 'designer' && $this->urlArray[1] == 'images' && isset($_FILES['images-to-upload'])) {
 
-			$this->errorArray = Image::uploadImages($_FILES['perihelionImages'],'Site',$_SESSION['siteID']);
+			$this->errorArray = Image::uploadImages($_FILES['images-to-upload'],'Site',$_SESSION['siteID']);
 			if (empty($this->errorArray)) {
 				$successURL = "/" . Lang::languageUrlPrefix() . "designer/images/";
 				header("Location: $successURL");
@@ -336,9 +336,9 @@ class DesignerController {
 
 		}
 		
-		if ($this->urlArray[0] == 'designer' && $this->urlArray[1] == 'files' && isset($_FILES['perihelionFiles'])) {
-			
-			$this->errorArray = File::uploadFiles($_FILES['perihelionFiles'],'Site',$_SESSION['siteID']);
+		if ($this->urlArray[0] == 'designer' && $this->urlArray[1] == 'files' && isset($_FILES['files-to-upload'])) {
+
+			$this->errorArray = File::uploadFiles($_FILES['files-to-upload'],'Site',$_SESSION['siteID']);
 			if (empty($this->errorArray)) {
 				$successURL = "/" . Lang::languageUrlPrefix() . "designer/files/";
 				header("Location: $successURL");

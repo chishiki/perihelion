@@ -103,7 +103,7 @@ INSERT INTO perihelion_Lang VALUES ('devData','Dev Data',0,'開発データ',0,@
 
 UPDATE perihelion_Content SET creator = 1, created = @now, updated = @now, deleted = 0 WHERE contentID > 0;
 
-/* @chishiki 2021-05-10 */
+/* @chishiki 2021-06-10 */
 
 ALTER TABLE `perihelion_Image`
     ADD COLUMN `creator` INT(12) NOT NULL AFTER `siteID`,
@@ -116,3 +116,16 @@ UPDATE perihelion_Image SET creator = imageSubmittedByUserID, created = imageSub
 SET @now := now();
 INSERT INTO perihelion_Lang VALUES ('imageManager', 'Image Manager', 0, 'イメージ管理', 0, @now);
 INSERT INTO perihelion_Lang VALUES ('selectImages', 'Select Images', 0, 'イメージ選択', 0, @now);
+
+/* @chishiki 2021-06-11 */
+
+ALTER TABLE `cj_crestronjapanDB`.`perihelion_File`
+    ADD COLUMN `creator` INT(12) NOT NULL AFTER `siteID`,
+    ADD COLUMN `created` DATETIME NOT NULL AFTER `creator`,
+    ADD COLUMN `updated` DATETIME NOT NULL AFTER `created`,
+    ADD COLUMN `deleted` INT(1) NOT NULL AFTER `updated`;
+
+UPDATE perihelion_File SET creator = fileSubmittedByUserID, created = fileSubmissionDateTime, updated = fileSubmissionDateTime WHERE fileID > 0;
+
+SET @now := now();
+INSERT INTO perihelion_Lang VALUES ('selectFiles', 'Select Files', 0, 'ファイル選択', 0, @now);

@@ -93,10 +93,13 @@ class DesignerViewController {
 		}
 
 		if ($this->urlArray[1] == 'files') {
-			
+
 			$view = new FileView($this->urlArray,$this->inputArray,$this->errorArray);
-			$fileBaseURL = '/' . Lang::prefix() . 'designer/files/';
-			return $nav . $view->fileManager('Site',$_SESSION['siteID'],$fileBaseURL);
+			$arg = new NewFileViewParameters();
+			$arg->displayObjectInfo = true;
+			$arg->cardContainerDivClasses = array('container');
+			if (ctype_digit($this->urlArray[2])) { $arg->currentPage = $this->urlArray[2]; }
+			return $nav . $view->newFileManager($arg);
 			
 		}
 		

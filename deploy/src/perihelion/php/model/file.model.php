@@ -4,6 +4,10 @@ class File extends ORM {
 
 	public $fileID;
 	public $siteID;
+	public $creator;
+	public $created;
+	public $updated;
+	public $deleted;
 	public $fileSubmittedByUserID;
 	public $fileSubmissionDateTime;
 	public $filePath;
@@ -18,11 +22,17 @@ class File extends ORM {
 	public $fileNotes;
 	
 	public function __construct($fileID = 0) {
-		
+
+		$dt = new DateTime();
+
 		$this->fileID = 0;
 		$this->siteID = $_SESSION['siteID'];
+		$this->creator = $_SESSION['userID'];
+		$this->created =  $dt->format('Y-m-d H:i:s');
+		$this->updated =  $dt->format('Y-m-d H:i:s');
+		$this->deleted = 0;
 		$this->fileSubmittedByUserID = $_SESSION['userID'];
-		$this->fileSubmissionDateTime = date('Y-m-d H:i:s');
+		$this->fileSubmissionDateTime = $dt->format('Y-m-d H:i:s');
 		$this->filePath = '';
 		$this->fileName = '';
 		$this->fileOriginalName = '';
@@ -248,5 +258,149 @@ class File extends ORM {
 	}
 
 }
+
+/* REFACTOR BEGINS HERE */
+
+final class NewFileList {
+
+	private $files;
+
+	public function __construct(NewFileListParameters $arg) {
+
+		$this->files = array();
+
+		$where = array();
+
+		$where[] = 'deleted = 0';
+		if ($arg->siteID) { $where[] = 'siteID = :siteID'; }
+		if ($arg->fileObject) { $where[] = 'fileObject = :fileObject'; }
+		if ($arg->fileObjectID) { $where[] = 'fileObjectID = :fileObjectID'; }
+
+		$orderBy = array();
+		foreach ($arg->orderBy AS $field => $sort) { $orderBy[] = $field . ' ' . $sort; }
+
+		switch ($arg->resultSet) {
+			case 'robust': $selector = '*'; break;
+			default: $selector = 'fileID';
+		}
+
+		$query = 'SELECT ' . $selector . ' FROM perihelion_File WHERE ' . implode(' AND ',$where) . ' ORDER BY ' . implode(', ',$orderBy);
+		if ($arg->limit) { $query .= ' LIMIT ' . $arg->limit . ($arg->offset?', '.$arg->offset:''); }
+
+		$nucleus = Nucleus::getInstance();
+		$statement = $nucleus->database->prepare($query);
+
+		if ($arg->siteID) { $statement->bindParam(':siteID', $arg->siteID, PDO::PARAM_INT); }
+		if ($arg->fileObject) { $statement->bindParam(':fileObject', $arg->fileObject, PDO::PARAM_STR); }
+		if ($arg->fileObjectID) { $statement->bindParam(':fileObjectID', $arg->fileObjectID, PDO::PARAM_INT); }
+
+		$statement->execute();
+
+		while ($row = $statement->fetch()) {
+			if ($arg->resultSet == 'robust') {
+				$this->files[] = $row;
+			} else {
+				$this->files[] = $row['fileID'];
+			}
+		}
+
+	}
+
+	public function files() {
+
+		return $this->files;
+
+	}
+
+	public function fileCount() {
+
+		return count($this->files);
+
+	}
+
+}
+
+final class NewFileListParameters {
+
+	public $siteID;
+	public $fileObject;
+	public $fileObjectID;
+
+	public $resultSet;
+	public $orderBy;
+	public $limit;
+	public $offset;
+
+	public function __construct() {
+
+		$this->siteID = $_SESSION['siteID'];
+		$this->fileObject = null;
+		$this->fileObjectID = null;
+
+		$this->resultSet = 'id'; // [id|robust]
+		$this->orderBy = array('fileID' => 'DESC');
+		$this->limit = null;
+		$this->offset = null;
+
+	}
+
+}
+
+final class NewFileViewParameters {
+
+	public $siteID;
+	public $fileObject;
+	public $fileObjectID;
+
+	public $cardHeader;
+	public $cardContainerDivClasses;
+	public $breadcrumbs;
+	public $navtabs;
+
+	public $includeForm;
+	public $formURL;
+	public $formContainerDivClasses;
+	public $formSelectDivClasses;
+	public $formSubmitDivClasses;
+	public $allowMultiple;
+
+	public $includeList;
+	public $listContainerDivClasses;
+	public $pagination;
+	public $filesPerPage;
+	public $currentPage;
+
+	public $displayObjectInfo;
+
+	public function __construct() {
+
+		$this->siteID = $_SESSION['siteID'];
+		$this->fileObject = null;
+		$this->fileObjectID = null;
+
+		$this->cardHeader = Lang::getLang('fileManager');
+		$this->cardContainerDivClasses = array('container-fluid');
+		$this->breadcrumbs = '';
+		$this->navtabs = '';
+
+		$this->includeForm = true;
+		$this->formURL = $_SERVER['REQUEST_URI'];
+		$this->formContainerDivClasses = array('container-fluid');
+		$this->formSelectDivClasses = array('col-12','col-sm-6','col-md-4','offset-md-4','col-lg-3','offset-lg-6');
+		$this->formSubmitDivClasses = array('col-12','col-sm-6','col-md-4','col-lg-3');
+		$this->allowMultiple = true;
+
+		$this->includeList = true;
+		$this->listContainerDivClasses = array('container-fluid');
+		$this->pagination = false;
+		$this->filesPerPage = 25;
+		$this->currentPage = 1;
+
+		$this->displayObjectInfo = false;
+
+	}
+
+}
+
 
 ?>

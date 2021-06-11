@@ -424,7 +424,7 @@ INSERT INTO `perihelion_Lang` VALUES
 ('fileType','Type',0,'タイプ',0,@now),
 ('fileSize','Size',0,'サイズ',0,@now),
 ('download','Download',0,'ダウンロード',0,@now),
-('fileManager','File Manager',0,'ファイルマネジャー',0,@now),
+('fileManager','File Manager',0,'ファイル管理',0,@now),
 ('youDoNotHaveAccessToThisFile','You do not have access to this file.',0,'ファイルのアクセス権は必要です。',0,@now),
 ('portfolio','Portfolio',0,'ポートフォリオ',0,@now),
 ('construction','Construction',0,'建設',0,@now),
@@ -825,6 +825,6 @@ INSERT INTO `perihelion_Lang` VALUES
 ('loginSuccessful','Login Successful',0,'ログインが出来ました',0,@now),
 ('devData','Dev Data',0,'開発データ',0,@now),
 ('imageManager', 'Image Manager', 0, 'イメージ管理', 0, @now),
-('selectImages', 'Select Images', 0, 'イメージ選択', 0, @now);
-
+('selectImages', 'Select Images', 0, 'イメージ選択', 0, @now),
+('selectFiles', 'Select Files', 0, 'ファイル選択', 0, @now);
 

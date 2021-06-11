@@ -228,4 +228,16 @@ class Content extends ORM {
 	
 }
 
+final class ContentRouting {
+
+	public function __construct($loc) {
+
+		// is $loc[0] contentCategory?
+		// is $loc[x] a contentCategory with parentContentCategoryID $loc[x-1]?
+		// does $loc[n] correspond with a specific content item?
+
+	}
+
+}
+
 ?>
