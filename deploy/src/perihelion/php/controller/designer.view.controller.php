@@ -49,11 +49,11 @@ class DesignerViewController {
 		if ($this->urlArray[1] == 'images') {
 			
 			$view = new ImageView($this->urlArray,$this->inputArray,$this->errorArray);
-			if (ctype_digit($this->urlArray[2])) {
-				return $nav . $view->imageManager('Site',$_SESSION['siteID'],$this->urlArray[2]);
-			} else {
-				return $nav . $view->imageManager('Site',$_SESSION['siteID']);
-			}
+			$arg = new NewImageViewParameters();
+			$arg->displayObjectInfo = true;
+			$arg->cardContainerDivClasses = array('container');
+			if (ctype_digit($this->urlArray[2])) { $arg->currentPage = $this->urlArray[2]; }
+			return $nav . $view->newImageManager($arg);
 			
 		}
 		

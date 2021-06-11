@@ -597,7 +597,7 @@ final class NewImageViewParameters {
 	public $imageObjectID;
 
 	public $cardHeader;
-	public $cardContainer;
+	public $cardContainerDivClasses;
 	public $breadcrumbs;
 	public $navtabs;
 
@@ -615,6 +615,11 @@ final class NewImageViewParameters {
 	public $imagesPerPage;
 	public $currentPage;
 
+	public $displayObjectInfo;
+	public $displayCarouselCheckbox;
+	public $displayDisplayOrder;
+	public $displayDefaultRadio;
+
 	public function __construct() {
 
 		$this->siteID = $_SESSION['siteID'];
@@ -622,7 +627,7 @@ final class NewImageViewParameters {
 		$this->imageObjectID = null;
 
 		$this->cardHeader = Lang::getLang('imageManager');
-		$this->cardContainer = array('container-fluid');
+		$this->cardContainerDivClasses = array('container-fluid');
 		$this->breadcrumbs = '';
 		$this->navtabs = '';
 
@@ -639,6 +644,11 @@ final class NewImageViewParameters {
 		$this->pagination = false;
 		$this->imagesPerPage = 25;
 		$this->currentPage = 1;
+
+		$this->displayObjectInfo = false;
+		$this->displayCarouselCheckbox = false;
+		$this->displayDisplayOrder = false;
+		$this->displayDefaultRadio = false;
 
 	}
 

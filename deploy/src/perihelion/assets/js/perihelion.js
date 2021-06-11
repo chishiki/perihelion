@@ -40,29 +40,28 @@ $(document).ready( // dom is ready
 
 	function() {
 
-		const path = window.location.pathname.split('/');
 		var lang = 'en';
 		var langPrefix = '';
+		var langSelectImages = 'Select Images';
 		var langImagesSelected = ' Images Selected';
+		var langSelectFiles = 'Select Files';
 		var langFilesSelected = ' Files Selected';
 
-		path.pop();
-		path.shift();
-		if (path[0] == 'ja') {
-			path.shift();
+		if ($('body').hasClass('lang-ja')) {
 			lang = 'ja';
 			langPrefix = '/ja';
+			langSelectImages = 'イメージ選択';
 			langImagesSelected = 'つのイメージ';
+			langSelectFiles = 'ファイル選択';
 			langFilesSelected = 'つのファイル';
 		}
 
 		$('.clickable').click(
-			function() {
-				window.document.location = $(this).data('url');
-			}
+			function() { window.document.location = $(this).data('url'); }
 		);
-		
-		$('.alphaNumericHyphenOnly').keypress(function (e) {
+
+		/*
+		$('.alphanumeric-and-hyphens-only').keypress(function (e) {
 			var allowedChars = new RegExp("^[a-zA-Z0-9\-]+$");
 			var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
 			if (allowedChars.test(str) || e.which === 8 || e.which === 9 || e.which === 13 || e.which === 16 || e.which === 17 || e.which === 18) { return true; }
@@ -72,61 +71,11 @@ $(document).ready( // dom is ready
 			var forbiddenChars = new RegExp("[^a-zA-Z0-9\-]", 'g');
 			if (forbiddenChars.test($(this).val())) { $(this).val($(this).val().replace(forbiddenChars, '')); }
 		});
+		*/
 		
 		$(function () {
 		  $('[data-toggle="tooltip"]').tooltip()
 		})
-
-		$('#contentImages').on('change click keyup', contentImagesPrep);
-
-		function contentImagesPrep(event) {
-			images = event.target.files;
-			var fileCount = images.length;
-			if (fileCount < 1) {
-				$('#perihelionDesignerContentImagesSubmitButtonText').text('Select Images');
-				$('#perihelionDesignerContentImagesSubmit').prop("disabled",true);
-			} else {
-				$('#perihelionDesignerContentImagesSubmitButtonText').text(images.length + ' Images Selected');
-				$('#perihelionDesignerContentImagesSubmit').prop("disabled",false);
-			}
-		}
-
-		$('#perihelionImages').on('change click keyup', perihelionImagesPrep);
-		function perihelionImagesPrep(event) {
-			console.log('perihelionImagesPrep');
-			images = event.target.files;
-			var fileCount = images.length;
-			if (fileCount < 1) {
-				$('#perihelionImageManagerSubmitButtonText').text('Select Images');
-				$('#perihelionImageManagerSubmit').prop("disabled",true);
-			} else {
-				$('#perihelionImageManagerSubmitButtonText').text(images.length + ' Images Selected');
-				$('#perihelionImageManagerSubmit').prop("disabled",false);
-			}
-		}
-		
-		$('#perihelionFiles').on('change click keyup', perihelionFilesPrep);
-		function perihelionFilesPrep(event) {
-			
-			var segments = location.pathname.split('/');
-			var unselectedButtonText = 'Select Files';
-			var selectedButtonText = '　Files Selected';
-			if (segments[1] == 'ja') {
-				unselectedButtonText = 'ファイル選択';
-				selectedButtonText = 'つのファイル';
-			}
-
-			files = event.target.files;
-			var fileCount = files.length;
-			if (fileCount < 1) {
-				$('#perihelionFileManagerSubmitButtonText').text(unselectedButtonText);
-				$('#perihelionFileManagerSubmit').prop("disabled",true);
-			} else {
-				getLocation();
-				$('#perihelionFileManagerSubmitButtonText').text(files.length + ' ' + selectedButtonText);
-				$('#perihelionFileManagerSubmit').prop("disabled",false);
-			}
-		}
 
 		$('#profileChangePassword').click(function() {
 			if( $(this).is(':checked')) {
@@ -138,47 +87,31 @@ $(document).ready( // dom is ready
 			}
 		});
 
-		$('#freshperihelionFiles').on('change click keyup', freshPerihelionFilesPrep);
-
-		function freshPerihelionFilesPrep(event) {
-			
-			files = event.target.files;
-			var fileCount = files.length;
-			if (fileCount < 1) {
-				$('#freshPerihelionFilesSubmitButtonText').text('Select Files');
-				$('#freshPerihelionFilesSubmit').prop("disabled",true);
-			} else {
-				$('#freshPerihelionFilesSubmitButtonText').text(files.length + ' Files Selected');
-				$('#freshPerihelionFilesSubmit').prop("disabled",false);
-			}
-		}
-		
-		$('#freshPerihelionImages').on('change click keyup', freshPerihelionImagesPrep);
-
-		function freshPerihelionImagesPrep(event) {
-			console.log('wuttup');
-			images = event.target.files;
-			var fileCount = images.length;
-			if (fileCount < 1) {
-				$('#freshPerihelionImagesSelectPromptText').text('Select Images');
-				$('#freshPerihelionImagesSubmit').prop("disabled",true);
-			} else {
-				$('#freshPerihelionImagesSelectPromptText').text(images.length + ' Images Selected');
-				$('#freshPerihelionImagesSubmit').prop("disabled",false);
-			}
-		}
-
 		$('#new_image_select_input').on('change click keyup', newImagesPrep);
 
 		function newImagesPrep(event) {
-			images = event.target.files;
-			var fileCount = images.length;
-			if (fileCount < 1) {
-				$('#new_image_select_prompt').text('Select Images');
-				$('#new_image_submit_button').prop("disabled",true);
+			var images = event.target.files;
+			var imageCount = images.length;
+			if (imageCount < 1) {
+				$('#new_image_select_prompt').text(langSelectImages);
+				$('#new_image_submit_button').prop('disabled',true);
 			} else {
-				$('#new_image_select_prompt').text(fileCount+langImagesSelected);
-				$('#new_image_submit_button').prop("disabled",false);
+				$('#new_image_select_prompt').text(imageCount+langImagesSelected);
+				$('#new_image_submit_button').prop('disabled',false);
+			}
+		}
+
+		$('#new_file_select_input').on('change click keyup', newFilesPrep);
+
+		function newFilesPrep(event) {
+			var files = event.target.files;
+			var fileCount = files.length;
+			if (fileCount < 1) {
+				$('#new_file_select_prompt').text(langSelectFiles);
+				$('#new_file_submit_button').prop('disabled',true);
+			} else {
+				$('#new_file_select_prompt').text(fileCount+langFilesSelected);
+				$('#new_file_submit_button').prop('disabled',false);
 			}
 		}
 
