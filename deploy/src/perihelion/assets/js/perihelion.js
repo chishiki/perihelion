@@ -36,9 +36,7 @@ function getUrlData(locSearch) {
     
 }
 
-$(document).ready( // dom is ready
-
-	function() {
+$(window).on('load', function() {
 
 		var lang = 'en';
 		var langPrefix = '';
@@ -115,10 +113,50 @@ $(document).ready( // dom is ready
 			}
 		}
 
-	}
-	
-);
+		$('.image-list-default-radio > input[type="radio"][name="mainImage"]').on('change', function() {
 
-$(window).on('load', function () {
-	console.log("assets have been loaded");
-});
+			var imageID = $(this).closest('tr').data('image-id');
+			var imageObject = $(this).closest('tr').data('image-object');
+			var imageObjectID = $(this).closest('tr').data('image-object-id');
+
+			$(this).closest('table').find('button.image-delete').removeClass('disabled').prop("disabled", false);
+			$(this).closest('tr').find('button.image-delete').addClass('disabled').prop("disabled", true);
+
+			var settings = {
+				url: "/api/v1/image/set-default/",
+				method: "post",
+				data: { imageID : imageID, imageObject : imageObject, imageObjectID : imageObjectID },
+				dataType: "json"
+			};
+
+			$.ajax(settings).always(function(data) {
+				console.dir(data);
+			});
+
+		});
+
+		$('.image-list-action > button.image-delete').on('click', function() {
+
+			var imageID = $(this).closest('tr').data('image-id');
+
+			$(this).closest('tr').remove();
+
+			var settings = {
+				url: "/api/v1/image/delete/",
+				method: "post",
+				data: { imageID : imageID },
+				dataType: "json"
+			};
+
+			$.ajax(settings).always(function(data) {
+
+				console.dir(data);
+			});
+
+		});
+
+		console.log("perihelion.js has loaded");
+
+	}
+
+);

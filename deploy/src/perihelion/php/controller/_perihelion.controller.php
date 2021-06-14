@@ -169,14 +169,15 @@ class Controller {
 				
 				case 'api':
 				    
-				    $response = '{}';
+				    $api = new PerihelionAPI($this->urlArray,$this->inputArray);
 				    foreach ($this->moduleArray AS $moduleName) {
 				        if ($this->urlArray[1] == $moduleName) {
 							$apiClass = ModuleUtilities::moduleToClassName($moduleName, 'API');
 				            $api = new $apiClass($this->urlArray,$this->inputArray);
-				            $response = $api->response();
 				        }
 				    }
+					$response = $api->response();
+
 				    header('Content-Type: application/json');
 				    header("Server: perihelion.xyz");
 				    print $response;

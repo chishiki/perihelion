@@ -133,14 +133,21 @@ final class ImageView {
 		$imageList = new NewImageList($listArg);
 		$images = $imageList->images();
 
+		$rows = '';
+
 		foreach ($images as $imageID) {
 
 			$image = new Image($imageID);
 			$createdDT = new DateTime($image->created);
 			$imageSize = $image->imageSize/1024;
 
+			$defaultImage = false;
+			if ($image->imageDisplayClassification=='mainImage') {
+				$defaultImage = true;
+			}
+
 			$rows .= '
-				<tr>
+				<tr data-image-id="' . $imageID . '" data-image-object="' . $image->imageObject . '" data-image-object-id="' . $image->imageObjectID . '">
 					<td class="image-list-image text-center align-middle">
 						<a href="/image/' . $imageID . '/" target="blank">
 							<img src="/image/' . $image->imageID . '/50/" style="width:50px;" alt="' . $image->imageOriginalName . '">
@@ -158,10 +165,10 @@ final class ImageView {
 					</td>
 					<td class="image-list-display-order text-center align-middle d-none' . ($arg->displayDisplayOrder?' d-xl-table-cell':'') . '">' . $image->imageDisplayOrder . '</td>
 					<td class="image-list-default-radio text-center align-middle' . ($arg->displayDefaultRadio?'':' d-none') . '">
-						<input type="radio" name="mainImage" value="' . $imageID . '"' . ($image->imageDisplayClassification=='mainImage'?' checked':'') . '>
+						<input type="radio" name="mainImage" value="' . $imageID . '"' . ($defaultImage?' checked':'') . '>
 					</td>
 					<td class="image-list-action text-center align-middle">
-						<button type="button" class="btn btn-danger btn-sm"><span class="fas fa-trash-alt"></span></button>
+						<button type="button" class="image-delete btn btn-danger btn-sm' . ($defaultImage?' disabled':'') . '"' . ($defaultImage?' disabled':'') . '><span class="fas fa-trash-alt"></span></button>
 					</td>
 				</tr>
 			';
