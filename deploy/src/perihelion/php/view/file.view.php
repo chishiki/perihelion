@@ -119,7 +119,23 @@ class FileView {
 					<input type="hidden" name="fileObjectID" value="' . ($arg->fileObjectID?$arg->fileObjectID:0) . '">
 				
 					<div class="form-group row">
-				
+
+						<div id="new_file_title_english" class="' . implode(' ', $arg->fileTitleDivClasses) . '">
+							<!--<label id="new_file_title_english_label">' . Lang::getLang('fileTitleEnglish') . '</label>-->
+							<div class="input-group">
+								<div class="input-group-prepend"><div class="input-group-text">' . Lang::getLang('english') . '</div></div>
+								<input id="new_file_title_english_input" type="text" name="fileTitleEnglish" class="form-control" value="">
+							</div>
+						</div>
+						
+						<div id="new_file_title_japanese" class="' . implode(' ', $arg->fileTitleDivClasses) . '">
+							<!--<label id="new_file_title_japanese_label">' . Lang::getLang('fileTitleJapanese') . '</label>-->
+							<div class="input-group">
+								<div class="input-group-prepend"><div class="input-group-text">' . Lang::getLang('japanese') . '</div></div>
+								<input id="new_file_title_japanese_input" type="text" name="fileTitleJapanese" class="form-control" value="">
+							</div>
+						</div>
+
 						<div id="new_file_select" class="' . implode(' ', $arg->formSelectDivClasses) . '">
 				
 							<label id="new_file_select_label" class="btn btn-secondary btn-block btn-file">
@@ -178,7 +194,7 @@ class FileView {
 			
 							<tr>
 								<th class="file-list-file text-center">' . Lang::getLang('file') . '</th>
-								<th class="file-list-original-name text-center d-none d-xl-table-cell">' . Lang::getLang('originalName') . '</th>
+								<th class="file-list-original-name text-center d-none d-xl-table-cell">' . Lang::getLang('fileName') . '</th>
 								<th class="file-list-created text-center d-none d-md-table-cell">' . Lang::getLang('date') . '</th>
 								<th class="file-list-size text-center d-none d-sm-table-cell">' . Lang::getLang('size') . '</th>
 								<th class="file-list-file-object text-center d-none' . ($arg->displayObjectInfo?' d-xl-table-cell':'') . '">' . Lang::getLang('object') . '</th>
@@ -223,7 +239,7 @@ class FileView {
 					<td class="file-list-file text-center align-middle">
 						<a class="btn btn-primary btn-sm" href="/file/' . $fileID . '/" target="blank" download="' . $file->fileName . '"><span class="fas fa-download" aria-hidden="true"></span></a>
 					</td>
-					<td class="file-list-original-name text-left align-middle d-none d-xl-table-cell">' . $file->fileOriginalName . '</td>
+					<td class="file-list-original-name text-left align-middle d-none d-xl-table-cell">' . $file->title() . '</td>
 					<td class="file-list-created text-center align-middle d-none d-md-table-cell">' . $createdDT->format('Y-m-d H:i:s') . '</td>
 					<td class="file-list-size text-center align-middle d-none d-sm-table-cell">' . number_format($fileSize) . 'K</td>
 					<td class="file-list-file-object text-center align-middle d-none' . ($arg->displayObjectInfo?' d-xl-table-cell':'') . '">' . $file->fileObject . '</td>

@@ -154,7 +154,7 @@ class File extends ORM {
 
 	}
 	
-	public static function uploadFiles($fileUploadArray, $fileObject, $fileObjectID) {
+	public static function uploadFiles($fileUploadArray, $fileObject, $fileObjectID, $fileNameEnglish = '',  $fileNameJapanese = '') {
 
 		$errorArray = array(); 
 		$allowedExts = self::allowedExtensions();
@@ -184,8 +184,8 @@ class File extends ORM {
 				$file->fileSize = $fileUploadArray['size'][$i];
 				$file->fileObject = $fileObject;
 				$file->fileObjectID = $fileObjectID;
-				$file->fileTitleEnglish = $fileUploadArray["name"][$i];
-				$file->fileTitleJapanese = $fileUploadArray["name"][$i];
+				$file->fileTitleEnglish = $fileNameEnglish;
+				$file->fileTitleJapanese = $fileNameJapanese;
 				
 				$fileID = self::insert($file);
 				$conditions['fileID'] = $fileID;
@@ -371,6 +371,8 @@ final class NewFileViewParameters {
 	public $includeForm;
 	public $formURL;
 	public $formContainerDivClasses;
+	public $fileTitleInput;
+	public $fileTitleDivClasses;
 	public $formSelectDivClasses;
 	public $formSubmitDivClasses;
 	public $allowMultiple;
@@ -397,9 +399,12 @@ final class NewFileViewParameters {
 		$this->includeForm = true;
 		$this->formURL = $_SERVER['REQUEST_URI'];
 		$this->formContainerDivClasses = array('container-fluid');
+
+		$this->fileTitleInput = true;
+		$this->fileTitleDivClasses = array('col-12','col-md-6','mb-3');
 		$this->formSelectDivClasses = array('col-12','col-sm-6','col-md-4','offset-md-4','col-lg-3','offset-lg-6');
 		$this->formSubmitDivClasses = array('col-12','col-sm-6','col-md-4','col-lg-3');
-		$this->allowMultiple = true;
+		$this->allowMultiple = false;
 
 		$this->includeList = true;
 		$this->listContainerDivClasses = array('container-fluid');
