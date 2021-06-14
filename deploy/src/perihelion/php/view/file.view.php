@@ -219,7 +219,7 @@ class FileView {
 			$fileSize = $file->fileSize/1024;
 
 			$rows .= '
-				<tr>
+				<tr data-file-id="' . $fileID . '" data-file-object="' . $file->fileObject . '" data-file-object-id="' . $file->fileObjectID . '">
 					<td class="file-list-file text-center align-middle">
 						<a class="btn btn-primary btn-sm" href="/file/' . $fileID . '/" target="blank" download="' . $file->fileName . '"><span class="fas fa-download" aria-hidden="true"></span></a>
 					</td>
@@ -229,7 +229,7 @@ class FileView {
 					<td class="file-list-file-object text-center align-middle d-none' . ($arg->displayObjectInfo?' d-xl-table-cell':'') . '">' . $file->fileObject . '</td>
 					</td>
 					<td class="file-list-action text-center align-middle">
-						<button type="button" class="btn btn-danger btn-sm"><span class="fas fa-trash-alt"></span></button>
+						<button type="button" class="btn btn-danger btn-sm file-delete"><span class="fas fa-trash-alt"></span></button>
 					</td>
 				</tr>
 			';

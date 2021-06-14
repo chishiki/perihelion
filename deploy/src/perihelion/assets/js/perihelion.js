@@ -149,7 +149,25 @@ $(window).on('load', function() {
 			};
 
 			$.ajax(settings).always(function(data) {
+				console.dir(data);
+			});
 
+		});
+
+		$('.file-list-action > button.file-delete').on('click', function() {
+
+			var fileID = $(this).closest('tr').data('file-id');
+
+			$(this).closest('tr').remove();
+
+			var settings = {
+				url: "/api/v1/file/delete/",
+				method: "post",
+				data: { fileID : fileID },
+				dataType: "json"
+			};
+
+			$.ajax(settings).always(function(data) {
 				console.dir(data);
 			});
 
@@ -157,6 +175,4 @@ $(window).on('load', function() {
 
 		console.log("perihelion.js has loaded");
 
-	}
-
-);
+});

@@ -109,7 +109,7 @@ final class Image extends ORM {
 		$cond = array('imageID' => $this->imageID);
 		self::update($this, $cond);
 
-		// do also delete image files
+		// to also delete image files
 		// unlink($this->imagePath);
 		// foreach thumbnail { unlink($thumb->deleteImage(); }
 

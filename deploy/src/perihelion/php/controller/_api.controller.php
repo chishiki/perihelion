@@ -19,8 +19,6 @@ final class PerihelionAPI {
 
 		if ($loc[1] == 'v1') {
 
-
-
 			if ($loc[2] == 'image') {
 
 				// need an API key check here (!)
@@ -57,6 +55,21 @@ final class PerihelionAPI {
 							Image::update($image, $cond);
 						}
 					}
+
+				}
+
+			}
+
+			if ($loc[2] == 'file') {
+
+				// need an API key check here (!)
+
+				if ($loc[3] == 'delete') {
+
+					// /api/v1/file/delete/
+					$file = new File($input['fileID']);
+					$file->deleteFile();
+					return json_encode($file);
 
 				}
 

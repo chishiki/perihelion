@@ -51,10 +51,21 @@ class File extends ORM {
 			$statement = $nucleus->database->prepare($query);
 			$statement->execute(array(':fileID' => $fileID));
 			if ($row = $statement->fetch()) {
-				foreach ($row AS $key => $value) { if (!is_int($key)) { $this->$key = $value; } }
+				foreach ($row AS $key => $value) { if (isset($this->$key)) { $this->$key = $value; } }
 			}
 			
 		}
+
+	}
+
+	public function deleteFile() {
+
+		$this->deleted = 1;
+		$cond = array('fileID' => $this->fileID);
+		self::update($this, $cond);
+
+		// to also delete files
+		// unlink($this->filePath);
 
 	}
 
