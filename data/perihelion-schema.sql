@@ -31,6 +31,8 @@ CREATE TABLE `perihelion_Address` (
   `addressObject` varchar(25) NOT NULL,
   `addressObjectID` int(12) NOT NULL,
   `addressDefault` varchar(1) NOT NULL,
+  `latitude` decimal(8,6) NOT NULL,
+  `longitude` decimal(9,6) NOT NULL,
   PRIMARY KEY (`addressID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
