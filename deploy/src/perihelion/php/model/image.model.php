@@ -103,6 +103,18 @@ final class Image extends ORM {
 		
 	}
 
+	public function deleteImage() {
+
+		$this->deleted = 1;
+		$cond = array('imageID' => $this->imageID);
+		self::update($this, $cond);
+
+		// do also delete image files
+		// unlink($this->imagePath);
+		// foreach thumbnail { unlink($thumb->deleteImage(); }
+
+	}
+
 	public static function createThumbnail($source, $filetype, $destination, $desiredWidth) {
 
 		// SUPPORTS JPG AND PNG ONLY
