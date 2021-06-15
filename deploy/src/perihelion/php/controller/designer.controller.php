@@ -338,7 +338,7 @@ class DesignerController {
 		
 		if ($this->urlArray[0] == 'designer' && $this->urlArray[1] == 'files' && isset($_FILES['files-to-upload'])) {
 
-			$this->errorArray = File::uploadFiles($_FILES['files-to-upload'],'Site',$_SESSION['siteID']);
+			$this->errorArray = File::uploadFiles($_FILES['files-to-upload'],'Site',$_SESSION['siteID'], $this->inputArray['fileTitleEnglish'], $this->inputArray['fileTitleJapanese']);
 			if (empty($this->errorArray)) {
 				$successURL = "/" . Lang::languageUrlPrefix() . "designer/files/";
 				header("Location: $successURL");
@@ -346,48 +346,7 @@ class DesignerController {
 			
 			
 		}
-		
-		if ($this->urlArray[0] == 'designer' && $this->urlArray[1] == 'files' && $this->urlArray[2] == 'delete' && ctype_digit($this->urlArray[3])) {
-						
-			$fileID = $this->urlArray[3];
-			$file = new File($fileID);
-			$conditions = array('fileID' => $fileID);
 
-			$ioa = new Audit();
-			$ioa->auditAction = 'delete';
-			$ioa->auditObject = 'File';
-			$ioa->auditObjectID = $fileID;
-			$ioa->auditResult = 'success';
-			$ioa->auditNote = json_encode($file);
-			
-			if ($file->siteID == $_SESSION['siteID']) {
-				
-				if (unlink($file->filePath)) {
-					
-					File::delete($file,$conditions);
-					$successURL = "/" . Lang::languageUrlPrefix() . "designer/files/";
-					header("Location: $successURL");
-					
-				} else {
-					
-					$this->errorArray['fileDelete'][] = "Could not delete that file. Please contact support.";
-					$ioa->auditResult = 'fail';
-					$ioa->auditNote = '{ "redflag": [{ "reason": "could not unlink file" }] }';
-					Audit::createAuditEntry($ioa);
-					
-				}
-				
-			} else {
-
-				$this->errorArray['fileDelete'][] = "You do not have permission to delete that file.";
-				$ioa->auditResult = 'fail';
-				$ioa->auditNote = '{ "redflag": [{ "reason": "trying to delete a different site\'s file" }] }';
-				Audit::createAuditEntry($ioa);
-				
-			}
-
-		}
-		
 		if ($this->urlArray[0] == 'designer' && $this->urlArray[1] == 'seo' && $this->urlArray[2] == 'create') {
 			
 			$successURL = $lang . "/designer/seo/";

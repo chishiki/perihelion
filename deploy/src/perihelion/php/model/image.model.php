@@ -430,7 +430,7 @@ final class ImageFetch {
 
 	private $imageID;
 
-	public function __construct($imageObject, $imageObjectID, $imageMetaData) {
+	public function __construct($imageObject, $imageObjectID, $imageMetaData, $mainImage = null) {
 
 		$this->imageID = null;
 
@@ -439,6 +439,9 @@ final class ImageFetch {
 		if ($imageObject) { $where[] = 'imageObject = :imageObject'; }
 		if ($imageObjectID) { $where[] = 'imageObjectID = :imageObjectID'; }
 		if ($imageMetaData) { $where[] = 'imageMetaData = :imageMetaData'; }
+
+		if ($mainImage == true) { $where[] = 'imageDisplayClassification = "mainImage"'; }
+		if ($mainImage == false) { $where[] = 'imageDisplayClassification != "mainImage"'; }
 
 		$query = 'SELECT imageID FROM perihelion_Image WHERE ' . implode(' AND ',$where) . ' LIMIT 1';
 
