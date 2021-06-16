@@ -228,6 +228,8 @@ class FileView {
 		$fileList = new NewFileList($listArg);
 		$files = $fileList->files();
 
+		$rows = '';
+		
 		foreach ($files as $fileID) {
 
 			$file = new File($fileID);
