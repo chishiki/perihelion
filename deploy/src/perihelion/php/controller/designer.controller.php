@@ -69,15 +69,13 @@ class DesignerController {
 		if ($this->urlArray[0] == 'designer' && $this->urlArray[1] == 'content' && $this->urlArray[2] == 'update' && ctype_digit($this->urlArray[3])) {
 			
 			$contentID = $this->urlArray[3];
-			// $successURL = "/" . Lang::prefix() . "designer/content/update/" . $contentID . "/images/";
 
-			if (!empty($this->inputArray)) {
-				
-				// upload images
-				if (isset($_FILES['contentImages']) && $this->urlArray[4] == 'images') {
-					$this->errorArray = Image::uploadImages($_FILES['contentImages'],'Content',$contentID);
-				}
-					
+			if ($this->urlArray[4] == 'images' && isset($this->inputArray['submitted-images'])) {
+
+				Image::uploadImages($_FILES['images-to-upload'], 'Content', $contentID);
+
+			} elseif (!empty($this->inputArray)) {
+
 				$content = new Content($contentID);
 				
 				// booleans

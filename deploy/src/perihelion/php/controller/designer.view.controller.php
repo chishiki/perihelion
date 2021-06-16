@@ -28,9 +28,18 @@ class DesignerViewController {
 			$view = new ContentView($this->urlArray, $this->inputArray, $this->errorArray);
 			if ($this->urlArray[1] == 'content' && $this->urlArray[2] == 'create') { return $nav . $view->contentForm('create'); }
 			if ($this->urlArray[1] == 'content' && $this->urlArray[2] == 'update' && ctype_digit($this->urlArray[3])) {
+
+				$contentID = $this->urlArray[3];
 				
-				if ($this->urlArray[4] == 'images') { return $nav . $view->contentImagesForm($this->urlArray[3]); }
-				return $nav . $view->contentForm('update',$this->urlArray[3]);
+				if ($this->urlArray[4] == 'images') {
+					$view = new ImageView($this->urlArray, $this->inputArray, $this->errorArray);
+					$arg = new NewImageViewParameters();
+					$arg->imageObject = 'Content';
+					$arg->imageObjectID = $contentID;
+					return $nav . $view->newImageManager($arg);
+				}
+
+				return $nav . $view->contentForm('update',$contentID);
 				
 			}
 			if ($this->urlArray[1] == 'content') { return $nav . $view->contentList(); }
