@@ -119,7 +119,7 @@ INSERT INTO perihelion_Lang VALUES ('selectImages', 'Select Images', 0, 'イメ�
 
 /* @chishiki 2021-06-11 */
 
-ALTER TABLE `cj_crestronjapanDB`.`perihelion_File`
+ALTER TABLE `perihelion_File`
     ADD COLUMN `creator` INT(12) NOT NULL AFTER `siteID`,
     ADD COLUMN `created` DATETIME NOT NULL AFTER `creator`,
     ADD COLUMN `updated` DATETIME NOT NULL AFTER `created`,
