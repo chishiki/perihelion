@@ -336,13 +336,16 @@ final class Image extends ORM {
 						foreach ($thumbSizes as $width) {
 
 							$thumbImageName = $imageID . '-' . $width . 'px.' . $image->imageType;
-							$thumbPath = Config::read('physical.path') . 'vault/images/' . date('Y') . '/' . $thumbImageName;
+							$thumbnailDirectory = Config::read('physical.path') . 'vault/images/' . date('Y');
+							if (!is_dir($thumbnailDirectory)) { mkdir($thumbnailDirectory, 0755); }
+							clearstatcache();
+							$thumbPath = $thumbnailDirectory . '/' . $thumbImageName;
 							self::createThumbnail($newFilePath, $image->imageType, $thumbPath, $width);
 							
 							if ($awsKey != 'xxxxxxx') {
-							$key = $thumbImageName;
-							$sourceFile = $thumbPath;
-							$aws->uploadImageToS3($bucket,$key,$sourceFile,$contentType,$imageObject,$imageObjectID);
+								$key = $thumbImageName;
+								$sourceFile = $thumbPath;
+								$aws->uploadImageToS3($bucket,$key,$sourceFile,$contentType,$imageObject,$imageObjectID);
 							}
 
 						}
