@@ -69,103 +69,8 @@ class DesignerController {
 		if ($this->urlArray[0] == 'designer' && $this->urlArray[1] == 'content' && $this->urlArray[2] == 'update' && ctype_digit($this->urlArray[3])) {
 			
 			$contentID = $this->urlArray[3];
-			$successURL = "/" . Lang::prefix() . "designer/content/update/" . $contentID . "/images/";
+			// $successURL = "/" . Lang::prefix() . "designer/content/update/" . $contentID . "/images/";
 
-				if ($this->urlArray[4] == 'images' && $this->urlArray[5] == 'delete' && ctype_digit($this->urlArray[6])) {
-						
-					$imageID = $this->urlArray[6];
-					$image = new Image($imageID);
-					$conditions = array('imageID' => $imageID);
-
-					$ioa = new Audit();
-					$ioa->auditAction = 'delete';
-					$ioa->auditObject = 'Image';
-					$ioa->auditObjectID = $imageID;
-					$ioa->auditResult = 'success';
-					$ioa->auditNote = json_encode($image);
-					
-					if ($image->siteID == $_SESSION['siteID']) {
-						
-						if (unlink($image->imagePath)) {
-							
-							Image::delete($image,$conditions);
-							Audit::createAuditEntry($ioa);
-							header("Location: $successURL");
-							
-							
-						} else {
-							
-							$this->errorArray['imageDelete'][] = "Could not delete that image. Please contact support.";
-							$ioa->auditResult = 'fail';
-							$ioa->auditNote = '{ "redflag": [{ "reason": "could not unlink image" }] }';
-							Audit::createAuditEntry($ioa);
-							
-						}
-						
-					} else {
-
-						$this->errorArray['imageDelete'][] = "You do not have permission to delete that image.";
-						$ioa->auditResult = 'fail';
-						$ioa->auditNote = '{ "redflag": [{ "reason": "trying to delete a different site\'s image" }] }';
-						Audit::createAuditEntry($ioa);
-						
-					}
-
-				}
-
-				if ($this->urlArray[4] == 'images' && $this->urlArray[5] == 'make-main-image' && ctype_digit($this->urlArray[6])) {
-						
-					$selectedImageID = $this->urlArray[6];
-					$contentImages = Image::getObjectImageArray('Content',$contentID);
-					
-					foreach ($contentImages AS $thisImageID) {
-						
-						$thisImage = new Image($thisImageID);
-						$thisImage->imageDisplayClassification = ''; $audit = false;
-						if ($thisImageID == $selectedImageID) { $thisImage->imageDisplayClassification = 'mainImage'; $audit = true; }
-						$conditions = array('imageID' => $thisImageID);
-						if ($thisImage->siteID == $_SESSION['siteID']) { Image::update($thisImage,$conditions,$audit); }
-						
-					}
-					
-					header("Location: $successURL");
-					
-				}
-					
-				if ($this->urlArray[4] == 'images' && $this->urlArray[5] == 'add-to-carousel' && ctype_digit($this->urlArray[6])) {
-
-					$thisImageID = $this->urlArray[6];
-					$thisImage = new Image($thisImageID);
-					$thisImage->imageDisplayInGallery = 1;
-					$conditions = array('imageID' => $thisImageID);
-					if ($thisImage->siteID == $_SESSION['siteID']) { Image::update($thisImage,$conditions); }
-					header("Location: $successURL");
-					
-				}
-					
-				if ($this->urlArray[4] == 'images' && $this->urlArray[5] == 'remove-from-carousel' && ctype_digit($this->urlArray[6])) {
-					
-					$thisImageID = $this->urlArray[6];
-					$thisImage = new Image($thisImageID);
-					$thisImage->imageDisplayInGallery = 0;
-					$conditions = array('imageID' => $thisImageID);
-					if ($thisImage->siteID == $_SESSION['siteID']) { Image::update($thisImage,$conditions); }
-					header("Location: $successURL");
-					
-				}
-				
-				if ($this->urlArray[4] == 'images' && $this->urlArray[5] == 'set-display-order' && ctype_digit($this->urlArray[6]) && ctype_digit($this->urlArray[7])) {
-					
-					$thisImageID = $this->urlArray[6];
-					$thisImage = new Image($thisImageID);
-					$thisImage->imageDisplayOrder = $this->urlArray[7];
-					$conditions = array('imageID' => $thisImageID);
-					if ($thisImage->siteID == $_SESSION['siteID']) { Image::update($thisImage,$conditions); }
-					header("Location: $successURL");
-					
-				}
-
-				
 			if (!empty($this->inputArray)) {
 				
 				// upload images
@@ -285,7 +190,7 @@ class DesignerController {
 			
 		}
 
-		if ($this->urlArray[0] == 'designer' && $this->urlArray[1] == 'images' && isset($_FILES['images-to-upload'])) {
+		if ($this->urlArray[0] == 'designer' && $this->urlArray[1] == 'images' && isset($this->inputArray['submitted-images'])) {
 
 			$this->errorArray = Image::uploadImages($_FILES['images-to-upload'],'Site',$_SESSION['siteID']);
 			if (empty($this->errorArray)) {

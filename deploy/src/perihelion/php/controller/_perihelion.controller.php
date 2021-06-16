@@ -57,18 +57,23 @@ class Controller {
 				case 'image':
 				
 					if (ctype_digit($this->urlArray[1])) {
-						
+
+						$dt = new DateTime();
+
 						$imageID = $this->urlArray[1];
+
+
 						$image = new Image($imageID);
 						$imagePath = $image->imagePath;
 						$thumbImagePath = $imagePath;
 						$contentType = 'image/' . $image->imageType;
 						$legitThumbs = Image::thumbSizes();
-						
-						if (!empty($this->urlArray[2]) && ctype_digit($this->urlArray[2]) && in_array($this->urlArray[2],$legitThumbs)) { $thumbRequested = true; } else { $thumbRequested = false; }
+
+						if (ctype_digit($this->urlArray[2])) { $thumbPixels = $this->urlArray[2]; }
+						if (!empty($this->urlArray[2]) && isset($thumbPixels) && in_array($thumbPixels,$legitThumbs)) { $thumbRequested = true; } else { $thumbRequested = false; }
+
 						if ($thumbRequested) {
-							// what happens when year ('Y') is wrong...? hmmmm...
-							$thumbImagePath = Config::read('physical.path') . 'vault/images/' . date('Y') . '/' . $this->urlArray[1] . '-' . $this->urlArray[2] . 'px.' . $image->imageType;
+							$thumbImagePath = Config::read('physical.path') . 'vault/images/' . $dt->format('Y') . '/' . $imageID . '-' . $thumbPixels . 'px.' . $image->imageType;
 						}
 
 						header("Content-Type: " . $contentType);
@@ -78,11 +83,10 @@ class Controller {
 						if (file_exists($thumbImagePath)) {
 							header('Content-Length: ' . filesize($thumbImagePath));
 							readfile($thumbImagePath);
-						} else { // thumb did not exist
-							
+						} else {
 							$thumbFormats =  Image::thumbFormats();
 							if($thumbRequested && in_array($image->imageType,$thumbFormats)) {
-								Image::createThumbnail($imagePath, $image->imageType, $thumbImagePath, $this->urlArray[2]);
+								Image::createThumbnail($imagePath, $image->imageType, $thumbImagePath, $thumbPixels);
 							} 
 							header('Content-Length: ' . filesize($imagePath));
 							readfile($imagePath);

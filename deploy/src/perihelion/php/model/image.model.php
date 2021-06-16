@@ -301,7 +301,6 @@ final class Image extends ORM {
 				$image->imageOriginalName = $imageUploadArray["name"][$i];
 				$image->imageType = strtolower($extension);
 				$image->imageSize = $imageUploadArray['size'][$i];
-				if ($imageObject == 'Property') { $image->imageDisplayInGallery = 1; }
 
 				$imageID = self::insert($image);
 				$arrayOfImageIDs[] = $imageID;
@@ -353,12 +352,11 @@ final class Image extends ORM {
 					}
 					
 				} else {
-					
-					
+
+					if (Config::read('environment') == 'dev') { print_r(error_get_last()); }
 					$errorArray['imageUploads'][$image->imageOriginalName] = "There was an error uploading " . $image->imageOriginalName . ".";
-					self::delete($image, $conditions);
-					// log this!
-					
+					$image->deleteImage();
+					// self::delete($image, $conditions);
 					
 				}
 
