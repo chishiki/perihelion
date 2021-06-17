@@ -30,12 +30,13 @@ class DesignerViewController {
 			if ($this->urlArray[1] == 'content' && $this->urlArray[2] == 'update' && ctype_digit($this->urlArray[3])) {
 
 				$contentID = $this->urlArray[3];
-				
+
 				if ($this->urlArray[4] == 'images') {
 					$view = new ImageView($this->urlArray, $this->inputArray, $this->errorArray);
 					$arg = new NewImageViewParameters();
 					$arg->imageObject = 'Content';
 					$arg->imageObjectID = $contentID;
+					$arg->cardContainerDivClasses = array('container');
 					return $nav . $view->newImageManager($arg);
 				}
 
