@@ -98,12 +98,11 @@ final class ContentView {
 											</div>
 											
 											<div class="form-group row">
-												<label class="col-sm-2 col-form-label" for="contentCategoryKey">' . Lang::getLang('contentCategoryKey') . '</label>
+												<label class="col-sm-2 col-form-label" for="contentCategoryType">' . Lang::getLang('contentCategoryType') . '</label>
 												<div class="col-sm-10">
-													<select class="form-control" name="contentCategoryKey">
-														<option value="module"' . ($content->contentCategoryKey=='module'?" selected":"") . '>' . Lang::getLang('module') . '</option>
-														<option value="news"' . ($content->contentCategoryKey=='news'?" selected":"") . '>' . Lang::getLang('news') . '</option>
-														<option value="page"' . ($content->contentCategoryKey=='page'?" selected":"") . '>' . Lang::getLang('page') . '</option>
+													<select class="form-control" name="contentCategoryType">
+														<option value="page"' . ($content->contentCategoryType=='page'?" selected":"") . '>' . Lang::getLang('page') . '</option>
+														<option value="other"' . ($content->contentCategoryType=='other'?" selected":"") . '>' . Lang::getLang('other') . '</option>
 													</select>
 												</div>
 											</div>
@@ -169,7 +168,9 @@ final class ContentView {
 											
 											foreach($contentArray AS $contentID) {
 												$content = new Content($contentID);
-												$author = new User($content->entrySubmittedByUserID);
+												$author = new User($content->creator);
+												$contentCategory = new ContentCategory($content->contentCategoryID);
+												$category = $contentCategory->contentCategoryEnglish;
 												$h .= '<tr>';
 													$h .= '<td>';
 														if (!empty($content->entrySeoURL)) {
@@ -178,8 +179,8 @@ final class ContentView {
 															$h .= $content->title() . '<span class="float-right" style="font-size:12px;">' . Lang::getLang('requiresSeoURL') . '<span class="fas fa-exclamation-triangle" style="margin:5px;color:#999;"></span></span>';
 														}
 													$h .= '</td>';
-													$h .= '<td class="text-center">' . $content->contentCategoryKey . '</td>';
-													$h .= '<td class="text-center">' . $content->entrySubmissionDateTime . '</td>';
+													$h .= '<td class="text-center">' . (!empty($category)?$category:'') . '</td>';
+													$h .= '<td class="text-center">' . $content->created . '</td>';
 													$h .= '<td class="text-center">' . ($content->entryPublished?"&#10004;":"") . '</td>';
 													$h .= '<td class="text-center">' . number_format($content->entryViews) . '</td>';
 													$h .= '<td class="text-center">';

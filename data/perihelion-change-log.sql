@@ -135,3 +135,18 @@ INSERT INTO perihelion_Lang VALUES ('selectFiles', 'Select Files', 0, 'ファイ
 ALTER TABLE `perihelion_Content` CHANGE COLUMN `contentID` `contentID` INT(12) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `perihelion_Content` AUTO_INCREMENT = 1001;
 
+ALTER TABLE `perihelion_Content`
+    DROP COLUMN `contentDeletedByUserID`,
+    DROP COLUMN `contentDeletedDate`,
+    DROP COLUMN `contentDeleted`,
+    DROP COLUMN `entryDescriptionMeta`,
+    DROP COLUMN `entryKeywordMeta`,
+    DROP COLUMN `pageID`,
+    DROP COLUMN `entrySortOrder`,
+    DROP COLUMN `entryLastModified`,
+    DROP COLUMN `entrySubmissionDateTime`,
+    DROP COLUMN `entrySubmittedByUserID`,
+    DROP COLUMN `entrySiteID`,
+    CHANGE COLUMN `contentCategoryID` `contentCategoryID` INT(12) NOT NULL AFTER `entrySeoURL`,
+    CHANGE COLUMN `entryPublished` `entryPublished` INT(1) NOT NULL AFTER `contentCategoryType`,
+    CHANGE COLUMN `contentCategoryKey` `contentCategoryType` VARCHAR(20) NOT NULL;
