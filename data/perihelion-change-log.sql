@@ -129,3 +129,9 @@ UPDATE perihelion_File SET creator = fileSubmittedByUserID, created = fileSubmis
 
 SET @now := now();
 INSERT INTO perihelion_Lang VALUES ('selectFiles', 'Select Files', 0, 'ファイル選択', 0, @now);
+
+/* @chishiki 2021-06-19 */
+
+ALTER TABLE `perihelion_Content` CHANGE COLUMN `contentID` `contentID` INT(12) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `perihelion_Content` AUTO_INCREMENT = 1001;
+

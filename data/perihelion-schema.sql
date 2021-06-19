@@ -197,7 +197,7 @@ CREATE TABLE `perihelion_ContactForm` (
 DROP TABLE IF EXISTS `perihelion_Content`;
 
 CREATE TABLE `perihelion_Content` (
-  `contentID` int(12) NOT NULL,
+  `contentID` int(12) NOT NULL AUTO_INCREMENT,
   `siteID` int(12) NOT NULL,
   `creator` int(12) NOT NULL,
   `created` datetime NOT NULL,
@@ -232,7 +232,7 @@ CREATE TABLE `perihelion_Content` (
   `contentDeletedByUserID` int(12) NOT NULL,
   `contentLock` int(1) NOT NULL,
   PRIMARY KEY (`contentID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=1001 DEFAULT CHARSET=utf8mb4;
 
 
 
