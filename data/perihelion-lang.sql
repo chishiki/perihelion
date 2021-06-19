@@ -1,6 +1,6 @@
 SET @now := now();
 
-INSERT INTO `perihelion_Lang` VALUES
+REPLACE INTO `perihelion_Lang` VALUES
 ('Role','Role',0,'役割',0,@now),
 ('User','User',20,'ユーザー',1,@now),
 ('Admin','Admin',0,'システム管理',0,@now),
