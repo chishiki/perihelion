@@ -30,7 +30,7 @@ CREATE TABLE `perihelion_Content` (
 
 */
 
-class Content extends ORM {
+final class Content extends ORM {
 	
 	public $contentID;
 	public $siteID;
@@ -195,6 +195,122 @@ class Content extends ORM {
 		
 	}
 	
+}
+
+final class ContentList {
+
+	private $content;
+
+	public function __construct(ContentListParameters $arg) {
+
+		$this->content = array();
+
+		$where = array();
+
+		$where[] = 'deleted = 0';
+
+		if ($arg->siteID) { $where[] = 'siteID = :siteID'; }
+		if ($arg->contentID) { $where[] = 'contentID = :contentID'; }
+		if ($arg->contentURL) { $where[] = 'contentURL = :contentURL'; }
+		if ($arg->seoEntryURL) { $where[] = 'seoEntryURL = :seoEntryURL'; }
+		if ($arg->contentCategoryID) { $where[] = 'contentCategoryID = :contentCategoryID'; }
+		if ($arg->contentCategoryKey) { $where[] = 'contentCategoryKey = :contentCategoryKey'; }
+		if ($arg->contentPublished === true) { $where[] = 'contentPublished = 1'; }
+		if ($arg->contentPublished === false) { $where[] = 'contentPublished = 0'; }
+		if ($arg->contentPublishedDateCheck) { $where[] = '(contentPublishedStartDate <= :contentPublishedDateCheck AND contentPublishedEndDate >= :contentPublishedDateCheck)'; }
+		if ($arg->contentLock === true) { $where[] = 'contentLock = 1'; }
+		if ($arg->contentLock === false) { $where[] = 'contentLock = 0'; }
+
+		$search = array();
+		$search[] = 'entryTitleEnglish LIKE CONCAT("%",:contentSearchString,"%")';
+		$search[] = 'entryTitleJapanese LIKE CONCAT("%",:contentSearchString,"%")';
+		$search[] = 'entryContentEnglish LIKE CONCAT("%",:contentSearchString,"%")';
+		$search[] = 'entryContentJapanese LIKE CONCAT("%",:contentSearchString,"%")';
+
+		if ($arg->contentSearchString) { $where[] = '(' . implode(' OR ', $search) . ')'; }
+
+		$orderBy = array();
+		foreach ($arg->orderBy AS $field => $sort) { $orderBy[] = $field . ' ' . $sort; }
+
+		switch ($arg->resultSet) {
+			case 'robust': $selector = '*'; break;
+			default: $selector = 'contentID';
+		}
+
+		$query = 'SELECT ' . $selector . ' FROM perihelion_Content WHERE ' . implode(' AND ',$where) . ' ORDER BY ' . implode(', ',$orderBy);
+		if ($arg->limit) { $query .= ' LIMIT ' . ($arg->offset?$arg->offset.', ':'') . $arg->limit; }
+
+		$nucleus = Nucleus::getInstance();
+		$statement = $nucleus->database->prepare($query);
+
+		if ($arg->siteID) { $statement->bindParam(':siteID', $arg->siteID, PDO::PARAM_INT); }
+		if ($arg->contentID) { $statement->bindParam(':contentID', $arg->contentID, PDO::PARAM_INT); }
+		if ($arg->contentURL) { $statement->bindParam(':contentURL', $arg->contentURL, PDO::PARAM_STR); }
+		if ($arg->seoEntryURL) { $statement->bindParam(':seoEntryURL', $arg->seoEntryURL, PDO::PARAM_STR); }
+		if ($arg->contentCategoryID) { $statement->bindParam(':contentCategoryID', $arg->contentCategoryID, PDO::PARAM_INT); }
+		if ($arg->contentCategoryKey) { $statement->bindParam(':contentCategoryKey', $arg->contentCategoryKey, PDO::PARAM_STR); }
+		if ($arg->contentPublishedDateCheck) { $statement->bindParam(':contentPublishedDateCheck', $arg->contentPublishedDateCheck, PDO::PARAM_STR); }
+		if ($arg->contentSearchString) { $statement->bindParam(':contentSearchString', $arg->contentSearchString, PDO::PARAM_STR); }
+
+		$statement->execute();
+
+		while ($row = $statement->fetch()) {
+			if ($arg->resultSet == 'robust') { $this->content[] = $row; }
+			else { $this->content[] = $row['contentID']; }
+		}
+
+	}
+
+	public function content(): array {
+		return $this->content;
+	}
+
+	public function contentCount(): int {
+		return count($this->content);
+	}
+
+}
+
+final class ContentListParameters {
+
+	public $siteID;
+	public $contentID;
+	public $contentURL;
+	public $seoEntryURL;
+	public $contentCategoryID;
+	public $contentCategoryKey;
+	public $contentPublished;
+	public $contentPublishedDateCheck;
+	public $contentLock;
+
+	public $contentSearchString;
+
+	public $resultSet;
+	public $orderBy;
+	public $limit;
+	public $offset;
+
+	public function __construct() {
+
+		$dt = new DateTime();
+		$this->siteID = $_SESSION['siteID'];
+		$this->contentID = null;
+		$this->contentURL = null;
+		$this->seoEntryURL = null;
+		$this->contentCategoryID = null;
+		$this->contentCategoryKey = null;
+		$this->contentPublished = null; // [null => either; true => published; false => not published]
+		$this->contentPublishedDateCheck = null;
+		$this->contentLock = null; // [null => either; true => locked; false => not locked]
+		$this->contentSearchString = null;
+
+		$this->resultSet = 'id'; // [id|robust]
+		$this->orderBy = array('contentID' => 'DESC');
+		$this->limit = null;
+		$this->offset = null;
+
+	}
+
 }
 
 final class ContentRouting {
