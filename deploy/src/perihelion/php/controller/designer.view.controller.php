@@ -32,18 +32,23 @@ class DesignerViewController {
 				$contentID = $this->urlArray[3];
 
 				if ($this->urlArray[4] == 'images') {
-					$view = new ImageView($this->urlArray, $this->inputArray, $this->errorArray);
+					$imageView = new ImageView($this->urlArray, $this->inputArray, $this->errorArray);
 					$arg = new NewImageViewParameters();
 					$arg->imageObject = 'Content';
+					$arg->cardHeader = Lang::getLang('imageManager');
 					$arg->imageObjectID = $contentID;
 					$arg->cardContainerDivClasses = array('container');
-					return $nav . $view->newImageManager($arg);
+					$arg->navtabs = $view->designerContentFormTabs('update', $contentID, 'images');
+					return $nav . $imageView->newImageManager($arg);
 				}
 
 				return $nav . $view->contentForm('update',$contentID);
 				
 			}
-			if ($this->urlArray[1] == 'content') { return $nav . $view->contentList(); }
+			if ($this->urlArray[1] == 'content') {
+				$arg = new ContentListParameters();
+				return $nav . $view->contentList($arg);
+			}
 
 		}
 	

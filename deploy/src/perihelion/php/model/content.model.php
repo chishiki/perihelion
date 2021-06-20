@@ -273,6 +273,7 @@ final class ContentList {
 
 final class ContentListParameters {
 
+	// data filters
 	public $siteID;
 	public $contentID;
 	public $contentURL;
@@ -282,9 +283,9 @@ final class ContentListParameters {
 	public $contentPublished;
 	public $contentPublishedDateCheck;
 	public $contentLock;
-
 	public $contentSearchString;
 
+	// sorting and pagination
 	public $resultSet;
 	public $orderBy;
 	public $limit;
@@ -292,7 +293,7 @@ final class ContentListParameters {
 
 	public function __construct() {
 
-		$dt = new DateTime();
+		// data filters
 		$this->siteID = $_SESSION['siteID'];
 		$this->contentID = null;
 		$this->contentURL = null;
@@ -304,6 +305,7 @@ final class ContentListParameters {
 		$this->contentLock = null; // [null => either; true => locked; false => not locked]
 		$this->contentSearchString = null;
 
+		// sorting and pagination
 		$this->resultSet = 'id'; // [id|robust]
 		$this->orderBy = array('contentID' => 'DESC');
 		$this->limit = null;

@@ -150,3 +150,10 @@ ALTER TABLE `perihelion_Content`
     CHANGE COLUMN `contentCategoryID` `contentCategoryID` INT(12) NOT NULL AFTER `entrySeoURL`,
     CHANGE COLUMN `entryPublished` `entryPublished` INT(1) NOT NULL AFTER `contentCategoryType`,
     CHANGE COLUMN `contentCategoryKey` `contentCategoryType` VARCHAR(20) NOT NULL;
+
+/* @chishiki 2021-06-20 */
+
+SET @now := now();
+INSERT INTO perihelion_Lang VALUES ('scripts', 'Scripts', 0, 'スクリプト', 0, @now);
+INSERT INTO perihelion_Lang VALUES ('createContent', 'Create Content', 0, 'コンテント新規作成', 0, @now);
+INSERT INTO perihelion_Lang VALUES ('contentCategoryType', 'Content Type', 0, 'コンテントタイプ', 0, @now);

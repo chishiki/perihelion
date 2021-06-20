@@ -826,5 +826,7 @@ REPLACE INTO `perihelion_Lang` VALUES
 ('devData','Dev Data',0,'開発データ',0,@now),
 ('imageManager', 'Image Manager', 0, 'イメージ管理', 0, @now),
 ('selectImages', 'Select Images', 0, 'イメージ選択', 0, @now),
-('selectFiles', 'Select Files', 0, 'ファイル選択', 0, @now);
-
+('selectFiles', 'Select Files', 0, 'ファイル選択', 0, @now),
+('scripts', 'Scripts', 0, 'スクリプト', 0, @now),
+('createContent', 'Create Content', 0, 'コンテント新規作成', 0, @now),
+('contentCategoryType', 'Content Type', 0, 'コンテントタイプ', 0, @now);
