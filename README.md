@@ -33,6 +33,7 @@ sudo apt install php7.4-zip
 sudo apt install grc
 sudo add-apt-repository ppa:certbot/certbot
 sudo apt-get install python-certbot-apache
+sudo apt install postfix
 ```
 
 #### RDS (MySQL)
