@@ -829,4 +829,11 @@ REPLACE INTO `perihelion_Lang` VALUES
 ('selectFiles', 'Select Files', 0, 'ファイル選択', 0, @now),
 ('scripts', 'Scripts', 0, 'スクリプト', 0, @now),
 ('createContent', 'Create Content', 0, 'コンテント新規作成', 0, @now),
-('contentCategoryType', 'Content Type', 0, 'コンテントタイプ', 0, @now);
+('contentCategoryType', 'Content Type', 0, 'コンテントタイプ', 0, @now),
+('youMustEnableJavaScript', 'You must enable JavaScript to use this site.', 0, 'JavaScriptを有効に設定してからご利用ください。', 0, @langTimeStamp),
+('siteUsesLocationPicker', 'Uses LocationPicker', 0, 'LocationPicker使用', 0, @langTimeStamp),
+('siteUsesGoogleMaps', 'Uses Google Maps', 0, 'Googleマップ使用', 0, @langTimeStamp),
+('siteGoogleUpdateSuccessful', 'Site Google settings successfully updated.', 0, 'Google設定は更新済みです。', 0, @langTimeStamp),
+('siteUsesDataTables', 'Site uses DataTables.', 0, 'DataTables使用', 0, @langTimeStamp);
+
+

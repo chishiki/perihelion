@@ -7,8 +7,8 @@
 # DATA
 
 /data/*
-# only files that begin with "perihelion-" will be tracked and committed
 !/data/perihelion-*
+!/data/updates/
 
 # VENDOR
 
