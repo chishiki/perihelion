@@ -125,7 +125,7 @@ final class Content extends ORM {
 	
 		$content = '';
 		if ($_SESSION['lang'] == 'ja' && $this->entryContentJapanese != '') { $content = $this->entryContentJapanese; } else { $content = $this->entryContentEnglish; }
-		if ($plusOne) { self::plusOne($this->contentID); }
+		if ($plusOne) { $this->plusOne($this->contentID); }
 		return $content;
 		
 	}
@@ -145,22 +145,7 @@ final class Content extends ORM {
 		return $name;
 		
 	}
-	
-	public static function contentArray() {
 
-		$siteID = $_SESSION['siteID'];
-		
-		$nucleus = Nucleus::getInstance();
-		$query = "SELECT contentID FROM perihelion_Content  WHERE siteID = :siteID AND deleted = 0 ORDER BY entryPublishStartDate ASC ";
-		$statement = $nucleus->database->prepare($query);
-		$statement->execute(array(':siteID' => $siteID));
-
-		$contentArray = array();
-		while ($row = $statement->fetch()) { $contentArray[] = $row['contentID']; }
-		return $contentArray;
-
-	}
-	
 	public static function publishedContentExists($entrySeoURL) {
 
 		$nucleus = Nucleus::getInstance();
@@ -185,13 +170,11 @@ final class Content extends ORM {
 		
 	}
 
-	public static function plusOne($contentID) {
-		
-		$content = new Content($contentID);
-		$content->entryViews ++;
-		$conditions = array('contentID' => $contentID);
-		$logThis = false;
-		Content::update($content,$conditions,$logThis);
+	public function plusOne($contentID) {
+
+		$this->entryViews ++;
+		$conditions = array('contentID' => $this->contentID);
+		self::update($this, $conditions, false);
 		
 	}
 	
@@ -214,7 +197,7 @@ final class ContentList {
 		if ($arg->contentURL) { $where[] = 'contentURL = :contentURL'; }
 		if ($arg->seoEntryURL) { $where[] = 'seoEntryURL = :seoEntryURL'; }
 		if ($arg->contentCategoryID) { $where[] = 'contentCategoryID = :contentCategoryID'; }
-		if ($arg->contentCategoryKey) { $where[] = 'contentCategoryKey = :contentCategoryKey'; }
+		if ($arg->contentCategoryType) { $where[] = 'contentCategoryType = :contentCategoryType'; }
 		if ($arg->contentPublished === true) { $where[] = 'contentPublished = 1'; }
 		if ($arg->contentPublished === false) { $where[] = 'contentPublished = 0'; }
 		if ($arg->contentPublishedDateCheck) { $where[] = '(contentPublishedStartDate <= :contentPublishedDateCheck AND contentPublishedEndDate >= :contentPublishedDateCheck)'; }
@@ -248,7 +231,7 @@ final class ContentList {
 		if ($arg->contentURL) { $statement->bindParam(':contentURL', $arg->contentURL, PDO::PARAM_STR); }
 		if ($arg->seoEntryURL) { $statement->bindParam(':seoEntryURL', $arg->seoEntryURL, PDO::PARAM_STR); }
 		if ($arg->contentCategoryID) { $statement->bindParam(':contentCategoryID', $arg->contentCategoryID, PDO::PARAM_INT); }
-		if ($arg->contentCategoryKey) { $statement->bindParam(':contentCategoryKey', $arg->contentCategoryKey, PDO::PARAM_STR); }
+		if ($arg->contentCategoryType) { $statement->bindParam(':contentCategoryType', $arg->contentCategoryType, PDO::PARAM_STR); }
 		if ($arg->contentPublishedDateCheck) { $statement->bindParam(':contentPublishedDateCheck', $arg->contentPublishedDateCheck, PDO::PARAM_STR); }
 		if ($arg->contentSearchString) { $statement->bindParam(':contentSearchString', $arg->contentSearchString, PDO::PARAM_STR); }
 
@@ -279,7 +262,7 @@ final class ContentListParameters {
 	public $contentURL;
 	public $seoEntryURL;
 	public $contentCategoryID;
-	public $contentCategoryKey;
+	public $contentCategoryType;
 	public $contentPublished;
 	public $contentPublishedDateCheck;
 	public $contentLock;
@@ -299,7 +282,7 @@ final class ContentListParameters {
 		$this->contentURL = null;
 		$this->seoEntryURL = null;
 		$this->contentCategoryID = null;
-		$this->contentCategoryKey = null;
+		$this->contentCategoryType = null;
 		$this->contentPublished = null; // [null => either; true => published; false => not published]
 		$this->contentPublishedDateCheck = null;
 		$this->contentLock = null; // [null => either; true => locked; false => not locked]
