@@ -41,7 +41,9 @@ class StateController {
 		foreach ($this->moduleArray AS $moduleName) {
 			if ($loc[0] == $moduleName) {
 				$moduleStateController = ModuleUtilities::moduleToClassName($moduleName, 'Controller');
-		        $state = new $moduleStateController($loc,$input,$mods);
+				if (class_exists($moduleStateController)) {
+					$state = new $moduleStateController($loc,$input,$mods);
+				}
 		    }
 		}
 
