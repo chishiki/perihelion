@@ -12,9 +12,9 @@ Perihelion is an open-source web application framework. https://perihelion.xyz/
    * [Environment Setup](#environment-setup)
    * [Database ](#RDS-MySQL)
 * [Documentation and FAQ](#documentation-and-faq)
-* [Periheilion Framework]
-   * [Perihelion - Core] 
-   * [Satellites - Modules]
+* [Periheilion Framework](#periheilion-framework)
+   * [Perihelion - Core](#perihelion---core)
+   * [Satellites - Modules](satellites---modules)
 
 
 ## Quick Start
@@ -66,8 +66,12 @@ Parameter Group
 
 ## Documentation and FAQ
 
+### What Does Perihelion Mean?
+Perihelion is the position of a planet's orbit that is closest to the sun.
 
 ## Periheilion Framework
+   
+   Perihelion consists of the main core of the framework which is called Perihelion and modules which are satellites. 
    
 ### Perihelion - Core
 ### Satellites - Modules
