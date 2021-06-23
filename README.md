@@ -6,6 +6,17 @@
 Perihelion is an open-source web application framework. https://perihelion.xyz/
 
 ----
+## Table of Contents
+
+* [Quick start](#quick-start)
+   * [Environment Setup](#environment-setup)
+   * [Database ](#RDS-MySQL)
+* [Documentation and FAQ](#documentation-and-faq)
+
+
+## Quick Start
+
+You will need to be familar with the command-line and have a Linux like machine.
 
 ### ENVIRONMENT SETUP
 
@@ -49,6 +60,8 @@ Parameter Group
 * `init_connect` => `SET NAMES utf8mb4`
 
 ----
+
+## Documentation and FAQ
 
 ### VERSION HISTORY
 
