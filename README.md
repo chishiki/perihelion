@@ -6,6 +6,20 @@
 Perihelion is an open-source web application framework. https://perihelion.xyz/
 
 ----
+## Table of Contents
+
+* [Quick start](#quick-start)
+   * [Environment Setup](#environment-setup)
+   * [Database ](#RDS-MySQL)
+* [Documentation and FAQ](#documentation-and-faq)
+* [Periheilion Framework](#periheilion-framework)
+   * [Perihelion - Core](#perihelion---core)
+   * [Satellites - Modules](satellites---modules)
+
+
+## Quick Start
+
+You will need to be familar with the command-line and have a Linux like machine.
 
 ### ENVIRONMENT SETUP
 
@@ -47,6 +61,25 @@ Parameter Group
 * `character_set_server` => `utf8mb4`
 * `collation_server` => `utf8mb4_general_ci`
 * `init_connect` => `SET NAMES utf8mb4`
+
+----
+
+## Documentation and FAQ
+
+### What Does Perihelion Mean?
+Perihelion is the position of a planet's orbit that is closest to the sun.
+
+## Periheilion Framework
+   
+   Perihelion consists of the main core of the framework which is called Perihelion and modules which are satellites. 
+   
+### Perihelion - Core
+
+The core files can be found in the `perihelion/deploy/src/perihelion` directory.
+
+### Satellites - Modules
+
+The modules and files can be found in the `perihelion/deploy/src/satellites` directory.
 
 ----
 
