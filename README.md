@@ -74,8 +74,14 @@ Perihelion is the position of a planet's orbit that is closest to the sun.
    Perihelion consists of the main core of the framework which is called Perihelion and modules which are satellites. 
    
 ### Perihelion - Core
+
+The core files can be found in the `perihelion/deploy/src/perihelion` directory.
+
 ### Satellites - Modules
 
+The modules and files can be found in the `perihelion/deploy/src/satellites` directory.
+
+----
 
 ### VERSION HISTORY
 
