@@ -24,14 +24,12 @@ class StateController {
 		$input = $this->inputArray;
 		$mods = $this->moduleArray;
 		
-		if ($loc[0] == 'user-manager') { $state = new UserController($loc,$input,$mods); }
 		if ($loc[0] == 'enquiry') { $state = new EnquiryController($loc,$input,$mods); }
 		if ($loc[0] == 'designer') { $state = new DesignerController($loc,$input,$mods); }
 		if ($loc[0] == 'manager') { $state = new ManagerController($loc,$input,$mods); }
 		if ($loc[0] == 'newsletter') { $state = new NewsletterController($loc,$input,$mods); }
 		if ($loc[0] == 'admin') { $state = new AdminController($loc,$input,$mods); }
 		if ($loc[0] == 'profile') { $state = new ProfileController($loc,$input,$mods); }
-		if ($loc[0] == 'sign-up') { $state = new SignUpController($loc,$input,$mods); }
 		if ($loc[0] == 'support') { $state = new SupportController($loc,$input,$mods); }
 		if ($loc[0] == 'contact') { $state = new ContactController($loc,$input,$mods); }
 		

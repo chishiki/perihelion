@@ -256,24 +256,15 @@ class ManagerController {
 					$fromAddress = $site->siteAutomatedEmailSenderName . ' <' . $site->siteAutomatedEmailAddress . '>';
 					$mailSubject = '[ you can now login to ' . $site->siteURL . ' ]';
 
-					if ($site->siteUsesPropertyManagement && $perihelionNewbie && $inputUserRole == 'siteOwner') {
-						
-						$message = "<p>Here are your details for logging in to the " . $site->getTitle() . " system:</p>";
-						$message .= "<p>Login page: http://" . $site->siteURL . "/login/<br />Registered email address: " . $user->userEmail . "<br />Password: " . $password . "</p>";
-						$message .= "<p>You can access your recent invoices, cashflow statements, bank information, and basic property information from the drop down menu at the top of the page. ";
-						$message .= "Please note that we are continuously adding to the system so there may be changes in the future.</p>";
-						$message .= "<p>You can log in to the system using your email address or your username. You can create a username and change your password within the system under the Profile tab. Please keep your password safe.</p>";
-						$message .= "<p>Thanks for using " . $site->getTitle() . ".</p>";
-						
-					} elseif ($perihelionNewbie) {
+					if ($perihelionNewbie) {
 						
 						$message = "<p>Welcome to " . $site->siteTitleEnglish . ". A new account has been established for you.</p>";
-						$message .= "<p>You can login via http://" . $site->siteURL . "/login/ =&gt; ( " . $inputUserEmail . " | " . $password . " )</p>";
+						$message .= "<p>You can login via https://" . $site->siteURL . "/login/ =&gt; ( " . $inputUserEmail . " | " . $password . " )</p>";
 						
 					} else {
 						
 						$message = "<p>You have been granted access to " . $site->siteTitleEnglish . ".</p>";
-						$message .= "<p>You can now login via http://" . $site->siteURL . "/login/ using your existing Perihelion login details.</p>";
+						$message .= "<p>You can now login via https://" . $site->siteURL . "/login/ using your existing Perihelion login details.</p>";
 						
 					}
 

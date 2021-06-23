@@ -36,8 +36,6 @@ require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/controller/profile.controll
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/controller/profile.view.controller.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/controller/support.controller.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/controller/support.view.controller.php');
-require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/controller/user.controller.php');
-require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/controller/user.view.controller.php');
 
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/model/nucleus.model.php'); // required by ORM
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/model/orm.model.php'); // extended by other model classes

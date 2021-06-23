@@ -5,13 +5,15 @@ class DesignerViewController {
 	private $urlArray;
 	private $inputArray;
 	private $errorArray;
-	
-	public function __construct($urlArray, $inputArray, $errorArray) {
+	private $messages;
+
+	public function __construct($urlArray, $inputArray, $errorArray, $messages) {
 
 		$this->urlArray = $urlArray;
 		$this->inputArray = $inputArray;
 		$this->errorArray = $errorArray;
-		
+		$this->messages = $messages;
+
 		$authorizedRoles = array('siteAdmin','siteManager','siteDesigner');
 		$role = Auth::getUserRole();
 		if (!in_array($role,$authorizedRoles)) { die("[DesignerViewController] You do not have view permissions for the designer module."); }

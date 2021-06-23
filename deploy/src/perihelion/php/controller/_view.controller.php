@@ -36,13 +36,10 @@ class ViewController {
 		if ($loc[0] == 'admin' && in_array($role,$adminUserRoleArray)) { $view = new AdminViewController($loc, $input, $errors); }
 		if ($loc[0] == 'designer' && in_array($role,$designerUserRoleArray)) { $view = new DesignerViewController($loc, $input, $errors, $msg); }
 		if ($loc[0] == 'enquiry') { $view = new EnquiryViewController($loc, $input, $errors); }
-		if ($loc[0] == 'manage-menus') { $view = new MenuViewController($loc, $input, $errors); }
 		if ($loc[0] == 'manager' && in_array($role,$managerUserRoleArray)) { $view = new ManagerViewController($loc, $input, $mods, $errors, $msg); }
 		if ($loc[0] == 'newsletter') { $view = new NewsletterViewController($loc, $input, $errors, $msg); }
 		if ($loc[0] == 'profile') { $view = new ProfileViewController($loc, $input, $errors); }
-		if ($loc[0] == 'project') { $view = new ProjectViewController($loc, $input, $errors); }
 		if ($loc[0] == 'support' && $isLoggedIn) { $view = new SupportViewController($loc, $input, $errors); }
-		if ($loc[0] == 'user-manager') { $view = new UserViewController($loc, $input, $errors); }
 
 		$authViews = array('account-recovery','account-recovery-mail-sent','login','reset-password');
 		if (in_array($loc[0],$authViews)) { $view = new AuthViewController($loc, $input, $errors, $mods); }
