@@ -1,3 +1,3 @@
 Satellites
 
-This is where Perihelion modules should be copied when deploying.
+This is where Perihelion satellites should be copied when deploying.

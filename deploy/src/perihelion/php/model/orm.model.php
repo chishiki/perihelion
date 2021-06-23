@@ -67,7 +67,14 @@ class ORM {
 		$statement = $nucleus->database->prepare($query);
 		
 		foreach ($conditions AS $condition => $value) { $attribute = ':' . $condition; $statement->bindValue($attribute, $value); }
-		foreach ($objectVariableArray AS $property => $value) { $attribute = ':' . $property; $statement->bindValue($attribute, $value); }
+		foreach ($objectVariableArray AS $property => $value) {
+			if ($property == 'updated') {
+				$updatedDT = new DateTime();
+				$attribute = ':' . $property; $statement->bindValue($attribute, $updatedDT->format('Y-m-d H:i:s'));
+			} else {
+				$attribute = ':' . $property; $statement->bindValue($attribute, $value);
+			}
+		}
 
 		if (!$statement->execute()){
 			print_r($statement->errorInfo());

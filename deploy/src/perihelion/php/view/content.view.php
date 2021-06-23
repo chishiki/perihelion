@@ -40,7 +40,7 @@ final class ContentView {
 								$h .= '</div>';
 								$h .= '<div class="card-body">';
 
-								$h .= self::contentButtonGroup($contentID,$this->urlArray[4]);
+								$h .= $this->designerContentFormTabs($action, $contentID, 'content');
 								
 								$h .= '
 								
@@ -65,8 +65,18 @@ final class ContentView {
 											
 											<div class="form-group row">
 												<label class="col-sm-2 col-form-label" for="entryContentEnglish">' . Lang::getLang('entryContentEnglish') . '</label>
-												<div class="col-sm-10"><textarea class="form-control" rows="10" name="entryContentEnglish" placeholder="Content (English)">' . $content->entryContentEnglish . '</textarea></div>
+												<div class="col-sm-10">
+													<textarea class="form-control ckeditor" rows="10" id="content_english" name="entryContentEnglish" placeholder="Content (English)">' . $content->entryContentEnglish . '</textarea>
+												</div>
 											</div>
+											
+											<script>
+												CKEDITOR.replace(\'content_english\', {
+													language: \'' . $_SESSION['lang'] . '\',
+													extraPlugins: \'sourcedialog\',
+													contentsCss: \'/bootstrap/4.3.1/css/bootstrap.min.css\'
+												});
+											</script>
 											
 											<hr />
 											
@@ -87,8 +97,18 @@ final class ContentView {
 											
 											<div class="form-group row">
 												<label class="col-sm-2 col-form-label" for="entryContentJapanese">' . Lang::getLang('entryContentJapanese') . '</label>
-												<div class="col-sm-10"><textarea class="form-control" rows="10" name="entryContentJapanese" placeholder="内容">' . $content->entryContentJapanese . '</textarea></div>
+												<div class="col-sm-10">
+													<textarea class="form-control ckeditor" rows="10" id="content_japanese" name="entryContentJapanese" placeholder="内容">' . $content->entryContentJapanese . '</textarea>
+												</div>
 											</div>
+											
+											<script>
+												CKEDITOR.replace(\'content_japanese\', {
+													language: \'' . $_SESSION['lang'] . '\',
+													extraPlugins: \'sourcedialog\',
+													contentsCss: \'/bootstrap/4.3.1/css/bootstrap.min.css\'
+												});
+											</script>
 											
 											<hr />
 											
@@ -98,12 +118,11 @@ final class ContentView {
 											</div>
 											
 											<div class="form-group row">
-												<label class="col-sm-2 col-form-label" for="contentCategoryKey">' . Lang::getLang('contentCategoryKey') . '</label>
+												<label class="col-sm-2 col-form-label" for="contentCategoryType">' . Lang::getLang('contentCategoryType') . '</label>
 												<div class="col-sm-10">
-													<select class="form-control" name="contentCategoryKey">
-														<option value="module"' . ($content->contentCategoryKey=='module'?" selected":"") . '>' . Lang::getLang('module') . '</option>
-														<option value="news"' . ($content->contentCategoryKey=='news'?" selected":"") . '>' . Lang::getLang('news') . '</option>
-														<option value="page"' . ($content->contentCategoryKey=='page'?" selected":"") . '>' . Lang::getLang('page') . '</option>
+													<select class="form-control" name="contentCategoryType">
+														<option value="page"' . ($content->contentCategoryType=='page'?" selected":"") . '>' . Lang::getLang('page') . '</option>
+														<option value="other"' . ($content->contentCategoryType=='other'?" selected":"") . '>' . Lang::getLang('other') . '</option>
 													</select>
 												</div>
 											</div>
@@ -112,7 +131,7 @@ final class ContentView {
 											
 											<div class="form-group row">
 												<label class="col-sm-2 col-form-label" for="entrySeoURL">SEO URL</label>
-												<div class="col-sm-10"><input type="text" name="entrySeoURL" class="form-control col-sm-10" placeholder="alphanumeric and hyphens only " value="' . $content->entrySeoURL . '"></div>
+												<div class="col-sm-10"><input type="text" name="entrySeoURL" class="form-control col-sm-10" placeholder="alphanumeric and hyphens only " value="' . $content->entrySeoURL . '" required></div>
 											</div>
 											
 											<hr />
@@ -137,72 +156,81 @@ final class ContentView {
 
 	}
 	
-	public function contentList() {
-		
-		$contentArray = Content::contentArray($_SESSION['siteID']);
+	public function contentList(ContentListParameters $arg) {
+
 		$actionURL = '/' . Lang::languageUrlPrefix() . 'designer/content/create/';
-		
-		$h = '<div id="perihelion_content_list">';
-			$h .= '<div class="container">';
-				$h .= '<div class="row">';
-					$h .= '<div class="col-sm-12">';
-						$h .= '<div class="card" >';
-							
-							$h .= '<div class="card-header">';
-								$h .= '<div class="card-title">';
-									$h .= Lang::getLang('content') . ' <a class="btn btn-secondary btn-sm float-right" href="' . $actionURL . '"><span class="fas fa-plus"></span></a>';
-								$h .= '</div>';
-							$h .= '</div>';
-							
-							$h .= '<div class="card-body">';
-								$h .= '<div class="table-responsive">';
-									$h .= '<table class="table table-bordered table-hover table-striped table-sm">';
-										
-											$h .= '<tr>';
-												$h .= '<th class="th_content_content">' . Lang::getLang('content') . '</th>';
-												$h .= '<th class="th_content_category text-center">' . Lang::getLang('category') . '</th>';
-												$h .= '<th class="th_content_created text-center">' . Lang::getLang('created') . '</th>';
-												$h .= '<th class="th_content_published text-center">' . Lang::getLang('published') . '</th>';
-												$h .= '<th class="th_content_served text-center">' . Lang::getLang('served') . '</th>';
-												$h .= '<th class="th_content_action text-center">' . Lang::getLang('action') . '</th>';
-											$h .= '</tr>';
-											
-											foreach($contentArray AS $contentID) {
-												$content = new Content($contentID);
-												$author = new User($content->entrySubmittedByUserID);
-												$h .= '<tr>';
-													$h .= '<td>';
-														if (!empty($content->entrySeoURL)) {
-															$h .= '<a class="btn btn-secondary btn-block btn-sm  clearfix" href="/' . Lang::languageUrlPrefix() . $content->entrySeoURL . '/" style="text-align:left;padding-left:5px;font-size:12px;font-weight:700;" target="_blank">' . $content->title() . '<span class="fas fa-external-link-alt float-right" style="margin:5px;"></span></a>';
-														} else {
-															$h .= $content->title() . '<span class="float-right" style="font-size:12px;">' . Lang::getLang('requiresSeoURL') . '<span class="fas fa-exclamation-triangle" style="margin:5px;color:#999;"></span></span>';
-														}
-													$h .= '</td>';
-													$h .= '<td class="text-center">' . $content->contentCategoryKey . '</td>';
-													$h .= '<td class="text-center">' . $content->entrySubmissionDateTime . '</td>';
-													$h .= '<td class="text-center">' . ($content->entryPublished?"&#10004;":"") . '</td>';
-													$h .= '<td class="text-center">' . number_format($content->entryViews) . '</td>';
-													$h .= '<td class="text-center">';
-														if ($content->contentLock) {
-															$h .= '<span class="fas fa-lock"></span>';
-														} else {
-															$h .= '<a class="btn btn-primary btn-block btn-sm" href="/' . Lang::languageUrlPrefix() . 'designer/content/update/' . $contentID . '/">' . Lang::getLang('update') . '</a>';
-														}
-													$h .= '</td>';
-												$h .= '</tr>';
-											}
-											
 
-									$h .= '</table>';
-								$h .= '</div>';
-							$h .= '</div>';
-						$h .= '</div>';
-					$h .= '</div>';
-				$h .= '</div>';
-			$h .= '</div>';
-		$h .= '</div>';
+		$contentList = '
 
-		return $h;
+				<div class="row mb-3">
+					<div id="new_content_link" class="col-12 col-sm-6 offset-sm-6 col-md-4 offset-md-8 col-lg-3 offset-lg-9">
+						<a href="' . $actionURL . '" class="btn btn-primary btn-block">
+							<span class="fas fa-plus"></span> ' . Lang::getLang('createContent') . '
+						</a>
+					</div>
+				</div>
+				<div class="table-responsive">
+					<table class="table table-bordered table-hover table-striped table-sm">
+						<thead class="thead-light">
+							<tr>
+								<th class="th_content_content">' . Lang::getLang('content') . '</th>
+								<th class="th_content_category text-center">' . Lang::getLang('category') . '</th>
+								<th class="th_content_created text-center">' . Lang::getLang('created') . '</th>
+								<th class="th_content_published text-center">' . Lang::getLang('published') . '</th>
+								<th class="th_content_served text-center">' . Lang::getLang('served') . '</th>
+								<th class="th_content_action text-center">' . Lang::getLang('action') . '</th>
+							</tr>
+						</thead>
+						<tbody>' . $this->contentListRows($arg) . '</tbody>
+					</table>
+				</div>
+
+		';
+
+		$cardView = new CardView('perihelion_content_list', array('container'), '', array('col-12'), Lang::getLang('contentList'), $contentList);
+		return $cardView->card();
+
+	}
+
+	private function contentListRows(ContentListParameters $arg) {
+
+		$cl = new ContentList($arg);
+		$contentArray = $cl->content();
+
+		$rows = '';
+
+		foreach($contentArray AS $contentID) {
+
+			$content = new Content($contentID);
+			$contentCategory = new ContentCategory($content->contentCategoryID);
+			$category = $contentCategory->contentCategoryEnglish;
+
+			if (!empty($content->entrySeoURL)) {
+				$contentLink = '<a class="btn btn-secondary btn-block btn-sm  clearfix" href="/' . Lang::languageUrlPrefix() . $content->entrySeoURL . '/" style="text-align:left;padding-left:5px;font-size:12px;font-weight:700;" target="_blank">' . $content->title() . '<span class="fas fa-external-link-alt float-right" style="margin:5px;"></span></a>';
+			} else {
+				$contentLink = $content->title() . '<span class="float-right" style="font-size:12px;">' . Lang::getLang('requiresSeoURL') . '<span class="fas fa-exclamation-triangle" style="margin:5px;color:#999;"></span></span>';
+			}
+
+			if ($content->contentLock) {
+				$action = '<span class="fas fa-lock"></span>';
+			} else {
+				$action = '<a class="btn btn-primary btn-block btn-sm" href="/' . Lang::languageUrlPrefix() . 'designer/content/update/' . $contentID . '/">' . Lang::getLang('update') . '</a>';
+			}
+
+			$rows .= '
+				<tr>
+					<td>' . $contentLink . '</td>
+					<td class="text-center">' . (!empty($category)?$category:'') . '</td>
+					<td class="text-center">' . $content->created . '</td>
+					<td class="text-center">' . ($content->entryPublished?'&#10004;':'') . '</td>
+					<td class="text-center">' . number_format($content->entryViews) . '</td>
+					<td class="text-center">' . $action . '</td>
+				</tr>
+			';
+
+		}
+
+		return $rows;
 
 	}
 
@@ -216,162 +244,32 @@ final class ContentView {
 		
 	}
 
-	public function contentImagesForm($contentID) {
-		
-		$content = new Content($contentID);
+	public function designerContentFormTabs($type = 'create', $contentID = null, $activeTab = 'content') {
 
-		$formAction = '/' . Lang::prefix() . 'designer/content/update/' . $contentID . '/images/';
-		
-		$h = '<div id="perihelion_designer_content_images">';
-			$h .= '<div class="container">';
-				$h .= '<div class="row">';
-					$h .= '<div class="col-sm-12">';
-						$h .= '<div class="card" >';
-						
-							$h .= '<div class="card-header">';
-								$h .= '<div class="card-title clearfix">' . Lang::getLang('updateContent') . ' - ' . $content->title() . ' - ' . Lang::getLang('images') . '</div>';
-							$h .= '</div>';
-							
-							$h .= '<div class="card-body">';
-								
-								$h .= self::contentButtonGroup($contentID,$this->urlArray[4]);
+		$contentFormURL = '#';
+		$updateOnly = true;
 
-								$h .= '<form id="perihelionDesignerContentImagesForm" name="perihelionDesignerContentImagesForm"  method="post" action="' . $formAction . '" enctype="multipart/form-data">';
-									$h .= '<input type="hidden" name="contentID" value="' . $contentID . '">';
+		if ($type == 'update' && ctype_digit($contentID)) {
+			$contentFormURL = '/' . Lang::prefix() . 'designer/content/update/' . $contentID . '/';
+			$updateOnly = false;
+		}
 
-									$h .= '<div class="form-group row">';
-									
-										$h .= '<div class="col-sm-2 offset-sm-8">';
-										
-											$h .= '<label class="btn btn-secondary btn-block btn-file">';
-												$h .= '<span id="perihelionDesignerContentImagesSubmitButtonText">' . Lang::getLang('Select Images') . '</span> ';
-												$h .= '<input type="file" id="contentImages" name="contentImages[]" style="display:none;" accept="image/*" multiple>';
-											$h .= '</label>';
-											
-										$h .= '</div>';
+		$t = '
 
-										$h .= '<div class="col-sm-2">';
-										
-											$h .= '<button type="submit" name="perihelionDesignerContentImagesSubmit" id="perihelionDesignerContentImagesSubmit" class="btn btn-primary btn-block" disabled="true">';
-												$h .= '<span id="perihelionDesignerContentImagesSubmitIcon" class="fas fa-upload"></span> ';
-												$h .= '<span id="perihelionDesignerContentImagesSubmitText">' . Lang::getLang('uploadImages') . '</span>';
-											$h .= '</button>';
-											
-										$h .= '</div>';
-										
-									$h .= '</div>';
+			<ul id="designer_content_form_nav_tabs" class="nav nav-tabs">
+				<li class="nav-item">
+					<a class="nav-link' . ($activeTab=='content'?' active':'') . '" href="' . $contentFormURL . '">' . Lang::getLang('content') . '</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link' . ($updateOnly?' disabled':'') . ($activeTab=='images'?' active':'') . '" href="' . $contentFormURL . 'images/"' . ($updateOnly?' tabindex="-1"':'') . '>' . Lang::getLang('images') . '</a>
+				</li>
+			</ul>
+			
+		';
 
-								$h .= '</form>';
-
-								$images = Image::getObjectImageArray('Content',$contentID);
-								
-								if (!empty($images)) {
-									$h .= '<div class="row">';
-										$h .= '<div class="col-12">';
-											$h .= '<div class="table-responsive">';
-												$h .= '<table class="table table-striped">';
-
-													$h .= '<tr>';
-														$h .= '<th>' . Lang::getLang('image') . '</th>';
-														$h .= '<th class="hidden-xs">' . Lang::getLang('url') . '</th>';
-														$h .= '<th class="hidden-xs hidden-sm">' . Lang::getLang('originalName') . '</th>';
-														$h .= '<th class="hidden-xs">' . Lang::getLang('date') . '</th>';
-														$h .= '<th class="text-right hidden-xs">' . Lang::getLang('size') . '</th>';
-														$h .= '<th class="text-center">' . Lang::getLang('main') . '</th>';
-														$h .= '<th class="text-center">' . Lang::getLang('carousel') . '</th>';
-														$h .= '<th class="text-center">' . Lang::getLang('order') . '</th>';
-														$h .= '<th class="text-center">' . Lang::getLang('delete') . '</th>';
-													$h .= '</tr>';
-												
-													foreach ($images as $imageID) {
-														$image = new Image($imageID);
-														
-														if ($image->imageSize < 1024) { $size = 1; } else { $size = $image->imageSize / 1024;}
-														
-														$h .= '<tr>';
-															$h .= '<td style="vertical-align:middle;"><a href="/image/' . $image->imageID . '/" target="blank"><img src="/image/' . $image->imageID . '/90/" style="width:90px;"></a></td>';
-															$h .= '<td class="hidden-xs" style="vertical-align:middle;"><a href="/image/' . $image->imageID . '/" target="blank">/image/' . $image->imageID . '/</a></td>';
-															$h .= '<td class="hidden-xs hidden-sm" style="vertical-align:middle;">' . $image->imageOriginalName . '</td>';
-															$h .= '<td class="hidden-xs" style="vertical-align:middle;">' . date('Y-m-d',strtotime($image->imageSubmissionDateTime)) . '</td>';
-															$h .= '<td class="text-right hidden-xs" style="vertical-align:middle;">' . number_format($size) . 'K</td>';
-
-															$h .= '<td class="text-center" style="vertical-align:middle;">';
-																if ($image->imageDisplayClassification != 'mainImage') {
-																	$h .= '<a class="btn btn-secondary btn-sm" href="/' .  Lang::prefix() . 'designer/content/update/' . $contentID . '/images/make-main-image/' . $imageID . '/"><span class="fas fa-check" style="color:#fff;"></span></a>';
-																} else {
-																	$h .= '<span class="fas fa-check" style="color:#000;"></span>';
-																}
-															$h .= '</td>';
-															
-															$h .= '<td class="text-center" style="vertical-align:middle;">';
-																if ($image->imageDisplayInGallery) {
-																	$h .= '<a class="btn btn-secondary btn-sm" href="/' .  Lang::prefix() . 'designer/content/update/' . $contentID . '/images/remove-from-carousel/' . $imageID . '/"><span class="fas fa-check" style="color:#000;"></span></a>';
-																} else {
-																	$h .= '<a class="btn btn-secondary btn-sm" href="/' .  Lang::prefix() . 'designer/content/update/' . $contentID . '/images/add-to-carousel/' . $imageID . '/"><span class="fas fa-check" style="color:#fff;"></span></a>';
-																}
-															$h .= '</td>';
-															
-															$h .= '<td class="text-center" style="vertical-align:middle;">';
-																$h .= self::contentImageDisplayOrderDropdown($contentID, $image->imageID, $image->imageDisplayOrder);
-															$h .= '</td>';
-
-															$h .= '<td class="text-center" style="vertical-align:middle;">';
-																$h .= '<a class="btn btn-danger btn-sm" href="/' .  Lang::prefix() . 'designer/content/update/' . $contentID . '/images/delete/' . $imageID . '/"><span class="fas fa-trash-alt" style="color:#fff;"></span></a>';
-															$h .= '</td>';
-	
-														$h .= '</tr>';
-													}
-												
-												$h .= '</table>';
-											$h .= '</div>';
-										$h .= '</div>';
-									$h .= '</div>';
-								}
-
-							$h .= '</div>';
-						$h .= '</div>';
-					$h .= '</div>';
-				$h .= '</div>';
-			$h .= '</div>';
-		$h .= '</div>';
-
-		return $h;
+		return $t;
 
 	}
-
-	private static function contentButtonGroup($contentID,$section) {
-
-		$url = '/' . Lang::prefix() . 'designer/content/update/' . $contentID . '/';
-
-        $h = '<div id="perihelion_content_button_group">';
-          $h .= '<div class="row">';
-              $h .= '<div class="col-md-12">';
-        		$h .= '<div class="btn-group" role="group" aria-label="...">';								
-        			$h .= '<a href="' . $url . '" class="btn btn-secondary' . ($section==''?" active":"") . '"' . (!$contentID?" disabled":"") . '><span class="fas fa-pencil-alt"></span></a>';
-        			$h .= '<a href="' . $url . 'images/" class="btn btn-secondary' . ($section=='images'?" active":"") . '"' . (!$contentID?" disabled":"") . '>' . Lang::getLang('images') . '</a>';
-        		$h .= '</div>';
-        	$h .= '</div>';
-          $h .= '</div>';
-        $h .= '</div>';
-		$h .= '<hr />';
-
-		return $h;
-		
-	}
-
-	private static function contentImageDisplayOrderDropdown($contentID, $objectID, $displayOrder) {
-
-		$h = '<select name="imageDisplayOrder" onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">';
-			for ($i = 0; $i <= 100; $i++) {
-				$url = '/' . Lang::prefix() . 'designer/content/update/' . $contentID . '/images/set-display-order/' . $objectID . '/' . $i . '/';
-				$h .= '<option value="' . $url . '"' . ($i==$displayOrder?" selected":"") . '>' . $i . '</option>';
-			}
-		$h .= '</select>';
-		return $h;
-		
-	}
-	
-	
 	
 }
 

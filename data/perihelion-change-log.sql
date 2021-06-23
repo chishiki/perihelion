@@ -68,3 +68,92 @@ INSERT INTO perihelion_Lang VALUES ('youMustEnableJavaScript', 'You must enable 
 SET @langTimeStamp := now();
 INSERT INTO perihelion_Lang VALUES ('carouselSettings', 'Carousel Settings', 0, 'カルーセル設定', 0, @langTimeStamp);
 INSERT INTO perihelion_Lang VALUES ('carouselPanelManager', 'Panel Manager', 0, 'パネル管理', 0, @langTimeStamp);
+
+/* @chishiki 2021-06-01 */
+
+ALTER TABLE `perihelion_Content`
+    CHANGE COLUMN `contentID` `contentID` INT(12) NOT NULL ,
+    CHANGE COLUMN `siteID` `siteID` INT(12) NOT NULL ,
+    CHANGE COLUMN `entryCategoryID` `contentCategoryID` INT(12) NOT NULL ,
+    ADD COLUMN `creator` INT(12) NOT NULL AFTER `siteID`,
+    ADD COLUMN `created` DATETIME NOT NULL AFTER `creator`,
+    ADD COLUMN `updated` DATETIME NOT NULL AFTER `created`,
+    ADD COLUMN `deleted` INT(1) NOT NULL AFTER `updated`;
+
+CREATE TABLE `perihelion_ContentCategory` (
+    `contentCategoryID` int(12) NOT NULL AUTO_INCREMENT,
+    `siteID` int(12) NOT NULL,
+    `creator` int(12) NOT NULL,
+    `created` datetime NOT NULL,
+    `updated` datetime NOT NULL,
+    `deleted` int(1) NOT NULL,
+    `contentCategoryParentID` int(12) NOT NULL,
+    `contentCategoryURL` varchar(100) NOT NULL,
+    `contentCategoryEnglish` varchar(100) NOT NULL,
+    `contentCategoryJapanese` varchar(100) NOT NULL,
+    PRIMARY KEY (`contentCategoryID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+/* @chishiki 2021-06-02 */
+
+SET @now := now();
+INSERT INTO perihelion_Lang VALUES ('devEnvironment', 'Dev Environment', 0, '開発環境', 0, @now);
+INSERT INTO perihelion_Lang VALUES ('loginSuccessful','Login Successful',0,'ログインが出来ました',0,@now);
+INSERT INTO perihelion_Lang VALUES ('devData','Dev Data',0,'開発データ',0,@now);
+
+UPDATE perihelion_Content SET creator = 1, created = @now, updated = @now, deleted = 0 WHERE contentID > 0;
+
+/* @chishiki 2021-06-10 */
+
+ALTER TABLE `perihelion_Image`
+    ADD COLUMN `creator` INT(12) NOT NULL AFTER `siteID`,
+    ADD COLUMN `created` DATETIME NOT NULL AFTER `creator`,
+    ADD COLUMN `updated` DATETIME NOT NULL AFTER `created`,
+    ADD COLUMN `deleted` INT(1) NOT NULL AFTER `updated`;
+
+UPDATE perihelion_Image SET creator = imageSubmittedByUserID, created = imageSubmissionDateTime, updated = imageSubmissionDateTime WHERE imageID > 0;
+
+SET @now := now();
+INSERT INTO perihelion_Lang VALUES ('imageManager', 'Image Manager', 0, 'イメージ管理', 0, @now);
+INSERT INTO perihelion_Lang VALUES ('selectImages', 'Select Images', 0, 'イメージ選択', 0, @now);
+
+/* @chishiki 2021-06-11 */
+
+ALTER TABLE `perihelion_File`
+    ADD COLUMN `creator` INT(12) NOT NULL AFTER `siteID`,
+    ADD COLUMN `created` DATETIME NOT NULL AFTER `creator`,
+    ADD COLUMN `updated` DATETIME NOT NULL AFTER `created`,
+    ADD COLUMN `deleted` INT(1) NOT NULL AFTER `updated`;
+
+UPDATE perihelion_File SET creator = fileSubmittedByUserID, created = fileSubmissionDateTime, updated = fileSubmissionDateTime WHERE fileID > 0;
+
+SET @now := now();
+INSERT INTO perihelion_Lang VALUES ('selectFiles', 'Select Files', 0, 'ファイル選択', 0, @now);
+
+/* @chishiki 2021-06-19 */
+
+ALTER TABLE `perihelion_Content` CHANGE COLUMN `contentID` `contentID` INT(12) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `perihelion_Content` AUTO_INCREMENT = 1001;
+
+ALTER TABLE `perihelion_Content`
+    DROP COLUMN `contentDeletedByUserID`,
+    DROP COLUMN `contentDeletedDate`,
+    DROP COLUMN `contentDeleted`,
+    DROP COLUMN `entryDescriptionMeta`,
+    DROP COLUMN `entryKeywordMeta`,
+    DROP COLUMN `pageID`,
+    DROP COLUMN `entrySortOrder`,
+    DROP COLUMN `entryLastModified`,
+    DROP COLUMN `entrySubmissionDateTime`,
+    DROP COLUMN `entrySubmittedByUserID`,
+    DROP COLUMN `entrySiteID`,
+    CHANGE COLUMN `contentCategoryID` `contentCategoryID` INT(12) NOT NULL AFTER `entrySeoURL`,
+    CHANGE COLUMN `entryPublished` `entryPublished` INT(1) NOT NULL AFTER `contentCategoryType`,
+    CHANGE COLUMN `contentCategoryKey` `contentCategoryType` VARCHAR(20) NOT NULL;
+
+/* @chishiki 2021-06-20 */
+
+SET @now := now();
+INSERT INTO perihelion_Lang VALUES ('scripts', 'Scripts', 0, 'スクリプト', 0, @now);
+INSERT INTO perihelion_Lang VALUES ('createContent', 'Create Content', 0, 'コンテント新規作成', 0, @now);
+INSERT INTO perihelion_Lang VALUES ('contentCategoryType', 'Content Type', 0, 'コンテントタイプ', 0, @now);

@@ -28,12 +28,27 @@ class DesignerViewController {
 			$view = new ContentView($this->urlArray, $this->inputArray, $this->errorArray);
 			if ($this->urlArray[1] == 'content' && $this->urlArray[2] == 'create') { return $nav . $view->contentForm('create'); }
 			if ($this->urlArray[1] == 'content' && $this->urlArray[2] == 'update' && ctype_digit($this->urlArray[3])) {
-				
-				if ($this->urlArray[4] == 'images') { return $nav . $view->contentImagesForm($this->urlArray[3]); }
-				return $nav . $view->contentForm('update',$this->urlArray[3]);
+
+				$contentID = $this->urlArray[3];
+
+				if ($this->urlArray[4] == 'images') {
+					$imageView = new ImageView($this->urlArray, $this->inputArray, $this->errorArray);
+					$arg = new NewImageViewParameters();
+					$arg->imageObject = 'Content';
+					$arg->cardHeader = Lang::getLang('imageManager');
+					$arg->imageObjectID = $contentID;
+					$arg->cardContainerDivClasses = array('container');
+					$arg->navtabs = $view->designerContentFormTabs('update', $contentID, 'images');
+					return $nav . $imageView->newImageManager($arg);
+				}
+
+				return $nav . $view->contentForm('update',$contentID);
 				
 			}
-			if ($this->urlArray[1] == 'content') { return $nav . $view->contentList(); }
+			if ($this->urlArray[1] == 'content') {
+				$arg = new ContentListParameters();
+				return $nav . $view->contentList($arg);
+			}
 
 		}
 	
@@ -49,11 +64,11 @@ class DesignerViewController {
 		if ($this->urlArray[1] == 'images') {
 			
 			$view = new ImageView($this->urlArray,$this->inputArray,$this->errorArray);
-			if (ctype_digit($this->urlArray[2])) {
-				return $nav . $view->imageManager('Site',$_SESSION['siteID'],$this->urlArray[2]);
-			} else {
-				return $nav . $view->imageManager('Site',$_SESSION['siteID']);
-			}
+			$arg = new NewImageViewParameters();
+			$arg->displayObjectInfo = true;
+			$arg->cardContainerDivClasses = array('container');
+			if (ctype_digit($this->urlArray[2])) { $arg->currentPage = $this->urlArray[2]; }
+			return $nav . $view->newImageManager($arg);
 			
 		}
 		
@@ -93,10 +108,13 @@ class DesignerViewController {
 		}
 
 		if ($this->urlArray[1] == 'files') {
-			
+
 			$view = new FileView($this->urlArray,$this->inputArray,$this->errorArray);
-			$fileBaseURL = '/' . Lang::prefix() . 'designer/files/';
-			return $nav . $view->fileManager('Site',$_SESSION['siteID'],$fileBaseURL);
+			$arg = new NewFileViewParameters();
+			$arg->displayObjectInfo = true;
+			$arg->cardContainerDivClasses = array('container');
+			if (ctype_digit($this->urlArray[2])) { $arg->currentPage = $this->urlArray[2]; }
+			return $nav . $view->newFileManager($arg);
 			
 		}
 		

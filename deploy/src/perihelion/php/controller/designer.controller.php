@@ -69,110 +69,13 @@ class DesignerController {
 		if ($this->urlArray[0] == 'designer' && $this->urlArray[1] == 'content' && $this->urlArray[2] == 'update' && ctype_digit($this->urlArray[3])) {
 			
 			$contentID = $this->urlArray[3];
-			$successURL = "/" . Lang::prefix() . "designer/content/update/" . $contentID . "/images/";
 
-				if ($this->urlArray[4] == 'images' && $this->urlArray[5] == 'delete' && ctype_digit($this->urlArray[6])) {
-						
-					$imageID = $this->urlArray[6];
-					$image = new Image($imageID);
-					$conditions = array('imageID' => $imageID);
+			if ($this->urlArray[4] == 'images' && isset($this->inputArray['submitted-images'])) {
 
-					$ioa = new Audit();
-					$ioa->auditAction = 'delete';
-					$ioa->auditObject = 'Image';
-					$ioa->auditObjectID = $imageID;
-					$ioa->auditResult = 'success';
-					$ioa->auditNote = json_encode($image);
-					
-					if ($image->siteID == $_SESSION['siteID']) {
-						
-						if (unlink($image->imagePath)) {
-							
-							Image::delete($image,$conditions);
-							Audit::createAuditEntry($ioa);
-							header("Location: $successURL");
-							
-							
-						} else {
-							
-							$this->errorArray['imageDelete'][] = "Could not delete that image. Please contact support.";
-							$ioa->auditResult = 'fail';
-							$ioa->auditNote = '{ "redflag": [{ "reason": "could not unlink image" }] }';
-							Audit::createAuditEntry($ioa);
-							
-						}
-						
-					} else {
+				Image::uploadImages($_FILES['images-to-upload'], 'Content', $contentID);
 
-						$this->errorArray['imageDelete'][] = "You do not have permission to delete that image.";
-						$ioa->auditResult = 'fail';
-						$ioa->auditNote = '{ "redflag": [{ "reason": "trying to delete a different site\'s image" }] }';
-						Audit::createAuditEntry($ioa);
-						
-					}
+			} elseif (!empty($this->inputArray)) {
 
-				}
-
-				if ($this->urlArray[4] == 'images' && $this->urlArray[5] == 'make-main-image' && ctype_digit($this->urlArray[6])) {
-						
-					$selectedImageID = $this->urlArray[6];
-					$contentImages = Image::getObjectImageArray('Content',$contentID);
-					
-					foreach ($contentImages AS $thisImageID) {
-						
-						$thisImage = new Image($thisImageID);
-						$thisImage->imageDisplayClassification = ''; $audit = false;
-						if ($thisImageID == $selectedImageID) { $thisImage->imageDisplayClassification = 'mainImage'; $audit = true; }
-						$conditions = array('imageID' => $thisImageID);
-						if ($thisImage->siteID == $_SESSION['siteID']) { Image::update($thisImage,$conditions,$audit); }
-						
-					}
-					
-					header("Location: $successURL");
-					
-				}
-					
-				if ($this->urlArray[4] == 'images' && $this->urlArray[5] == 'add-to-carousel' && ctype_digit($this->urlArray[6])) {
-
-					$thisImageID = $this->urlArray[6];
-					$thisImage = new Image($thisImageID);
-					$thisImage->imageDisplayInGallery = 1;
-					$conditions = array('imageID' => $thisImageID);
-					if ($thisImage->siteID == $_SESSION['siteID']) { Image::update($thisImage,$conditions); }
-					header("Location: $successURL");
-					
-				}
-					
-				if ($this->urlArray[4] == 'images' && $this->urlArray[5] == 'remove-from-carousel' && ctype_digit($this->urlArray[6])) {
-					
-					$thisImageID = $this->urlArray[6];
-					$thisImage = new Image($thisImageID);
-					$thisImage->imageDisplayInGallery = 0;
-					$conditions = array('imageID' => $thisImageID);
-					if ($thisImage->siteID == $_SESSION['siteID']) { Image::update($thisImage,$conditions); }
-					header("Location: $successURL");
-					
-				}
-				
-				if ($this->urlArray[4] == 'images' && $this->urlArray[5] == 'set-display-order' && ctype_digit($this->urlArray[6]) && ctype_digit($this->urlArray[7])) {
-					
-					$thisImageID = $this->urlArray[6];
-					$thisImage = new Image($thisImageID);
-					$thisImage->imageDisplayOrder = $this->urlArray[7];
-					$conditions = array('imageID' => $thisImageID);
-					if ($thisImage->siteID == $_SESSION['siteID']) { Image::update($thisImage,$conditions); }
-					header("Location: $successURL");
-					
-				}
-
-				
-			if (!empty($this->inputArray)) {
-				
-				// upload images
-				if (isset($_FILES['contentImages']) && $this->urlArray[4] == 'images') {
-					$this->errorArray = Image::uploadImages($_FILES['contentImages'],'Content',$contentID);
-				}
-					
 				$content = new Content($contentID);
 				
 				// booleans
@@ -285,9 +188,9 @@ class DesignerController {
 			
 		}
 
-		if ($this->urlArray[0] == 'designer' && $this->urlArray[1] == 'images' && isset($_FILES['perihelionImages'])) {
+		if ($this->urlArray[0] == 'designer' && $this->urlArray[1] == 'images' && isset($this->inputArray['submitted-images'])) {
 
-			$this->errorArray = Image::uploadImages($_FILES['perihelionImages'],'Site',$_SESSION['siteID']);
+			$this->errorArray = Image::uploadImages($_FILES['images-to-upload'],'Site',$_SESSION['siteID']);
 			if (empty($this->errorArray)) {
 				$successURL = "/" . Lang::languageUrlPrefix() . "designer/images/";
 				header("Location: $successURL");
@@ -336,9 +239,9 @@ class DesignerController {
 
 		}
 		
-		if ($this->urlArray[0] == 'designer' && $this->urlArray[1] == 'files' && isset($_FILES['perihelionFiles'])) {
-			
-			$this->errorArray = File::uploadFiles($_FILES['perihelionFiles'],'Site',$_SESSION['siteID']);
+		if ($this->urlArray[0] == 'designer' && $this->urlArray[1] == 'files' && isset($_FILES['files-to-upload'])) {
+
+			$this->errorArray = File::uploadFiles($_FILES['files-to-upload'],'Site',$_SESSION['siteID'], $this->inputArray['fileTitleEnglish'], $this->inputArray['fileTitleJapanese']);
 			if (empty($this->errorArray)) {
 				$successURL = "/" . Lang::languageUrlPrefix() . "designer/files/";
 				header("Location: $successURL");
@@ -346,48 +249,7 @@ class DesignerController {
 			
 			
 		}
-		
-		if ($this->urlArray[0] == 'designer' && $this->urlArray[1] == 'files' && $this->urlArray[2] == 'delete' && ctype_digit($this->urlArray[3])) {
-						
-			$fileID = $this->urlArray[3];
-			$file = new File($fileID);
-			$conditions = array('fileID' => $fileID);
 
-			$ioa = new Audit();
-			$ioa->auditAction = 'delete';
-			$ioa->auditObject = 'File';
-			$ioa->auditObjectID = $fileID;
-			$ioa->auditResult = 'success';
-			$ioa->auditNote = json_encode($file);
-			
-			if ($file->siteID == $_SESSION['siteID']) {
-				
-				if (unlink($file->filePath)) {
-					
-					File::delete($file,$conditions);
-					$successURL = "/" . Lang::languageUrlPrefix() . "designer/files/";
-					header("Location: $successURL");
-					
-				} else {
-					
-					$this->errorArray['fileDelete'][] = "Could not delete that file. Please contact support.";
-					$ioa->auditResult = 'fail';
-					$ioa->auditNote = '{ "redflag": [{ "reason": "could not unlink file" }] }';
-					Audit::createAuditEntry($ioa);
-					
-				}
-				
-			} else {
-
-				$this->errorArray['fileDelete'][] = "You do not have permission to delete that file.";
-				$ioa->auditResult = 'fail';
-				$ioa->auditNote = '{ "redflag": [{ "reason": "trying to delete a different site\'s file" }] }';
-				Audit::createAuditEntry($ioa);
-				
-			}
-
-		}
-		
 		if ($this->urlArray[0] == 'designer' && $this->urlArray[1] == 'seo' && $this->urlArray[2] == 'create') {
 			
 			$successURL = $lang . "/designer/seo/";

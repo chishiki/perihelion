@@ -2,16 +2,18 @@
 
 class SiteView {
 	
-	private $urlArray;
-	private $inputArray;
-	public $errorArray;
-	public $messageArray;
+	private $loc;
+	private $input;
+	private $modules;
+	private $errors;
+	private $messages;
 	
-	public function __construct($urlArray, $inputArray, $errorArray, $messageArray) {
-		$this->urlArray = $urlArray;
-		$this->inputArray = $inputArray;
-		$this->errorArray = $errorArray;
-		$this->messageArray = $messageArray;
+	public function __construct($loc, $input, $modules, $errors, $messages) {
+		$this->loc = $loc;
+		$this->input = $input;
+		$this->modules = $modules;
+		$this->errors = $errors;
+		$this->messages = $messages;
 	}
 
 	public function siteSettingsForm() {
@@ -19,13 +21,13 @@ class SiteView {
 		$site = new Site($_SESSION['siteID']);
 		foreach ($site AS $key => $value) { ${$key} = $value; }
 
-		if (!empty($this->inputArray)) {
-			if (isset($this->inputArray['siteTitleEnglish'])) { $siteTitleEnglish = $this->inputArray['siteTitleEnglish']; }
-			if (isset($this->inputArray['siteKeywordsEnglish'])) { $siteKeywordsEnglish = $this->inputArray['siteKeywordsEnglish']; }
-			if (isset($this->inputArray['siteDescriptionEnglish'])) { $siteDescriptionEnglish = $this->inputArray['siteDescriptionEnglish']; }
-			if (isset($this->inputArray['siteTitleJapanese'])) { $siteTitleJapanese = $this->inputArray['siteTitleJapanese']; }
-			if (isset($this->inputArray['siteKeywordsJapanese'])) { $siteKeywordsJapanese = $this->inputArray['siteKeywordsJapanese']; }
-			if (isset($this->inputArray['siteDescriptionJapanese'])) { $siteDescriptionJapanese = $this->inputArray['siteDescriptionJapanese']; }
+		if (!empty($this->input)) {
+			if (isset($this->input['siteTitleEnglish'])) { $siteTitleEnglish = $this->input['siteTitleEnglish']; }
+			if (isset($this->input['siteKeywordsEnglish'])) { $siteKeywordsEnglish = $this->input['siteKeywordsEnglish']; }
+			if (isset($this->input['siteDescriptionEnglish'])) { $siteDescriptionEnglish = $this->input['siteDescriptionEnglish']; }
+			if (isset($this->input['siteTitleJapanese'])) { $siteTitleJapanese = $this->input['siteTitleJapanese']; }
+			if (isset($this->input['siteKeywordsJapanese'])) { $siteKeywordsJapanese = $this->input['siteKeywordsJapanese']; }
+			if (isset($this->input['siteDescriptionJapanese'])) { $siteDescriptionJapanese = $this->input['siteDescriptionJapanese']; }
 		}
 
 		$formAction = "/" . Lang::prefix() . "manager/settings/";
@@ -155,10 +157,10 @@ class SiteView {
 		$site = new Site($_SESSION['siteID']);
 		foreach ($site AS $key => $value) { ${$key} = $value; }
 
-		if (!empty($this->inputArray)) {
-			$siteGoogleAnalyticsID = $this->inputArray['siteGoogleAnalyticsID'];
-			$siteGoogleAdSenseID = $this->inputArray['siteGoogleAdSenseID'];
-			$siteGoogleApiKey = $this->inputArray['siteGoogleApiKey'];
+		if (!empty($this->input)) {
+			$siteGoogleAnalyticsID = $this->input['siteGoogleAnalyticsID'];
+			$siteGoogleAdSenseID = $this->input['siteGoogleAdSenseID'];
+			$siteGoogleApiKey = $this->input['siteGoogleApiKey'];
 		}
 
 		$formAction = "/" . Lang::prefix() . "manager/google/";
@@ -243,13 +245,13 @@ class SiteView {
 		$site = new Site($_SESSION['siteID']);
 		foreach ($site AS $key => $value) { ${$key} = $value; }
 
-		if (!empty($this->inputArray)) {
-			if (isset($this->inputArray['siteTwitter'])) { $siteTwitter = $this->inputArray['siteTwitter']; }
-			if (isset($this->inputArray['siteFacebook'])) { $siteFacebook = $this->inputArray['siteFacebook']; }
-			if (isset($this->inputArray['siteLinkedIn'])) { $siteLinkedIn = $this->inputArray['siteLinkedIn']; }
-			if (isset($this->inputArray['sitePinterest'])) { $sitePinterest = $this->inputArray['sitePinterest']; }
-			if (isset($this->inputArray['siteInstagram'])) { $siteInstagram = $this->inputArray['siteInstagram']; }
-			if (isset($this->inputArray['siteSkype'])) { $siteSkype = $this->inputArray['siteSkype']; }
+		if (!empty($this->input)) {
+			if (isset($this->input['siteTwitter'])) { $siteTwitter = $this->input['siteTwitter']; }
+			if (isset($this->input['siteFacebook'])) { $siteFacebook = $this->input['siteFacebook']; }
+			if (isset($this->input['siteLinkedIn'])) { $siteLinkedIn = $this->input['siteLinkedIn']; }
+			if (isset($this->input['sitePinterest'])) { $sitePinterest = $this->input['sitePinterest']; }
+			if (isset($this->input['siteInstagram'])) { $siteInstagram = $this->input['siteInstagram']; }
+			if (isset($this->input['siteSkype'])) { $siteSkype = $this->input['siteSkype']; }
 		}
 
 		$formAction = "/" . Lang::prefix() . "manager/social/";
@@ -341,10 +343,10 @@ class SiteView {
 		$site = new Site($_SESSION['siteID']);
 		foreach ($site AS $key => $value) { ${$key} = $value; }
 
-		if (!empty($this->inputArray)) {
-			$siteContactFormToAddress = $this->inputArray['siteContactFormToAddress'];
-			$siteAutomatedEmailSenderName = $this->inputArray['siteAutomatedEmailSenderName'];
-			$siteAutomatedEmailAddress = $this->inputArray['siteAutomatedEmailAddress'];
+		if (!empty($this->input)) {
+			$siteContactFormToAddress = $this->input['siteContactFormToAddress'];
+			$siteAutomatedEmailSenderName = $this->input['siteAutomatedEmailSenderName'];
+			$siteAutomatedEmailAddress = $this->input['siteAutomatedEmailAddress'];
 		}
 
 		$formAction = "/" . Lang::prefix() . "manager/email/";
@@ -418,86 +420,31 @@ class SiteView {
 	}
 	
 	public function siteModulesForm() {
-		
-		// $site = new Site($_SESSION['siteID']);
-		// foreach ($site AS $key => $value) { ${$key} = $value; }
 
-		// if (!empty($this->inputArray)) {
-			if (isset($this->inputArray['xxxxxxx'])) { $xxxxxxx = 1; } else { $xxxxxxx = 0; }
-			if (isset($this->inputArray['yyyyyyy'])) { $yyyyyyy = $this->inputArray['yyyyyyy']; } else { $yyyyyyy = 0; }
-		// }
+		$formAction = '/' . Lang::prefix() . 'manager/modules/';
 
-		$formAction = "/" . Lang::prefix() . "manager/modules/";
-		
-		$h = "<div id=\"perihelionSiteModulesForm\">";
-			$h .= "<div class=\"container\">";
-				$h .= "<div class=\"row\">";
-					$h .= "<div class=\"col-sm-12\">";
-						$h .= "<div class=\"card\" >";
-						$h .= '<div class="card-header">Site Modules</div>';
-						$h .= "<div class=\"card-body\" >";
-						$h .= '
-                            <form>
-                            
-                              <div class="form-group">
-                                <label for="formGroupExampleInput">Example label</label>
-                                <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Example input">
-                              </div>
-                              <div class="form-group">
-                                <label for="formGroupExampleInput2">Another label</label>
-                                <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Another input">
-                              </div>
-                            
-                            <hr />
-                            
-                            <div class="form-check">
-                              <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
-                              <label class="form-check-label" for="exampleRadios1">
-                                Default radio
-                              </label>
-                            </div>
-                            <div class="form-check">
-                              <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
-                              <label class="form-check-label" for="exampleRadios2">
-                                Second default radio
-                              </label>
-                            </div>
-                            <div class="form-check">
-                              <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3" value="option3" disabled>
-                              <label class="form-check-label" for="exampleRadios3">
-                                Disabled radio
-                              </label>
-                            </div>
-                            
-                            <hr />
+		$modules = '';
+		foreach ($this->modules AS $moduleName) {
+			$modules .= '
+				<div class="form-check">
+					<input class="form-check-input" type="checkbox" value="" checked disabled>
+					<label class="form-check-label" for="defaultCheck2">' . Lang::getLang($moduleName) . '</label>
+				</div>
+			';
+		}
 
-                            <div class="form-check">
-                              <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                              <label class="form-check-label" for="defaultCheck1">
-                                Default checkbox
-                              </label>
-                            </div>
-                            <div class="form-check">
-                              <input class="form-check-input" type="checkbox" value="" id="defaultCheck2" disabled>
-                              <label class="form-check-label" for="defaultCheck2">
-                                Disabled checkbox
-                              </label>
-                            </div>
+		$form = '
 
-                            <hr />
-                            
-                            <button type="submit" class="btn btn-primary float-right">Submit</button>
-                            
-                            </form>
-                        ';
-						$h .= "</div>";
-						$h .= "</div>";
-					$h .= "</div>";
-				$h .= "</div>";
-			$h .= "</div>";
-		$h .= "</div>"; // #perihelionSiteModulesForm
+			<form>
+				' . $modules . '
+				<hr />
+				<button type="submit" class="btn btn-primary float-right disabled" disabled>Submit</button>
+			</form>
 
-		return $h;
+	 	';
+
+		$card = new CardView('', array('container'), '', array('col-12'), Lang::getLang('siteModules'), $form, false);
+		return $card->card();
 		
 	}
 	

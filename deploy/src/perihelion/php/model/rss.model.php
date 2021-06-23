@@ -2,50 +2,62 @@
 
 class RSS {
 
-	public function getFeed($urlArray) {
+	public function getFeed($urlArray):string {
 
-		$currentDate = date('Y-m-d H:i:s');
 		$site = new Site($_SESSION['siteID']);
-		$atomLink = 'http://' . $site->siteURL . '/rss/';
 
-		$rss = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n";
-		
-		$rss .= "<rss version=\"2.0\" xmlns:atom=\"http://www.w3.org/2005/Atom\">\n";
-		
-			$rss .= "\t<site>\n";
-
-				$rss .= "\t\t<atom:link href=\"" . $atomLink . "\" rel=\"self\" type=\"application/rss+xml\" />\n";
-				$rss .= "\t\t<title>". $site->getTitle() . "</title>\n";
-				$rss .= "\t\t<link>http://" . $site->siteURL . "/</link>\n";
-				$rss .= "\t\t<description>". $site->getDescription() . "</description>\n";
-				$rss .= "\t\t<language>en</language>\n";
-
-				$content = Content::contentArray();
-				foreach ($content AS $contentID) {
-					
-					$c = new Content($propertyID);
-					$s = new Site($c->siteID);
-					$title = htmlspecialchars($c->title());
-					$pubdate = date('r', strtotime($p->propertyDateTimeAdded));
-					$url = 'http://' . $s->siteURL . '/content/' . $c->entryPublishStartDateNameSeoUrl . '/';
-					$description = Utilities::feedificate($c->description());
-
-					$rss .= "\t\t<item>\n";
-						$rss .= "\t\t\t<title>" . $title . "</title>\n";
-						$rss .= "\t\t\t<link>" . $url . "</link>\n";
-						$rss .= "\t\t\t<guid>" . $url . "</guid>\n";
-						$rss .= "\t\t\t<pubDate>" . $pubdate . "</pubDate>\n";
-						$rss .= "\t\t\t<category>Content</category>\n";
-						$rss .= "\t\t\t<description><![CDATA[" . $description . "]]></description>\n";
-					$rss .= "\t\t</item>\n";
-					
-				}
-
-			$rss .= "\t</site>\n";
-			
-		$rss .= "</rss>";
+		$rss = '<?xml version="1.0" encoding="UTF-8" ?>
+			<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+				<site>
+					<atom:link href="https://' . $site->siteURL . '/rss/" rel="self" type="application/rss+xml" />
+					<title>' . $site->getTitle() . '</title>
+					<link>https://' . $site->siteURL . '/</link>
+					<description>' . htmlspecialchars($site->getDescription()) . '</description>
+					<language>' . $_SESSION['lang'] . '</language>
+					' . $this->feedItems() . '
+				</site>
+			</rss>
+		';
 		
 		return $rss;
+
+	}
+
+	private function feedItems():string {
+
+		$dt = new DateTime();
+		$site = new Site($_SESSION['siteID']);
+
+		$arg = new ContentListParameters();
+		$arg->contentPublished = 1;
+		// $arg->contentPublishedDateCheck = $dt->format('Y-m-d');
+		$arg->contentCategoryType = 'page';
+		$arg->orderBy = array('entryPublishStartDate' => 'DESC');
+		$cl = new ContentList($arg);
+		$contentList = $cl->content();
+
+		$items = '';
+
+		foreach ($contentList AS $contentID) {
+
+			$content = new Content($contentID);
+			$contentDT = new DateTime($content->entryPublishStartDate);
+			$url = 'https://' . $site->siteURL . '/' . $content->entrySeoURL . '/';
+			$items .= '
+				<item>
+					<title>' . htmlspecialchars($content->title()) . '</title>
+					<link>' . $url . '</link>
+					<guid>' . $url . '</guid>
+					<pubDate>' . $contentDT->format('r') . '</pubDate>
+					<category>Content</category>
+					<description><![CDATA[' . Utilities::feedificate($content->content(false)) . ']]></description>
+				</item>
+			';
+
+		}
+
+		return $items;
+
 
 	}
 

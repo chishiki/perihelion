@@ -153,28 +153,28 @@ class PageView {
 		
 		$integratedErrorMessages = array('contact','contact-us','enquiry','get-in-touch','designer','manager','admin','profile');
 		$scriptFilter = array('designer','manager','admin','support');
-		
-		if (empty($this->urlArray[0])) { $body_class = 'index'; } else { $body_class = $this->urlArray[0]; }
-		$h = '<body class="' . $body_class . ' lang-' . $_SESSION['lang'] . ' ' . Config::read('environment') . '">';
-		if (!in_array($this->urlArray[0],$scriptFilter)) { $h .= $this->scripts('header'); }
-		$h .= $this->header();
-		$h .= $this->messages();
-		if (!in_array($this->urlArray[0],$integratedErrorMessages)) { $h .= $this->errors(); }
-		$h .= $html;
-		$h .= $this->footer();
 
-		if (!in_array($this->urlArray[0],$scriptFilter)) { $h .= $this->scripts('footer'); }
+		$bodyClasses = array();
+		if (empty($this->urlArray[0])) { $bodyClasses[] = 'index'; } else { $bodyClasses[] = $this->urlArray[0]; }
+		$bodyClasses[] = 'site-' . $_SESSION['siteID'];
+		$bodyClasses[] = 'lang-' . $_SESSION['lang'];
+		$bodyClasses[] = Config::read('environment');
 
-		if (Config::read('javascript.required') == true) {
-			$h .= '
-				<noscript>
-					<h1 class="enable-javascript">' . Lang::getLang('youMustEnableJavaScript') . '</h1>
-				</noscript>
-			';
-		}
-
+		$h = '<body class="' . implode(' ',$bodyClasses) . '">';
+			$h .= '<div id="perihelion_body">';
+				if (!in_array($this->urlArray[0],$scriptFilter)) { $h .= $this->scripts('header'); }
+				$h .= $this->header();
+				$h .= $this->messages();
+				if (!in_array($this->urlArray[0],$integratedErrorMessages)) { $h .= $this->errors(); }
+				$h .= '<div id="perihelion_main">' . $html . '</div>';
+				$h .= $this->footer();
+				if (!in_array($this->urlArray[0],$scriptFilter)) { $h .= $this->scripts('footer'); }
+				if (Config::read('javascript.required') == true) {
+					$h .= '<noscript><h1 class="enable-javascript">' . Lang::getLang('youMustEnableJavaScript') . '</h1></noscript>';
+				}
+			$h .= '</div>';
 		$h .= '</body>';
-		
+
 		return $h;
 		
 	}
@@ -182,9 +182,9 @@ class PageView {
 	private function header() {
 
 		foreach ($this->moduleArray as $moduleName) {
-			$class = ucfirst($moduleName) . 'NavbarView';
-			if (class_exists($class)) {
-				$navbar = new $class($this->urlArray, $this->inputArray, $this->inputArray);
+			$navbarViewClass = ModuleUtilities::moduleToClassName($moduleName, 'NavbarView');
+			if (class_exists($navbarViewClass)) {
+				$navbar = new $navbarViewClass($this->urlArray, $this->inputArray, $this->inputArray);
 				return $navbar->navbar();
 			}
 		}
@@ -222,9 +222,9 @@ class PageView {
 		}
 		
 		foreach ($this->moduleArray as $moduleName) {
-			$class = ucfirst($moduleName) . 'FooterView';
-			if (class_exists($class)) {
-				$f = new $class($this->urlArray, $this->inputArray, $this->inputArray);
+			$footerViewClass = ModuleUtilities::moduleToClassName($moduleName, 'FooterView');
+			if (class_exists($footerViewClass)) {
+				$f = new $footerViewClass($this->urlArray, $this->inputArray, $this->inputArray);
 				$footer .= $f->footer();
 			}
 		}

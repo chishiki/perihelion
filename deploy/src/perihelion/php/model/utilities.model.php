@@ -1,6 +1,6 @@
 <?php
 
-class DateUtilities {
+final class DateUtilities {
 	
 	public static function dateTimeIsValid($datetime) {
 		$dt = DateTime::createFromFormat("Y-m-d", $datetime);
@@ -49,7 +49,20 @@ class DateUtilities {
 	
 }
 
-class Utilities {
+final class ModuleUtilities {
+
+	public static function moduleToClassName($moduleName, $className) {
+
+		$moduleNameArray = explode('-', $moduleName);
+		$moduleNameArrayMap = array_map('ucfirst', $moduleNameArray);
+		$moduleCamelCaseName = implode('', $moduleNameArrayMap);
+		return ucfirst($moduleCamelCaseName) . $className;
+
+	}
+
+}
+
+final class Utilities {
 
 	public static function generateKey() {
 		return md5(uniqid(rand(),true));
@@ -189,7 +202,7 @@ class Utilities {
 		return $isValid;
 
 	}
-	
+
 }
 
 

@@ -1,10 +1,16 @@
 <?php
 
-require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/vendor/aws/aws-autoloader.php');
+$awsAutoloaderPath = $_SERVER['DOCUMENT_ROOT'] . '/perihelion/vendor/aws/aws-autoloader.php';
+if (file_exists($awsAutoloaderPath)) { require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/vendor/aws/aws-autoloader.php'); }
+// required to use aws-sdk-php
+// https://aws.amazon.com/sdk-for-php/
+// https://docs.aws.amazon.com/sdk-for-php/v3/developer-guide/welcome.html
+// https://github.com/aws/aws-sdk-php
 	
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/controller/_perihelion.controller.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/controller/_state.controller.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/controller/_view.controller.php');
+require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/controller/_api.controller.php');
 
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/controller/address.controller.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/controller/admin.controller.php');
@@ -50,6 +56,7 @@ require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/model/config.model.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/model/contact.model.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/model/contactForm.model.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/model/content.model.php');
+require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/model/contentCategory.model.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/model/contract.model.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/model/contractSignature.model.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/model/cookie.model.php');

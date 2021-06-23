@@ -1,27 +1,5 @@
--- MySQL dump 10.13  Distrib 5.7.23, for osx10.14 (x86_64)
---
--- Host: mysql.perihelion.xyz    Database: perihelionDB
--- ------------------------------------------------------
--- Server version	5.6.39-log
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
---
--- Table structure for table `perihelion_AccountRecovery`
---
-
 DROP TABLE IF EXISTS `perihelion_AccountRecovery`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `perihelion_AccountRecovery` (
   `accountRecoveryID` int(8) NOT NULL AUTO_INCREMENT,
   `accountRecoveryEmail` varchar(255) NOT NULL,
@@ -31,16 +9,12 @@ CREATE TABLE `perihelion_AccountRecovery` (
   `accountRecoveryMash` varchar(40) NOT NULL,
   `accountRecoveryVisited` int(1) NOT NULL,
   PRIMARY KEY (`accountRecoveryID`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Table structure for table `perihelion_Address`
---
+
 
 DROP TABLE IF EXISTS `perihelion_Address`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `perihelion_Address` (
   `addressID` int(12) NOT NULL AUTO_INCREMENT,
   `siteID` int(12) NOT NULL,
@@ -57,17 +31,15 @@ CREATE TABLE `perihelion_Address` (
   `addressObject` varchar(25) NOT NULL,
   `addressObjectID` int(12) NOT NULL,
   `addressDefault` varchar(1) NOT NULL,
+  `latitude` decimal(8,6) NOT NULL,
+  `longitude` decimal(9,6) NOT NULL,
   PRIMARY KEY (`addressID`)
-) ENGINE=InnoDB AUTO_INCREMENT=1244 DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Table structure for table `perihelion_Audit`
---
+
 
 DROP TABLE IF EXISTS `perihelion_Audit`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `perihelion_Audit` (
   `auditID` int(12) NOT NULL AUTO_INCREMENT,
   `siteID` int(8) NOT NULL,
@@ -82,16 +54,12 @@ CREATE TABLE `perihelion_Audit` (
   `auditResult` varchar(255) NOT NULL,
   `auditNote` text NOT NULL,
   PRIMARY KEY (`auditID`)
-) ENGINE=MyISAM AUTO_INCREMENT=45 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Table structure for table `perihelion_BlacklistDomain`
---
+
 
 DROP TABLE IF EXISTS `perihelion_BlacklistDomain`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `perihelion_BlacklistDomain` (
   `domain` varchar(100) CHARACTER SET utf8 NOT NULL,
   `siteID` int(8) DEFAULT NULL,
@@ -100,16 +68,12 @@ CREATE TABLE `perihelion_BlacklistDomain` (
   `dateTimeOfBlockExpiration` datetime NOT NULL,
   `attemptsSinceBlocked` int(12) NOT NULL,
   PRIMARY KEY (`domain`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Table structure for table `perihelion_BlacklistIP`
---
+
 
 DROP TABLE IF EXISTS `perihelion_BlacklistIP`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `perihelion_BlacklistIP` (
   `ip` varchar(50) CHARACTER SET utf8 NOT NULL,
   `siteID` int(8) DEFAULT NULL,
@@ -118,16 +82,12 @@ CREATE TABLE `perihelion_BlacklistIP` (
   `dateTimeOfBlockExpiration` datetime NOT NULL,
   `attemptsSinceBlocked` int(12) NOT NULL,
   PRIMARY KEY (`ip`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Table structure for table `perihelion_BlacklistWord`
---
+
 
 DROP TABLE IF EXISTS `perihelion_BlacklistWord`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `perihelion_BlacklistWord` (
   `word` varchar(100) CHARACTER SET utf8 NOT NULL,
   `siteID` int(8) DEFAULT NULL,
@@ -135,16 +95,12 @@ CREATE TABLE `perihelion_BlacklistWord` (
   `dateTimeBlocked` datetime NOT NULL,
   `timesBlocked` int(12) NOT NULL,
   PRIMARY KEY (`word`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Table structure for table `perihelion_Carousel`
---
+
 
 DROP TABLE IF EXISTS `perihelion_Carousel`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `perihelion_Carousel` (
   `carouselID` int(8) NOT NULL AUTO_INCREMENT,
   `siteID` int(8) NOT NULL,
@@ -163,16 +119,12 @@ CREATE TABLE `perihelion_Carousel` (
   `carouselDisplayLg` int(1) NOT NULL,
   `carouselDisplayCaption` int(1) NOT NULL,
   PRIMARY KEY (`carouselID`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Table structure for table `perihelion_CarouselPanel`
---
+
 
 DROP TABLE IF EXISTS `perihelion_CarouselPanel`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `perihelion_CarouselPanel` (
   `carouselPanelID` int(12) NOT NULL AUTO_INCREMENT,
   `siteID` int(12) NOT NULL,
@@ -191,16 +143,12 @@ CREATE TABLE `perihelion_CarouselPanel` (
   `carouselPanelUrlEnglish` varchar(255) NOT NULL,
   `carouselPanelUrlJapanese` varchar(255) NOT NULL,
   PRIMARY KEY (`carouselPanelID`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Table structure for table `perihelion_Contact`
---
+
 
 DROP TABLE IF EXISTS `perihelion_Contact`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `perihelion_Contact` (
   `contactID` int(12) NOT NULL AUTO_INCREMENT,
   `siteID` int(8) NOT NULL,
@@ -211,16 +159,12 @@ CREATE TABLE `perihelion_Contact` (
   `contactEmail` varchar(255) NOT NULL,
   `contactContent` text NOT NULL,
   PRIMARY KEY (`contactID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Table structure for table `perihelion_ContactForm`
---
+
 
 DROP TABLE IF EXISTS `perihelion_ContactForm`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `perihelion_ContactForm` (
   `contactFormID` int(12) NOT NULL AUTO_INCREMENT,
   `siteID` int(12) NOT NULL,
@@ -246,58 +190,61 @@ CREATE TABLE `perihelion_ContactForm` (
   `promptForBudget` tinyint(1) NOT NULL DEFAULT '0',
   `budgetCurrencyPrefix` varchar(20) NOT NULL,
   PRIMARY KEY (`contactFormID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Table structure for table `perihelion_Content`
---
+
 
 DROP TABLE IF EXISTS `perihelion_Content`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `perihelion_Content` (
-  `contentID` int(8) NOT NULL AUTO_INCREMENT,
-  `siteID` int(8) NOT NULL,
-  `entrySiteID` int(8) NOT NULL,
-  `contentURL` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
-  `entrySeoURL` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `contentCategoryKey` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `entryCategoryID` int(8) NOT NULL,
-  `entrySubmittedByUserID` int(12) NOT NULL,
-  `entrySubmissionDateTime` datetime NOT NULL,
+  `contentID` int(12) NOT NULL AUTO_INCREMENT,
+  `siteID` int(12) NOT NULL,
+  `creator` int(12) NOT NULL,
+  `created` datetime NOT NULL,
+  `updated` datetime NOT NULL,
+  `deleted` int(1) NOT NULL,
+  `contentURL` varchar(100) NOT NULL,
+  `entrySeoURL` varchar(255) NOT NULL,
+  `contentCategoryID` int(12) NOT NULL,
+  `contentCategoryType` varchar(20) NOT NULL,
+  `entryPublished` int(1) NOT NULL,
   `entryPublishStartDate` date NOT NULL,
   `entryPublishEndDate` date NOT NULL,
-  `entryLastModified` datetime NOT NULL,
-  `entryTitleEnglish` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `entryTitleJapanese` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `entryContentEnglish` text COLLATE utf8_unicode_ci NOT NULL,
-  `entryContentJapanese` text COLLATE utf8_unicode_ci NOT NULL,
-  `entrySortOrder` int(8) NOT NULL,
-  `pageID` int(8) NOT NULL,
-  `entryPublished` int(1) NOT NULL,
+  `entryTitleEnglish` varchar(255) NOT NULL,
+  `entryTitleJapanese` varchar(255) NOT NULL,
+  `entryContentEnglish` text NOT NULL,
+  `entryContentJapanese` text NOT NULL,
   `entryViews` int(12) NOT NULL,
-  `entryKeywordMeta` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `entryDescriptionMeta` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `contentMetaKeywordsEnglish` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `contentMetaKeywordsJapanese` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `contentMetaDescriptionEnglish` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `contentMetaDescriptionJapanese` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `contentDeleted` int(1) NOT NULL,
-  `contentDeletedDate` datetime NOT NULL,
-  `contentDeletedByUserID` int(12) NOT NULL,
+  `contentMetaKeywordsEnglish` varchar(255) NOT NULL,
+  `contentMetaKeywordsJapanese` varchar(255) NOT NULL,
+  `contentMetaDescriptionEnglish` varchar(255) NOT NULL,
+  `contentMetaDescriptionJapanese` varchar(255) NOT NULL,
   `contentLock` int(1) NOT NULL,
   PRIMARY KEY (`contentID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB AUTO_INCREMENT=1001 DEFAULT CHARSET=utf8mb4;
 
---
--- Table structure for table `perihelion_Contract`
---
+
+
+DROP TABLE IF EXISTS `perihelion_ContentCategory`;
+
+CREATE TABLE `perihelion_ContentCategory` (
+  `contentCategoryID` int(12) NOT NULL AUTO_INCREMENT,
+  `siteID` int(12) NOT NULL,
+  `creator` int(12) NOT NULL,
+  `created` datetime NOT NULL,
+  `updated` datetime NOT NULL,
+  `deleted` int(1) NOT NULL,
+  `contentCategoryParentID` int(12) NOT NULL,
+  `contentCategoryURL` varchar(100) NOT NULL,
+  `contentCategoryEnglish` varchar(100) NOT NULL,
+  `contentCategoryJapanese` varchar(100) NOT NULL,
+  PRIMARY KEY (`contentCategoryID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
 
 DROP TABLE IF EXISTS `perihelion_Contract`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `perihelion_Contract` (
   `contractID` int(8) NOT NULL AUTO_INCREMENT,
   `siteID` int(8) NOT NULL,
@@ -309,16 +256,12 @@ CREATE TABLE `perihelion_Contract` (
   `contractContentEnglish` text NOT NULL,
   `contractContentJapanese` text NOT NULL,
   PRIMARY KEY (`contractID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Table structure for table `perihelion_ContractSignature`
---
+
 
 DROP TABLE IF EXISTS `perihelion_ContractSignature`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `perihelion_ContractSignature` (
   `contractID` int(8) NOT NULL,
   `objectClass` varchar(50) NOT NULL,
@@ -328,35 +271,31 @@ CREATE TABLE `perihelion_ContractSignature` (
   `signatureIPAddress` varchar(39) NOT NULL,
   `signatureNameSigned` varchar(255) NOT NULL,
   PRIMARY KEY (`contractID`,`signatoryUserID`,`objectID`,`objectClass`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Table structure for table `perihelion_Currency`
---
+
 
 DROP TABLE IF EXISTS `perihelion_Currency`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `perihelion_Currency` (
   `iso4217` varchar(3) DEFAULT NULL,
   `currencyEnglish` int(11) DEFAULT NULL,
   `currencyJapanese` int(11) DEFAULT NULL,
   `currencyDecimalPlaces` int(11) DEFAULT NULL,
   `currencySeparator` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Table structure for table `perihelion_File`
---
+
 
 DROP TABLE IF EXISTS `perihelion_File`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `perihelion_File` (
   `fileID` int(12) NOT NULL AUTO_INCREMENT,
   `siteID` int(8) NOT NULL,
+  `creator` int(12) NOT NULL,
+  `created` datetime NOT NULL,
+  `updated` datetime NOT NULL,
+  `deleted` int(1) NOT NULL,
   `fileSubmittedByUserID` int(12) NOT NULL,
   `fileSubmissionDateTime` datetime NOT NULL,
   `filePath` varchar(255) NOT NULL,
@@ -371,34 +310,30 @@ CREATE TABLE `perihelion_File` (
   `fileTitleJapanese` varchar(255) NOT NULL,
   `fileNotes` text NOT NULL,
   PRIMARY KEY (`fileID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Table structure for table `perihelion_Font`
---
+
 
 DROP TABLE IF EXISTS `perihelion_Font`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `perihelion_Font` (
   `fontKey` varchar(20) NOT NULL,
   `fontCss` varchar(255) NOT NULL,
   PRIMARY KEY (`fontKey`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Table structure for table `perihelion_Image`
---
+
 
 DROP TABLE IF EXISTS `perihelion_Image`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `perihelion_Image` (
   `imageID` int(12) NOT NULL AUTO_INCREMENT,
   `imageDisplayOrder` int(4) NOT NULL,
   `siteID` int(8) NOT NULL,
+  `creator` int(12) NOT NULL,
+  `created` datetime NOT NULL,
+  `updated` datetime NOT NULL,
+  `deleted` int(1) NOT NULL,
   `imageSubmittedByUserID` int(12) NOT NULL,
   `imageSubmissionDateTime` datetime NOT NULL,
   `imagePath` varchar(255) NOT NULL,
@@ -412,78 +347,63 @@ CREATE TABLE `perihelion_Image` (
   `imageDimensionX` int(5) NOT NULL,
   `imageDimensionY` int(5) NOT NULL,
   `imageDisplayInGallery` int(1) NOT NULL,
+  `imageMetaData` varchar(255) NOT NULL,
   PRIMARY KEY (`imageID`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Table structure for table `perihelion_Lang`
---
+
 
 DROP TABLE IF EXISTS `perihelion_Lang`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `perihelion_Lang` (
-  `langKey` varchar(255) NOT NULL,
+  `langKey` varchar(191) NOT NULL, -- max key length in InnoDB is 767 bytes
   `enLang` varchar(255) NOT NULL,
   `enCount` int(12) NOT NULL,
   `jaLang` varchar(255) NOT NULL,
   `jaCount` int(12) NOT NULL,
   `langTimeStamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`langKey`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Table structure for table `perihelion_LanguageException`
---
+
 
 DROP TABLE IF EXISTS `perihelion_LanguageException`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `perihelion_LanguageException` (
-  `langKey` varchar(255) NOT NULL,
+  `langKey` varchar(191) NOT NULL, -- max key length in InnoDB is 767 bytes
   `siteID` int(12) NOT NULL,
   `enLangException` varchar(255) NOT NULL,
   `jaLangException` varchar(255) NOT NULL,
   PRIMARY KEY (`langKey`,`siteID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Table structure for table `perihelion_Link`
---
+
 
 DROP TABLE IF EXISTS `perihelion_Link`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `perihelion_Link` (
   `linkID` int(12) NOT NULL AUTO_INCREMENT,
   `siteID` int(12) NOT NULL,
   `linkCreatedByUserID` int(12) NOT NULL,
   `linkCreationDateTime` datetime NOT NULL,
-  `linkUrlEnglish` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `linkUrlJapanese` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `linkAnchorTextEnglish` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `linkAnchorTextJapanese` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `linkObject` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `linkUrlEnglish` varchar(255) NOT NULL,
+  `linkUrlJapanese` varchar(255) NOT NULL,
+  `linkAnchorTextEnglish` varchar(255) NOT NULL,
+  `linkAnchorTextJapanese` varchar(255) NOT NULL,
+  `linkObject` varchar(255) NOT NULL,
   `linkObjectID` int(12) NOT NULL,
   `linkPublished` int(1) NOT NULL,
   `linkDisplayOrder` int(8) NOT NULL,
   `linkClickCount` int(12) NOT NULL,
-  `linkShorty` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `linkShorty` varchar(255) NOT NULL,
   `linkPortalPrimary` int(1) NOT NULL,
   PRIMARY KEY (`linkID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Table structure for table `perihelion_Mail`
---
+
 
 DROP TABLE IF EXISTS `perihelion_Mail`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `perihelion_Mail` (
   `mailID` int(12) NOT NULL AUTO_INCREMENT,
   `siteID` int(8) NOT NULL,
@@ -494,16 +414,12 @@ CREATE TABLE `perihelion_Mail` (
   `mailSubject` varchar(255) CHARACTER SET utf8 NOT NULL,
   `mailMessage` text CHARACTER SET utf8 NOT NULL,
   PRIMARY KEY (`mailID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Table structure for table `perihelion_Menu`
---
+
 
 DROP TABLE IF EXISTS `perihelion_Menu`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `perihelion_Menu` (
   `menuID` int(8) NOT NULL AUTO_INCREMENT,
   `siteID` int(8) DEFAULT NULL,
@@ -513,16 +429,12 @@ CREATE TABLE `perihelion_Menu` (
   `menuPublished` int(1) DEFAULT NULL,
   `menuLayoutLocation` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`menuID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Table structure for table `perihelion_MenuItem`
---
+
 
 DROP TABLE IF EXISTS `perihelion_MenuItem`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `perihelion_MenuItem` (
   `menuItemID` int(8) NOT NULL AUTO_INCREMENT,
   `siteID` int(8) DEFAULT NULL,
@@ -540,35 +452,27 @@ CREATE TABLE `perihelion_MenuItem` (
   `menuItemDisabled` int(1) NOT NULL DEFAULT '0',
   `menuItemClasses` varchar(100) NOT NULL,
   PRIMARY KEY (`menuItemID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Table structure for table `perihelion_NewsletterSubscription`
---
+
 
 DROP TABLE IF EXISTS `perihelion_NewsletterSubscription`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `perihelion_NewsletterSubscription` (
   `siteID` int(12) NOT NULL,
   `newsletterID` int(12) NOT NULL,
-  `subscriberEmail` varchar(255) NOT NULL,
+  `subscriberEmail` varchar(191) NOT NULL, -- max key length in InnoDB is 767 bytes
   `subscribedDateTime` datetime NOT NULL,
   `subscribedFromIP` varchar(40) NOT NULL,
   `subscriberName` varchar(255) NOT NULL,
   `subscriberVerified` int(1) NOT NULL,
   PRIMARY KEY (`siteID`,`newsletterID`,`subscriberEmail`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Table structure for table `perihelion_Note`
---
+
 
 DROP TABLE IF EXISTS `perihelion_Note`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `perihelion_Note` (
   `noteID` int(12) NOT NULL AUTO_INCREMENT,
   `siteID` int(8) NOT NULL,
@@ -576,19 +480,15 @@ CREATE TABLE `perihelion_Note` (
   `noteSubmissionDateTime` datetime NOT NULL,
   `noteObject` varchar(20) NOT NULL,
   `noteObjectID` int(8) NOT NULL,
-  `noteContent` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `noteContent` text CHARACTER SET utf8 NOT NULL,
   `displayToOwner` tinyint(1) NOT NULL,
   PRIMARY KEY (`noteID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Table structure for table `perihelion_SEO`
---
+
 
 DROP TABLE IF EXISTS `perihelion_SEO`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `perihelion_SEO` (
   `seoID` int(8) NOT NULL AUTO_INCREMENT,
   `siteID` int(8) NOT NULL,
@@ -612,16 +512,12 @@ CREATE TABLE `perihelion_SEO` (
   `seoRobotsTxtFollow` int(1) NOT NULL,
   `seoCanonicalUrl` varchar(255) NOT NULL,
   PRIMARY KEY (`seoID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Table structure for table `perihelion_Script`
---
+
 
 DROP TABLE IF EXISTS `perihelion_Script`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `perihelion_Script` (
   `scriptID` int(11) NOT NULL AUTO_INCREMENT,
   `siteID` int(8) NOT NULL,
@@ -633,16 +529,12 @@ CREATE TABLE `perihelion_Script` (
   `scriptOrder` int(3) NOT NULL,
   `scriptEnabled` int(1) NOT NULL,
   PRIMARY KEY (`scriptID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Table structure for table `perihelion_Session`
---
+
 
 DROP TABLE IF EXISTS `perihelion_Session`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `perihelion_Session` (
   `sessionID` varchar(32) CHARACTER SET utf8 NOT NULL,
   `userID` int(12) NOT NULL,
@@ -650,18 +542,14 @@ CREATE TABLE `perihelion_Session` (
   `sessionDateTimeExpire` datetime NOT NULL,
   `sessionIP` varchar(50) CHARACTER SET utf8 NOT NULL,
   `sessionUserAgent` varchar(255) CHARACTER SET utf8 NOT NULL,
-  `sessionData` text COLLATE utf8_unicode_ci NOT NULL,
+  `sessionData` text NOT NULL,
   PRIMARY KEY (`sessionID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Table structure for table `perihelion_Site`
---
+
 
 DROP TABLE IF EXISTS `perihelion_Site`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `perihelion_Site` (
   `siteID` int(8) NOT NULL AUTO_INCREMENT,
   `siteKey` varchar(20) NOT NULL,
@@ -678,6 +566,9 @@ CREATE TABLE `perihelion_Site` (
   `siteGoogleAdSenseID` varchar(20) NOT NULL,
   `siteGoogleApiKey` varchar(40) NOT NULL,
   `siteUsesGoogleMaps` int(1) NOT NULL,
+  `siteUsesLocationPicker` int(1) NOT NULL,
+  `defaultLatitude` decimal(8,6) NOT NULL,
+  `defaultLongitude` decimal(9,6) NOT NULL,
   `siteTheme` varchar(30) NOT NULL,
   `themeID` int(12) NOT NULL,
   `siteTwitter` varchar(20) NOT NULL,
@@ -705,16 +596,12 @@ CREATE TABLE `perihelion_Site` (
   `siteDefaultTimeZone` varchar(45) NOT NULL,
   `siteUsesDataTables` int(1) NOT NULL,
   PRIMARY KEY (`siteID`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Table structure for table `perihelion_Theme`
---
+
 
 DROP TABLE IF EXISTS `perihelion_Theme`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `perihelion_Theme` (
   `themeID` int(11) NOT NULL AUTO_INCREMENT,
   `siteID` int(8) NOT NULL,
@@ -725,16 +612,12 @@ CREATE TABLE `perihelion_Theme` (
   `body_color` varchar(7) NOT NULL,
   `body_backgroundcolor` varchar(7) NOT NULL,
   PRIMARY KEY (`themeID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Table structure for table `perihelion_Tile`
---
+
 
 DROP TABLE IF EXISTS `perihelion_Tile`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `perihelion_Tile` (
   `tileID` int(8) NOT NULL AUTO_INCREMENT,
   `siteID` int(8) NOT NULL,
@@ -752,16 +635,12 @@ CREATE TABLE `perihelion_Tile` (
   `tileClass` varchar(100) NOT NULL,
   `tileAuthDisplay` varchar(10) NOT NULL,
   PRIMARY KEY (`tileID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Table structure for table `perihelion_User`
---
+
 
 DROP TABLE IF EXISTS `perihelion_User`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `perihelion_User` (
   `userID` int(12) NOT NULL AUTO_INCREMENT,
   `createdDateTime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -780,32 +659,24 @@ CREATE TABLE `perihelion_User` (
   `userBlackList` tinyint(1) NOT NULL DEFAULT '0',
   `userActive` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`userID`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Table structure for table `perihelion_UserRole`
---
+
 
 DROP TABLE IF EXISTS `perihelion_UserRole`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `perihelion_UserRole` (
   `siteID` int(11) NOT NULL,
   `userID` int(12) NOT NULL,
   `userRole` varchar(20) NOT NULL,
   `lastVisit` datetime NOT NULL,
   PRIMARY KEY (`siteID`,`userID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Table structure for table `perihelion_Video`
---
+
 
 DROP TABLE IF EXISTS `perihelion_Video`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `perihelion_Video` (
   `videoID` int(12) NOT NULL AUTO_INCREMENT,
   `siteID` int(8) NOT NULL,
@@ -822,16 +693,4 @@ CREATE TABLE `perihelion_Video` (
   `videoModestbranding` int(1) NOT NULL,
   `videoLoop` int(1) NOT NULL,
   PRIMARY KEY (`videoID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2019-09-09  8:21:03
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

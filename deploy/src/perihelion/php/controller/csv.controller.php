@@ -28,7 +28,7 @@ class CSVController {
 			
 			if ($this->urlArray[1] == $moduleName) {
 
-		        $moduleExportController = ucfirst($moduleName) . 'ExportController';
+				$moduleExportController = ModuleUtilities::moduleToClassName($moduleName, 'ExportController');
 		        $mec = new $moduleExportController($this->urlArray, $this->inputArray, $this->moduleArray);
 		        
 		        $filename = $mec->filename();
@@ -39,10 +39,13 @@ class CSVController {
 		    
 		}
 
-		header('Content-Type: text/csv; charset=utf-8');
+		header('Content-Encoding: UTF-8');
+		header('Content-Type: text/csv; charset=UTF-8');
 		header('Content-Disposition: attachment; filename=' . $filename . '.csv');
 		header('Cache-Control: no-cache, must-revalidate');
+
 		$output = fopen('php://output', 'w');
+		fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF));
 		fputcsv($output, $columns);
 		foreach ($rows AS $row) { fputcsv($output, $row); }
 		

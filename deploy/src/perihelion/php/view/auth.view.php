@@ -104,19 +104,11 @@ class AuthView
 
 		if (!empty($moduleName)) {
 			foreach ($this->modules as $moduleName) {
-
-				// want to convert modules names with hyphens to CamelCase here
-				// eg: perihelion-satellite => PerihelionSatellite
-				$moduleNameArray = explode('-', $moduleName);
-				$moduleNameArrayMap = array_map('ucfirst', $moduleNameArray);
-				$moduleCamelCaseName = implode('', $moduleNameArrayMap);
-
-				$moduleDashboardView = ucfirst($moduleCamelCaseName) . 'DashboardView';
+				$moduleDashboardView = ModuleUtilities::moduleToClassName($moduleName, 'DashboardView');
 				if (class_exists($moduleDashboardView)) {
 					$view = new $moduleDashboardView($this->urlArray);
 					$h = $view->dashboard();
 				}
-
 			}
 		}
 

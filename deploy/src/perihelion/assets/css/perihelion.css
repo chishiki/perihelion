@@ -17,6 +17,24 @@
 
 */
 
+html {
+	height:100%;
+}
+
+body {
+	height:100%;
+}
+
+#perihelion_body {
+	display:flex;
+	min-height:100vh;
+	flex-direction:column;
+}
+
+#perihelion_main {
+	flex: 1;
+}
+
 .navbar {
 	margin-bottom:20px;
 }
