@@ -35,8 +35,10 @@ class IndexViewController {
 		
 		foreach ($this->moduleArray AS $moduleName) {
 			$moduleIndexView = ModuleUtilities::moduleToClassName($moduleName, 'IndexView');
-			$view = new $moduleIndexView($this->urlArray);
-			$h .= $view->getView();
+			if (class_exists($moduleIndexView)) {
+				$view = new $moduleIndexView($this->urlArray);
+				$h .= $view->getView();
+			}
 		}
 
 		if ($site->siteFooterContentID) {
