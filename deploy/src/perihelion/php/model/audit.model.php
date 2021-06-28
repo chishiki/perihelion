@@ -63,45 +63,32 @@ class Audit {
 		
 	}
 
-	public static function getAuditTrailArray($type, $siteID, $auditUserID, $auditObject, $limit = '500') { // admin|manager
+	public static function getAuditTrailArray($siteID, $auditUserID, $auditObject, $startDate, $endDate, $limit = '100') { // admin|manager
 
 		$auditTrailArray = array();
 		
 		$nucleus = Nucleus::getInstance();
-		
-		
-		if ($type == 'admin') {
-			
-			$query = "SELECT auditID FROM perihelion_Audit ";
-			if ($siteID || $auditUserID || $auditObject) {
-				if ($siteID) { $where[] = "siteID = :siteID"; }
-				if ($auditUserID) { $where[] = "auditUserID = :auditUserID"; }
-				if ($auditObject) { $where[] = "auditObject = :auditObject"; }
-				$query .= "WHERE " . implode(" AND ",$where) . " ";
-			}
-			$query .= "ORDER BY auditID DESC LIMIT $limit";
-		}
-		
-		if ($type == 'manager') {
-		
-			$admins = Config::read('admin.userIdArray');
-			$adminString = "'".join("','",$admins)."'";
-			$query = "SELECT auditID FROM perihelion_Audit WHERE siteID = :siteID AND auditObject != 'Session' AND auditUserID NOT IN ($adminString) ORDER BY auditID DESC LIMIT $limit";
 
-		}
+		$where = array();
+		if ($siteID) { $where[] = "siteID = :siteID"; }
+		if ($auditUserID) { $where[] = "auditUserID = :auditUserID"; }
+		if ($auditObject) { $where[] = "auditObject = :auditObject"; }
+		if ($startDate) { $where[] = "auditDateTime >= :startDate"; $startDate = $startDate . ' 00:00:00'; }
+		if ($endDate) { $where[] = "auditDateTime <= :endDate"; $endDate = $endDate . ' 23:59:59'; }
+
+		$whereClause = '';
+		if (!empty($where)) { $whereClause = 'WHERE ' . implode(' AND ',$where); }
+
+		$query = 'SELECT auditID FROM perihelion_Audit ' . $whereClause . ' ORDER BY auditID DESC LIMIT ' . $limit;
 
 		$statement = $nucleus->database->prepare($query);
-		
-		if ($type == 'admin') {
-			if ($siteID) { $statement->bindParam(':siteID', $siteID); }
-			if ($auditUserID) { $statement->bindParam(':auditUserID', $auditUserID); }
-			if ($auditObject) { $statement->bindParam(':auditObject', $auditObject); }
-		}
-		
-		if ($type == 'manager') {
-			$statement->bindParam(':siteID', $_SESSION['siteID']);
-		}
-		
+
+		if ($siteID) { $statement->bindParam(':siteID', $siteID, PDO::PARAM_INT); }
+		if ($auditUserID) { $statement->bindParam(':auditUserID', $auditUserID, PDO::PARAM_INT); }
+		if ($auditObject) { $statement->bindParam(':auditObject', $auditObject, PDO::PARAM_STR); }
+		if ($startDate) { $statement->bindParam(':startDate', $startDate, PDO::PARAM_STR); }
+		if ($endDate) { $statement->bindParam(':endDate', $endDate, PDO::PARAM_STR); }
+
 		$statement->execute();
 
 		while ($row = $statement->fetch()) { $auditTrailArray[] = $row['auditID']; }

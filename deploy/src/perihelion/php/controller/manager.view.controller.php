@@ -92,7 +92,13 @@ class ManagerViewController {
 		if ($this->loc[1] == 'audit') {
 			
 			$view = new AuditView($this->loc,$this->input,$this->errors);
-			return $nav . $view->auditTrail('manager');
+
+			if (!empty($_SESSION['manager']['audit']['userID'])) { $userID = $_SESSION['manager']['audit']['userID']; } else { $userID = null; }
+			if (!empty($_SESSION['manager']['audit']['auditObject'])) { $auditObject = $_SESSION['manager']['audit']['auditObject']; } else { $auditObject = null; }
+			if (!empty($_SESSION['manager']['audit']['startDate'])) { $startDate = $_SESSION['manager']['audit']['startDate']; } else { $startDate = null; }
+			if (!empty($_SESSION['manager']['audit']['endDate'])) { $endDate = $_SESSION['manager']['audit']['endDate']; } else { $endDate = null; }
+
+			return $nav . $view->auditTrail('manager', null, $userID, $auditObject, $startDate, $endDate);
 			
 		}
 		

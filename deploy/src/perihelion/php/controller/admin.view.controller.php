@@ -25,11 +25,13 @@ class AdminViewController {
 
 			$view = new AuditView($this->urlArray,$this->inputArray,$this->errorArray);
 
-			if (!empty($_SESSION['admin']['audit']['siteID'])) { $siteID = $_SESSION['admin']['audit']['siteID']; } else { $siteID = ''; }
-			if (!empty($_SESSION['admin']['audit']['userID'])) { $userID = $_SESSION['admin']['audit']['userID']; } else { $userID = ''; }
-			if (!empty($_SESSION['admin']['audit']['auditObject'])) { $auditObject = $_SESSION['admin']['audit']['auditObject']; } else { $auditObject = ''; }
-			
-			return $menu->adminSubMenu() . $view->auditTrail('admin', $siteID, $userID, $auditObject);
+			if (!empty($_SESSION['admin']['audit']['siteID'])) { $siteID = $_SESSION['admin']['audit']['siteID']; } else { $siteID = null; }
+			if (!empty($_SESSION['admin']['audit']['userID'])) { $userID = $_SESSION['admin']['audit']['userID']; } else { $userID = null; }
+			if (!empty($_SESSION['admin']['audit']['auditObject'])) { $auditObject = $_SESSION['admin']['audit']['auditObject']; } else { $auditObject = null; }
+			if (!empty($_SESSION['admin']['audit']['startDate'])) { $startDate = $_SESSION['admin']['audit']['startDate']; } else { $startDate = null; }
+			if (!empty($_SESSION['admin']['audit']['endDate'])) { $endDate = $_SESSION['admin']['audit']['endDate']; } else { $endDate = null; }
+
+			return $menu->adminSubMenu() . $view->auditTrail('admin', $siteID, $userID, $auditObject, $startDate, $endDate);
 
 		}
 		

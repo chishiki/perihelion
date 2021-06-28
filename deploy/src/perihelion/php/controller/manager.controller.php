@@ -32,6 +32,16 @@ class ManagerController {
 		
 		if ($_SESSION['lang'] == 'ja') { $lang = "/ja"; } else { $lang = ""; }
 
+		if ($this->urlArray[0] == 'manager' && $this->urlArray[1] == 'audit' && !empty($this->inputArray)) {
+
+			if (isset($this->inputArray['siteID'])) { $_SESSION['manager']['audit']['siteID'] = $this->inputArray['siteID']; }
+			if (isset($this->inputArray['userID'])) { $_SESSION['manager']['audit']['userID'] = $this->inputArray['userID']; }
+			if (isset($this->inputArray['auditObject'])) { $_SESSION['manager']['audit']['auditObject'] = $this->inputArray['auditObject']; }
+			if (isset($this->inputArray['startDate'])) { $_SESSION['manager']['audit']['startDate'] = $this->inputArray['startDate']; }
+			if (isset($this->inputArray['endDate'])) { $_SESSION['manager']['audit']['endDate'] = $this->inputArray['endDate']; }
+
+		}
+
 		if ($this->urlArray[0] == 'manager' && $this->urlArray[1] == 'settings' && !empty($this->inputArray)) {
 
 			// $this->errorArray = Site::validate($this->inputArray, 'update');

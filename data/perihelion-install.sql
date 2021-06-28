@@ -1,9 +1,14 @@
-SET @now := now();
+SET @now = now();
 SET @siteID = 1; -- whatever number you use here needs to go in instance.config.php siteID
 SET @userID = 1; -- admin
 SET @domainKey = 'perihelion'; -- this is typically the domain name on single instance installs or the subdomain when powering multiple instances
 SET @domainName = 'perihelion.xyz';
 SET @adminEmail = 'support@perihelion.xyz';
+
+SET @siteTitleEnglish = 'Perihelion';
+SET @siteKeywordsEnglish = 'Perihelion, Content Management System, CMS, Prototype Framework';
+SET @siteTitleJapanese = 'ペリヘリオン';
+SET @siteKeywordsJapanese = 'ペリヘリオン, コンテントマネージメント, CMS, プロトタイプフレームワーク';
 
 INSERT INTO `perihelion_Carousel` VALUES
 (1,@siteID,'Default Carousel Title','Default Carousel Subtitle','例のタイトル','例のサブタイトル',@userID,@now,'index',0,1,1,1,1,1,1);
@@ -55,11 +60,11 @@ INSERT INTO `perihelion_Site` VALUES
     @domainName, -- siteURL
     @userID, -- siteManagerUserID
     1, -- siteIndexable
-    'Perihelion', -- siteTitleEnglish
-    'Perihelion, Content Management System, CMS, Prototype Framework', -- siteKeywordsEnglish
+    @siteTitleEnglish, -- siteTitleEnglish
+    @siteKeywordsEnglish, -- siteKeywordsEnglish
     '', -- siteDescriptionEnglish
-    'ペリヘリオン', -- siteTitleJapanese
-    'ペリヘリオン, コンテントマネージメント, CMS, プロトタイプフレームワーク', -- siteKeywordsJapanese
+    @siteTitleJapanese, -- siteTitleJapanese
+    @siteKeywordsJapanese, -- siteKeywordsJapanese
     '', -- siteDescriptionJapanese
     '', -- siteGoogleAnalyticsID
     '', -- siteGoogleAdSenseID

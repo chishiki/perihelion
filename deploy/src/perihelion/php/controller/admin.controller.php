@@ -34,34 +34,6 @@ class AdminController {
 		if ($this->urlArray[0] == 'admin' && $this->urlArray[1] == 'cron' && isset($this->inputArray['cronKey'])) {
 
 			if ($this->inputArray['cronKey'] != $cronKey) { $this->errorArray['cron'][] = 'The cron key is not correct.'; }
-			if (!isset($this->inputArray['invoiceYearMonth'])) { $this->errorArray['invoiceYearMonth'][] = 'invoiceYearMonth is not set.'; }
-			if (!isset($this->inputArray['invoiceDate'])) { $this->errorArray['invoiceDate'][] = 'invoiceDate is not set.'; }
-			if (!isset($this->inputArray['transactionDateTime'])) { $this->errorArray['transactionDateTime'][] = 'transactionDateTime is not set.'; }
-			
-			if (empty($this->errorArray)) {
-				
-				$invoiceYearMonth = $this->inputArray['invoiceYearMonth']; // YYYY-MM
-				$invoiceDate = $this->inputArray['invoiceDate']; // YYYY-MM-DD
-				$transactionDateTime = $this->inputArray['transactionDateTime']; // YYYY-MM-DD H:i:s
-				
-				PropertyManagement::createMonthlyInvoices($invoiceYearMonth,$invoiceDate);
-				PropertyManagement::processMonthlyFees($transactionDateTime);
-				
-				$this->messageArray[] = Lang::getLang('invoicesHaveBeenCreated');
-				$this->messageArray[] = Lang::getLang('monthlyFeesHaveBeenAdded');
-				$this->messageArray[] = Lang::getLang('cronJobComplete');
-				
-				$ioa = new Audit();
-				$ioa->auditAction = 'InvoicesCreated';
-				$ioa->auditObject = '';
-				$ioa->auditObjectID = 0;
-				$ioa->auditResult = 'success';
-				$ioa->auditNote = '';
-				Audit::createAuditEntry($ioa);
-				$ioa->auditAction = 'MonthlyFeesCreated';
-				Audit::createAuditEntry($ioa);
-				
-			}
 
 		}
 		
@@ -70,6 +42,8 @@ class AdminController {
 			if (isset($this->inputArray['siteID'])) { $_SESSION['admin']['audit']['siteID'] = $this->inputArray['siteID']; }
 			if (isset($this->inputArray['userID'])) { $_SESSION['admin']['audit']['userID'] = $this->inputArray['userID']; }
 			if (isset($this->inputArray['auditObject'])) { $_SESSION['admin']['audit']['auditObject'] = $this->inputArray['auditObject']; }
+			if (isset($this->inputArray['startDate'])) { $_SESSION['admin']['audit']['startDate'] = $this->inputArray['startDate']; }
+			if (isset($this->inputArray['endDate'])) { $_SESSION['admin']['audit']['endDate'] = $this->inputArray['endDate']; }
 
 		}
 
