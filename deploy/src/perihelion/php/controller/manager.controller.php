@@ -34,7 +34,6 @@ class ManagerController {
 
 		if ($this->urlArray[0] == 'manager' && $this->urlArray[1] == 'audit' && !empty($this->inputArray)) {
 
-			if (isset($this->inputArray['siteID'])) { $_SESSION['manager']['audit']['siteID'] = $this->inputArray['siteID']; }
 			if (isset($this->inputArray['userID'])) { $_SESSION['manager']['audit']['userID'] = $this->inputArray['userID']; }
 			if (isset($this->inputArray['auditObject'])) { $_SESSION['manager']['audit']['auditObject'] = $this->inputArray['auditObject']; }
 			if (isset($this->inputArray['startDate'])) { $_SESSION['manager']['audit']['startDate'] = $this->inputArray['startDate']; }

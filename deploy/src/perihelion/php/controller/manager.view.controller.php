@@ -98,7 +98,7 @@ class ManagerViewController {
 			if (!empty($_SESSION['manager']['audit']['startDate'])) { $startDate = $_SESSION['manager']['audit']['startDate']; } else { $startDate = null; }
 			if (!empty($_SESSION['manager']['audit']['endDate'])) { $endDate = $_SESSION['manager']['audit']['endDate']; } else { $endDate = null; }
 
-			return $nav . $view->auditTrail('manager', null, $userID, $auditObject, $startDate, $endDate);
+			return $nav . $view->auditTrail('manager', $_SESSION['siteID'], $userID, $auditObject, $startDate, $endDate); // manager can only see their own site's audit trail
 			
 		}
 		
