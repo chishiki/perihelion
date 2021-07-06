@@ -1,6 +1,6 @@
 <?php
 
-class PaginationView {
+final class PaginationView {
 	
 	public static function paginate($numberOfPages = 1, $currentPage = 1, $linkBaseURL = '') {
 		
@@ -45,40 +45,50 @@ class PaginationView {
 					$lastPageToLinkTo = $currentPage + 2;
 				}
 			}
+
 		}
 
 		if ($numberOfPages > 1) {
 			
-			$h .= "<nav>";
+			$h .= '<nav class="overflow-auto">';
 				
-				$h .= "<ul class=\"pagination pagination-sm\">";
+				$h .= '<ul class="pagination pagination-sm d-flex">';
 				
-					$h .= "<li" . ($currentPage==1?' class="disabled"':'') . ">";
-						$h .= "<a href=\"" . $firstPageURL . "\"><span class=\"fas fa-fast-backward\"></span></a>";
-					$h .= "</li>";
+					$h .= '<li class="page-item flex-fill' . ($currentPage==1?' disabled':'') . '">';
+						$h .= '<a class="page-link text-center" ' . ($currentPage==1?'tabindex="-1" ':'') . 'href="' . $firstPageURL . '">';
+							$h .= '<span class="fas fa-fast-backward">&nbsp;</span>';
+						$h .= '</a>';
+					$h .= '</li>';
 					
-					$h .= "<li" . ($currentPage==1?' class="disabled"':'') . ">";
-						$h .= "<a href=\"" . $previousPageURL . "\"><span class=\"fas fa-step-backward\"></span></a>";
-					$h .= "</li>";
+					$h .= '<li class="page-item flex-fill' . ($currentPage==1?' disabled':'') . '">';
+						$h .= '<a class="page-link text-center" ' . ($currentPage==1?'tabindex="-1" ':'') . 'href="' . $previousPageURL . '">';
+							$h .= '<span class="fas fa-step-backward"></span>';
+						$h .= '</a>';
+					$h .= '</li>';
 
 					for ($page = $firstPageToLinkTo; $page <= $lastPageToLinkTo; $page++) {
-						$class = "";
-						if ($page==$currentPage) { $class = 'active'; }
-						elseif ($page==$firstPageToLinkTo||$page==$lastPageToLinkTo||($currentPage==1&&$page==4)) { $class = 'hidden-xs'; }
-						$h .= "<li class=\"" . $class . "\"><a href=\"" . $lang . $linkBaseURL . $page . "/\">" . $page . "</a></li>";
+						$class = '';
+						if ($page==$currentPage) { $class = ' active'; }
+						$h .= '<li class="page-item flex-fill' . ($page==$currentPage?' active':'') . '">';
+							$h .= '<a class="page-link text-center" href="' . $lang . $linkBaseURL . $page . '/">' . $page . '</a>';
+						$h .= '</li>';
 					}
 
-					$h .= "<li" . ($currentPage==$numberOfPages?' class="disabled"':'') . ">";
-						$h .= "<a href=\"" . $nextPageURL . "\"><span class=\"fas fa-step-forward\"></span></a>";
-					$h .= "</li>";
+					$h .= '<li class="page-item flex-fill' . ($currentPage==$numberOfPages?' disabled':'') . '">';
+						$h .= '<a class="page-link text-center" ' . ($currentPage==$numberOfPages?'tabindex="-1" ':'') . 'href="' . $nextPageURL . '">';
+							$h .= '<span class="fas fa-step-forward"></span>';
+						$h .= '</a>';
+					$h .= '</li>';
 					
-					$h .= "<li" . ($currentPage==$numberOfPages?' class="disabled"':'') . ">";
-						$h .= "<a href=\"" . $lastPageURL . "\"><span class=\"fas fa-fast-forward\"></span></a>";
-					$h .= "</li>";
+					$h .= '<li class="page-item flex-fill' . ($currentPage==$numberOfPages?' disabled':'') . '">';
+						$h .= '<a class="page-link text-center" ' . ($currentPage==$numberOfPages?'tabindex="-1" ':'') . 'href="' . $lastPageURL . '">';
+							$h .= '<span class="fas fa-fast-forward"></span>';
+						$h .= '</a>';
+					$h .= '</li>';
 				
-				$h .= "</ul>";
+				$h .= '</ul>';
 				
-			$h .= "</nav>";
+			$h .= '</nav>';
 			
 		}
 		
