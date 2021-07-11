@@ -207,9 +207,26 @@ class Controller {
 						}
 					}
 
-					require_once Config::read('physical.path') . 'vendor/autoload.php';
+					require_once Config::read('perihelion.path') . 'vendor/autoload.php';
 
-					$mpdf = new \Mpdf\Mpdf(['fontdata' => ['meiryo' => ['R' => 'Meiryo W53 Regular.ttf']],'default_font' => 'meiryo']);
+					$defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
+					$fontDirs = $defaultConfig['fontDir'];
+
+					$defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
+					$fontData = $defaultFontConfig['fontdata'];
+
+					$mpdf = new \Mpdf\Mpdf([
+						'fontDir' => array_merge($fontDirs, [
+							'perihelion/assets/fonts',
+						]),
+						'fontdata' => array_merge($fontData, [
+							'takao_gothic' => ['R' => 'TakaoGothic.ttf'],
+							'takao_pgothic' => ['R' => 'TakaoPGothic.ttf']
+						]),
+						'default_font' => 'takao_pgothic',
+						'tempDir' => sys_get_temp_dir(),
+					]);
+
 					$stylesheet = file_get_contents(Config::read('web.root') . 'perihelion/assets/css/print.css');
 					$mpdf->WriteHTML($stylesheet,\Mpdf\HTMLParserMode::HEADER_CSS);
 					$mpdf->WriteHTML($doc);
