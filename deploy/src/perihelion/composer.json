@@ -1,0 +1,49 @@
+{
+  "repositories": [
+    {
+      "type": "package",
+      "package": {
+        "name": "ckeditor/ckeditor4",
+        "version": "4.16.1",
+        "source": {
+          "url": "https://github.com/ckeditor/ckeditor4.git",
+          "type": "git",
+          "reference": "master"
+        }
+      }
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "logicify/jquery-locationpicker-plugin",
+        "version": "0.1.16",
+        "source": {
+          "url": "https://github.com/Logicify/jquery-locationpicker-plugin.git",
+          "type": "git",
+          "reference": "master"
+        }
+      }
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "chishiki/jquery-ui-touch-punch",
+        "version": "dev-master",
+        "source": {
+          "url": "https://github.com/chishiki/jquery-ui-touch-punch.git",
+          "type": "git",
+          "reference": "dev-master"
+        }
+      }
+    }
+  ],
+  "require": {
+    "components/bootstrap": "4.6.*",
+    "ckeditor/ckeditor4": "4.16.1",
+    "components/jquery": "3.5.1",
+    "logicify/jquery-locationpicker-plugin": "*",
+    "desandro/masonry": "*",
+    "rsportella/popper": "dev-master",
+    "chishiki/jquery-ui-touch-punch": "dev-master"
+  }
+}

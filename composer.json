@@ -24,5 +24,20 @@
     "wiki": "https://github.com/chishiki/perihelion/wiki",
     "source": "https://github.com/chishiki/perihelion",
     "docs": "https://github.com/chishiki/perihelion/wiki"
+  },
+  "require": {
+    "php": ">=7.4",
+    "ext-ctype": "*",
+    "ext-pdo": "*",
+    "ext-bcmath": "*",
+    "ext-curl": "*",
+    "ext-gd": "*",
+    "ext-geoip": "*",
+    "ext-mbstring": "*",
+    "ext-memcached": "*",
+    "ext-xml": "*",
+    "ext-zip": "*",
+    "aws/aws-sdk-php": "*",
+    "mpdf/mpdf": "*"
   }
 }
