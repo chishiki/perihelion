@@ -7,8 +7,9 @@
 	===================== */
 
 	// System Info
-	Config::write('physical.path','/var/www/xxxxxxx/example.com/');
-	Config::write('web.root','/var/www/xxxxxxx/example.com/src/');
+	Config::write('perihelion.path','/var/www/xxxxxxx/example.com/perihelion/');
+	Config::write('physical.path','/var/www/xxxxxxx/example.com/perihelion/deploy/');
+	Config::write('web.root','/var/www/xxxxxxx/example.com/perihelion/deploy/src/');
 	Config::write('copyright.holder', 'Christopher Webb');
 	Config::write('copyright.url', 'https://perihelion.xyz/');
 	Config::write('copyright.start', '2020');
@@ -44,6 +45,9 @@
 	
 	// FontAwesome
 	Config::write('fa.kit', 'xxxxxxx');
+
+	// CKEditor
+	Config::write('ckeditor', false);
 
 	// Twilio
 	Config::write('account.sid', 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
