@@ -69,7 +69,7 @@ class PageView {
 			$h .= '<link rel="canonical" href="http://' . Site::url() . '/' . Lang::languageUrlPrefix() . $seo->seoURL . '/">';
 		}
 
-		$h .= '<link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">';
+		$h .= '<link rel="stylesheet" type="text/css" href="/perihelion/vendor/components/bootstrap/css/bootstrap.min.css">';
 		$h .= '<link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">';
 		$h .= '<link rel="stylesheet" type="text/css" href="/perihelion/assets/css/perihelion.css" />';
 		$h .= '<link rel="stylesheet" type="text/css" href="/theme.css" />';
@@ -91,14 +91,14 @@ class PageView {
 
 		}
 		
-		$h .= '<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>';
+		$h .= '<script type="text/javascript" src="/perihelion/vendor/components/jquery/jquery.min.js"></script>';
 		$h .= '<script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>';
-		$h .= '<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>';
+		$h .= '<script type="text/javascript" src="/perihelion/vendor/chishiki/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>';
 		$h .= '<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>';
-		$h .= '<script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>';
+		$h .= '<script type="text/javascript" src="/perihelion/vendor/components/bootstrap/js/bootstrap.min.js"></script>';
 		$h .= '<script type="text/javascript" src="https://kit.fontawesome.com/' . Config::read('fa.kit') . '.js"></script>';
-		$h .= '<script type="text/javascript" src="/perihelion/vendor/ckeditor/ckeditor.js"></script>';
-		$h .= '<script type="text/javascript" src="/perihelion/vendor/masonry/dist/masonry.pkgd.min.js"></script>';
+		if (Config::read('ckeditor')) { $h .= '<script type="text/javascript" src="/perihelion/vendor/ckeditor/ckeditor4/ckeditor.js"></script>'; }
+		$h .= '<script type="text/javascript" src="/perihelion/vendor/desandro/masonry/dist/masonry.pkgd.min.js"></script>';
 		$h .= '<script type="text/javascript" src="/perihelion/assets/js/perihelion.js"></script>';
 
 		if ($site->siteUsesGoogleMaps) {
@@ -106,7 +106,7 @@ class PageView {
 		}
 
 		if ($site->siteUsesLocationPicker) {
-			$h .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-locationpicker/0.1.12/locationpicker.jquery.min.js"></script>';
+			$h .= '<script src="/perihelion/vendor/logicify/jquery-locationpicker-plugin/dist/locationpicker.jquery.min.js"></script>';
 		}
 
 		if ($site->siteUsesDataTables) {
