@@ -1,14 +1,61 @@
 {
+  "name": "chishiki/perihelion",
+  "description": "Perihelion is an open-source PHP framework suitable for full-featured web application development.",
+  "version": "0.1.0",
+  "keywords": [
+    "php",
+    "framework",
+    "perihelion"
+  ],
+  "homepage": "https://perihelion.xyz/",
+  "time": "2020-11-20",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Christopher Webb",
+      "email": "christopher@zenidev.com",
+      "homepage": "https://linkedin.com/in/chishiki",
+      "role": "Developer"
+    }
+  ],
+  "support": {
+    "email": "support@zenidev.com",
+    "issues": "https://github.com/chishiki/perihelion/issues",
+    "wiki": "https://github.com/chishiki/perihelion/wiki",
+    "source": "https://github.com/chishiki/perihelion",
+    "docs": "https://github.com/chishiki/perihelion/wiki"
+  },
   "repositories": [
     {
       "type": "package",
       "package": {
-        "name": "ckeditor/ckeditor4",
-        "version": "4.16.1",
-        "source": {
-          "url": "https://github.com/ckeditor/ckeditor4.git",
-          "type": "git",
-          "reference": "master"
+        "name": "datatables/datatables",
+        "version": "1.10.25",
+        "dist": {
+          "url": "https://cdn.datatables.net/v/dt/dt-1.10.25/fh-3.1.9/datatables.min.js",
+          "type": "file"
+        }
+      }
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "furf/jquery-ui-touch-punch",
+        "version": "0.2.3",
+        "dist": {
+          "url": "https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js",
+          "type": "file"
+        }
+      }
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "popperjs/popper-core",
+        "version": "2.9.2",
+        "dist": {
+          "url": "https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js",
+          "type": "file"
         }
       }
     },
@@ -18,32 +65,23 @@
         "name": "logicify/jquery-locationpicker-plugin",
         "version": "0.1.16",
         "source": {
-          "url": "https://github.com/Logicify/jquery-locationpicker-plugin.git",
-          "type": "git",
-          "reference": "master"
-        }
-      }
-    },
-    {
-      "type": "package",
-      "package": {
-        "name": "chishiki/jquery-ui-touch-punch",
-        "version": "dev-master",
-        "source": {
-          "url": "https://github.com/chishiki/jquery-ui-touch-punch.git",
-          "type": "git",
-          "reference": "dev-master"
+          "url": "https://github.com/Logicify/jquery-locationpicker-plugin",
+          "reference": "master",
+          "type": "git"
         }
       }
     }
   ],
   "require": {
-    "components/bootstrap": "4.6.*",
-    "ckeditor/ckeditor4": "4.16.1",
-    "components/jquery": "3.5.1",
-    "logicify/jquery-locationpicker-plugin": "*",
-    "desandro/masonry": "*",
-    "rsportella/popper": "dev-master",
-    "chishiki/jquery-ui-touch-punch": "dev-master"
+    "datatables/datatables": "^1.0",
+    "furf/jquery-ui-touch-punch": "^0.2",
+    "popperjs/popper-core": "^2.9",
+    "logicify/jquery-locationpicker-plugin": "^0.1",
+    "ckeditor/ckeditor": "^4.16",
+    "components/jquery": "^3.0",
+    "components/jqueryui": "^1.0",
+    "desandro/masonry": "^4.2",
+    "mpdf/mpdf": "^8.0",
+    "twbs/bootstrap": "4.6"
   }
 }

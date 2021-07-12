@@ -69,8 +69,8 @@ class PageView {
 			$h .= '<link rel="canonical" href="http://' . Site::url() . '/' . Lang::languageUrlPrefix() . $seo->seoURL . '/">';
 		}
 
-		$h .= '<link rel="stylesheet" type="text/css" href="/perihelion/vendor/components/bootstrap/css/bootstrap.min.css">';
-		$h .= '<link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">';
+		$h .= '<link rel="stylesheet" type="text/css" href="/perihelion/vendor/twbs/bootstrap/dist/css/bootstrap.min.css">';
+		$h .= '<link rel="stylesheet" type="text/css" href="/perihelion/vendor/components/jqueryui/themes/base/jquery-ui.css">';
 		$h .= '<link rel="stylesheet" type="text/css" href="/perihelion/assets/css/perihelion.css" />';
 		$h .= '<link rel="stylesheet" type="text/css" href="/theme.css" />';
 
@@ -92,12 +92,12 @@ class PageView {
 		}
 		
 		$h .= '<script type="text/javascript" src="/perihelion/vendor/components/jquery/jquery.min.js"></script>';
-		$h .= '<script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>';
-		$h .= '<script type="text/javascript" src="/perihelion/vendor/chishiki/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>';
-		$h .= '<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>';
-		$h .= '<script type="text/javascript" src="/perihelion/vendor/components/bootstrap/js/bootstrap.min.js"></script>';
+		$h .= '<script type="text/javascript" src="/perihelion/vendor/components/jqueryui/jquery-ui.js"></script>';
+		$h .= '<script type="text/javascript" src="/perihelion/vendor/furf/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>';
+		$h .= '<script type="text/javascript" src="/perihelion/vendor/popperjs/popper-core/popper.min.js"></script>';
+		$h .= '<script type="text/javascript" src="/perihelion/vendor/twbs/bootstrap/dist/js/bootstrap.min.js"></script>';
 		$h .= '<script type="text/javascript" src="https://kit.fontawesome.com/' . Config::read('fa.kit') . '.js"></script>';
-		if (Config::read('ckeditor')) { $h .= '<script type="text/javascript" src="/perihelion/vendor/ckeditor/ckeditor4/ckeditor.js"></script>'; }
+		if (Config::read('ckeditor')) { $h .= '<script type="text/javascript" src="/perihelion/vendor/ckeditor/ckeditor/ckeditor.js"></script>'; }
 		$h .= '<script type="text/javascript" src="/perihelion/vendor/desandro/masonry/dist/masonry.pkgd.min.js"></script>';
 		$h .= '<script type="text/javascript" src="/perihelion/assets/js/perihelion.js"></script>';
 
@@ -110,7 +110,7 @@ class PageView {
 		}
 
 		if ($site->siteUsesDataTables) {
-			$h .= '<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.23/fh-3.1.7/datatables.min.js"></script>';
+			$h .= '<script type="text/javascript" src="/perihelion/vendor/datatables/datatables/datatables.min.js"></script>';
 		}
 
 		foreach ($this->moduleArray AS $moduleName) {
