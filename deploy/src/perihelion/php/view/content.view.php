@@ -21,6 +21,28 @@ final class ContentView {
 			foreach ($this->inputArray AS $key => $value) { if (isset($content->$key)) { $content->$key = $value; } }
 		}
 
+		$userCKEditor = Config::read('ckeditor');
+		$contentEnglishEditorScript = '';
+		$contentJapaneseEditorScript = '';
+		if ($userCKEditor) {
+			$contentEnglishEditorScript = '
+				<script>
+					CKEDITOR.replace(\'content_english\', {
+						language: \'' . $_SESSION['lang'] . '\',
+						contentsCss: \'/perihelion/vendor/twbs/bootstrap/dist/css/bootstrap.min.css\'
+					});
+				</script>
+			';
+			$contentJapaneseEditorScript = '
+				<script>
+					CKEDITOR.replace(\'content_japanese\', {
+						language: \'' . $_SESSION['lang'] . '\',
+						contentsCss: \'/perihelion/vendor/twbs/bootstrap/dist/css/bootstrap.min.css\'
+					});
+				</script>
+			';
+		}
+
 		$h = '<div id="perihelion_content_form">';
 			$h .= '<div class="container">';
 				$h .= '<div class="row">';
@@ -66,17 +88,11 @@ final class ContentView {
 											<div class="form-group row">
 												<label class="col-sm-2 col-form-label" for="entryContentEnglish">' . Lang::getLang('entryContentEnglish') . '</label>
 												<div class="col-sm-10">
-													<textarea class="form-control ckeditor" rows="10" id="content_english" name="entryContentEnglish" placeholder="Content (English)">' . $content->entryContentEnglish . '</textarea>
+													<textarea class="form-control' . ($userCKEditor?' ckeditor':'') . '" rows="10" id="content_english" name="entryContentEnglish" placeholder="Content (English)">' . $content->entryContentEnglish . '</textarea>
 												</div>
 											</div>
 											
-											<script>
-												CKEDITOR.replace(\'content_english\', {
-													language: \'' . $_SESSION['lang'] . '\',
-													extraPlugins: \'sourcedialog\',
-													contentsCss: \'/bootstrap/4.3.1/css/bootstrap.min.css\'
-												});
-											</script>
+											' . $contentEnglishEditorScript . '
 											
 											<hr />
 											
@@ -98,17 +114,11 @@ final class ContentView {
 											<div class="form-group row">
 												<label class="col-sm-2 col-form-label" for="entryContentJapanese">' . Lang::getLang('entryContentJapanese') . '</label>
 												<div class="col-sm-10">
-													<textarea class="form-control ckeditor" rows="10" id="content_japanese" name="entryContentJapanese" placeholder="内容">' . $content->entryContentJapanese . '</textarea>
+													<textarea class="form-control' . ($userCKEditor?' ckeditor':'') . '" rows="10" id="content_japanese" name="entryContentJapanese" placeholder="内容">' . $content->entryContentJapanese . '</textarea>
 												</div>
 											</div>
 											
-											<script>
-												CKEDITOR.replace(\'content_japanese\', {
-													language: \'' . $_SESSION['lang'] . '\',
-													extraPlugins: \'sourcedialog\',
-													contentsCss: \'/bootstrap/4.3.1/css/bootstrap.min.css\'
-												});
-											</script>
+											' . $contentJapaneseEditorScript . '
 											
 											<hr />
 											
