@@ -151,7 +151,7 @@ class PageView {
 	
 	private function body($html) {
 		
-		$integratedErrorMessages = array('contact','contact-us','enquiry','get-in-touch','designer','manager','admin','profile');
+		$integratedErrorMessages = array('contact','profile');
 		$scriptFilter = array('designer','manager','admin','support');
 
 		$bodyClasses = array();
