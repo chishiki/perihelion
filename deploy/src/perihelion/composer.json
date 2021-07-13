@@ -73,15 +73,15 @@
     }
   ],
   "require": {
-    "datatables/datatables": "^1.0",
+    "datatables/datatables": "1.*",
     "furf/jquery-ui-touch-punch": "^0.2",
-    "popperjs/popper-core": "^2.9",
+    "popperjs/popper-core": "2.*",
     "logicify/jquery-locationpicker-plugin": "^0.1",
-    "ckeditor/ckeditor": "^4.16",
-    "components/jquery": "^3.0",
-    "components/jqueryui": "^1.0",
-    "desandro/masonry": "^4.2",
-    "mpdf/mpdf": "^8.0",
-    "twbs/bootstrap": "4.6"
+
+    "ckeditor/ckeditor": "4.*",
+    "components/jquery": "3.*",
+    "components/jqueryui": "1.*",
+    "desandro/masonry": "4.*",
+    "twbs/bootstrap": "4.*"
   }
 }

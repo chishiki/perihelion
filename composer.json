@@ -27,17 +27,8 @@
   },
   "require": {
     "php": ">=7.4",
-    "ext-ctype": "*",
-    "ext-pdo": "*",
-    "ext-bcmath": "*",
-    "ext-curl": "*",
-    "ext-gd": "*",
-    "ext-geoip": "*",
-    "ext-mbstring": "*",
-    "ext-memcached": "*",
-    "ext-xml": "*",
-    "ext-zip": "*",
-    "aws/aws-sdk-php": "*",
-    "mpdf/mpdf": "*"
+    "aws/aws-sdk-php": "3.*",
+    "mpdf/mpdf": "8.*",
+    "geoip2/geoip2": "2.*"
   }
 }

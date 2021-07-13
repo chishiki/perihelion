@@ -20,7 +20,7 @@ class PageView {
 	
 	public function page($html) {
 		
-		if (empty($this->urlArray[0])) { $html_class = 'index'; } else { $html_class = $this->urlArray[0]; }
+				if (empty($this->urlArray[0])) { $html_class = 'index'; } else { $html_class = $this->urlArray[0]; }
 		
 		$h = '<!DOCTYPE html>';
 		$h .= '<html lang="' . ($_SESSION['lang']=='ja'?'ja':'en') . '" class="' . $html_class . '">';
@@ -70,7 +70,7 @@ class PageView {
 		}
 
 		$h .= '<link rel="stylesheet" type="text/css" href="/perihelion/vendor/twbs/bootstrap/dist/css/bootstrap.min.css">';
-		$h .= '<link rel="stylesheet" type="text/css" href="/perihelion/vendor/components/jqueryui/themes/base/jquery-ui.css">';
+		$h .= '<link rel="stylesheet" type="text/css" href="/perihelion/vendor/components/jqueryui/themes/base/jquery-ui.min.css">';
 		$h .= '<link rel="stylesheet" type="text/css" href="/perihelion/assets/css/perihelion.css" />';
 		$h .= '<link rel="stylesheet" type="text/css" href="/theme.css" />';
 
@@ -90,15 +90,15 @@ class PageView {
 			}
 
 		}
-		
+
+		$h .= '<script type="text/javascript" src="https://kit.fontawesome.com/' . Config::read('fa.kit') . '.js"></script>';
+		$h .= '<script type="text/javascript" src="/perihelion/vendor/ckeditor/ckeditor/ckeditor.js"></script>';
 		$h .= '<script type="text/javascript" src="/perihelion/vendor/components/jquery/jquery.min.js"></script>';
-		$h .= '<script type="text/javascript" src="/perihelion/vendor/components/jqueryui/jquery-ui.js"></script>';
+		$h .= '<script type="text/javascript" src="/perihelion/vendor/components/jqueryui/jquery-ui.min.js"></script>';
 		$h .= '<script type="text/javascript" src="/perihelion/vendor/furf/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>';
+		$h .= '<script type="text/javascript" src="/perihelion/vendor/desandro/masonry/dist/masonry.pkgd.min.js"></script>';
 		$h .= '<script type="text/javascript" src="/perihelion/vendor/popperjs/popper-core/popper.min.js"></script>';
 		$h .= '<script type="text/javascript" src="/perihelion/vendor/twbs/bootstrap/dist/js/bootstrap.min.js"></script>';
-		$h .= '<script type="text/javascript" src="https://kit.fontawesome.com/' . Config::read('fa.kit') . '.js"></script>';
-		if (Config::read('ckeditor')) { $h .= '<script type="text/javascript" src="/perihelion/vendor/ckeditor/ckeditor/ckeditor.js"></script>'; }
-		$h .= '<script type="text/javascript" src="/perihelion/vendor/desandro/masonry/dist/masonry.pkgd.min.js"></script>';
 		$h .= '<script type="text/javascript" src="/perihelion/assets/js/perihelion.js"></script>';
 
 		if ($site->siteUsesGoogleMaps) {
