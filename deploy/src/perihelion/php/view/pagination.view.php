@@ -5,13 +5,11 @@ final class PaginationView {
 	public static function paginate($numberOfPages = 1, $currentPage = 1, $linkBaseURL = '') {
 		
 		$h = "";
-		$lang = "";
-		if ($_SESSION['lang'] == 'ja') { $lang = "/ja"; }
-		
-		$firstPageURL = $lang . $linkBaseURL . "1/";
-		if ($currentPage == 1) { $previousPageURL = "#"; } else { $previousPageURL = $lang . $linkBaseURL . ($currentPage - 1) . "/"; }
-		if ($currentPage == $numberOfPages) { $nextPageURL = "#"; } else { $nextPageURL = $lang . $linkBaseURL . ($currentPage + 1) . "/"; }
-		$lastPageURL = $lang . $linkBaseURL . $numberOfPages . "/";
+
+		$firstPageURL = $linkBaseURL . "1/";
+		if ($currentPage == 1) { $previousPageURL = "#"; } else { $previousPageURL = $linkBaseURL . ($currentPage - 1) . "/"; }
+		if ($currentPage == $numberOfPages) { $nextPageURL = "#"; } else { $nextPageURL = $linkBaseURL . ($currentPage + 1) . "/"; }
+		$lastPageURL = $linkBaseURL . $numberOfPages . "/";
 
 		if ($numberOfPages <= 5) { // five pages or less
 			
