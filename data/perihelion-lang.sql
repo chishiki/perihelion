@@ -830,10 +830,16 @@ REPLACE INTO `perihelion_Lang` VALUES
 ('scripts', 'Scripts', 0, 'スクリプト', 0, @now),
 ('createContent', 'Create Content', 0, 'コンテント新規作成', 0, @now),
 ('contentCategoryType', 'Content Type', 0, 'コンテントタイプ', 0, @now),
-('youMustEnableJavaScript', 'You must enable JavaScript to use this site.', 0, 'JavaScriptを有効に設定してからご利用ください。', 0, @langTimeStamp),
-('siteUsesLocationPicker', 'Uses LocationPicker', 0, 'LocationPicker使用', 0, @langTimeStamp),
-('siteUsesGoogleMaps', 'Uses Google Maps', 0, 'Googleマップ使用', 0, @langTimeStamp),
-('siteGoogleUpdateSuccessful', 'Site Google settings successfully updated.', 0, 'Google設定は更新済みです。', 0, @langTimeStamp),
-('siteUsesDataTables', 'Site uses DataTables.', 0, 'DataTables使用', 0, @langTimeStamp);
+('youMustEnableJavaScript', 'You must enable JavaScript to use this site.', 0, 'JavaScriptを有効に設定してからご利用ください。', 0, @now),
+('siteUsesLocationPicker', 'Uses LocationPicker', 0, 'LocationPicker使用', 0, @now),
+('siteUsesGoogleMaps', 'Uses Google Maps', 0, 'Googleマップ使用', 0, @now),
+('siteGoogleUpdateSuccessful', 'Site Google settings successfully updated.', 0, 'Google設定は更新済みです。', 0, @now),
+('contentClassesID', 'ID', 0, 'ID', 0, @now),
+('contentClassesContainer', 'Width', 0, '幅', 0, @now),
+('contentClassesFluid', 'Fluid Width', 0, '全幅', 0, @now),
+('contentClassesFixedWidth', 'Fixed Width', 0, '固定幅', 0, @now),
+('contentClassesRow', 'Rows', 0, '行', 0, @now),
+('contentClassesCol', 'Columns', 0, '列', 0, @now),
+('usingWysiwygMayChangeDisplayFormat', 'Please note that using the WYSIWYG may change the actual display format.', 0, 'WYSIWYGを使用すると実際に表示するフォーマットが変わってしまう場合がある事にご注意ください。', 0, @now);
 
 

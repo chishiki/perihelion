@@ -14,11 +14,16 @@ final class ContentView {
 
 	public function contentForm($action, $contentID = null) {
 
+		$site = new Site($_SESSION['siteID']);
 		$content = new Content($contentID);
 		$actionURL = '/' . Lang::languageUrlPrefix() . 'designer/content/' . $action . '/' . ($contentID?$contentID.'/':'');
 
+		$contentClassArray = array('id' => 'id_sample', 'container' => 'container', 'row' => 'row', 'col' => 'col-12');
 		if (!empty($this->inputArray)) {
-			foreach ($this->inputArray AS $key => $value) { if (isset($content->$key)) { $content->$key = $value; } }
+			foreach ($this->inputArray AS $key => $value) {
+				if (isset($content->$key)) { $content->$key = $value; }
+				if ($key == 'contentClasses') { $contentClassArray = $value; }
+			}
 		}
 
 		$userCKEditor = Config::read('ckeditor');
@@ -29,7 +34,8 @@ final class ContentView {
 				<script>
 					CKEDITOR.replace(\'content_english\', {
 						language: \'' . $_SESSION['lang'] . '\',
-						contentsCss: \'/perihelion/vendor/twbs/bootstrap/dist/css/bootstrap.min.css\'
+						contentsCss: \'/perihelion/vendor/twbs/bootstrap/dist/css/bootstrap.min.css\',
+						customConfig:\'/perihelion/assets/js/ckeditor-config.js\'
 					});
 				</script>
 			';
@@ -37,7 +43,8 @@ final class ContentView {
 				<script>
 					CKEDITOR.replace(\'content_japanese\', {
 						language: \'' . $_SESSION['lang'] . '\',
-						contentsCss: \'/perihelion/vendor/twbs/bootstrap/dist/css/bootstrap.min.css\'
+						contentsCss: \'/perihelion/vendor/twbs/bootstrap/dist/css/bootstrap.min.css\',
+						customConfig:\'/perihelion/assets/js/ckeditor-config.js\'
 					});
 				</script>
 			';
@@ -88,7 +95,8 @@ final class ContentView {
 											<div class="form-group row">
 												<label class="col-sm-2 col-form-label" for="entryContentEnglish">' . Lang::getLang('entryContentEnglish') . '</label>
 												<div class="col-sm-10">
-													<textarea class="form-control' . ($userCKEditor?' ckeditor':'') . '" rows="10" id="content_english" name="entryContentEnglish" placeholder="Content (English)">' . $content->entryContentEnglish . '</textarea>
+													<textarea class="form-control" rows="10" id="content_english" name="entryContentEnglish" placeholder="Content (English)">' . $content->entryContentEnglish . '</textarea>
+													<small class="form-text text-muted">' . Lang::getLang('usingWysiwygMayChangeDisplayFormat') . '</small>
 												</div>
 											</div>
 											
@@ -114,11 +122,37 @@ final class ContentView {
 											<div class="form-group row">
 												<label class="col-sm-2 col-form-label" for="entryContentJapanese">' . Lang::getLang('entryContentJapanese') . '</label>
 												<div class="col-sm-10">
-													<textarea class="form-control' . ($userCKEditor?' ckeditor':'') . '" rows="10" id="content_japanese" name="entryContentJapanese" placeholder="内容">' . $content->entryContentJapanese . '</textarea>
+													<textarea class="form-control" rows="10" id="content_japanese" name="entryContentJapanese" placeholder="内容">' . $content->entryContentJapanese . '</textarea>
+													<small class="form-text text-muted">' . Lang::getLang('usingWysiwygMayChangeDisplayFormat') . '</small>
 												</div>
 											</div>
 											
 											' . $contentJapaneseEditorScript . '
+											
+											<hr />
+											
+											<div class="form-row">
+												<div class="form-group col-12 col-sm-6 col-md-3">
+													<label for="contentClasses[id]">' . Lang::getLang('contentClassesID') . '</label>
+													<input type="text" class="form-control" name="contentClasses[id]" value="' . $contentClassArray['id'] . '">
+												</div>
+												<div class="form-group col-12 col-sm-6 col-md-3">
+													<label for="contentClasses[id]">' . Lang::getLang('contentClassesContainer') . '</label>
+													<select id="content_form_container_select" class="form-control" name="contentClasses[container]">
+														<option value="">----</option>
+														<option value="container-fluid"' . ($contentClassArray['container']=='container-fluid'?' selected':'') . '>' . Lang::getLang('contentClassesFluid') . '</option>
+														<option value="container"' . ($contentClassArray['container']=='container'?' selected':'') . '>' . Lang::getLang('contentClassesFixedWidth') . '</option>
+													</select>
+												</div>
+												<div class="form-group col-12 col-sm-6 col-md-3">
+													<label for="contentClasses[row]">' . Lang::getLang('contentClassesRow') . '</label>
+													<input type="text" id="content_form_row_input" class="form-control" name="contentClasses[row]" value="' . $contentClassArray['row'] . '" readonly>
+												</div>
+												<div class="form-group col-12 col-sm-6 col-md-3">
+													<label for="contentClasses[col]">' . Lang::getLang('contentClassesCol') . '</label>
+													<input type="text" id="content_form_col_input" class="form-control" name="contentClasses[col]" value="' . $contentClassArray['col'] . '" readonly>
+												</div>
+											</div>
 											
 											<hr />
 											
@@ -127,6 +161,7 @@ final class ContentView {
 												<div class="col-sm-10"><input name="entryPublished" type="checkbox" value="1"' . ($content->entryPublished?" checked":"") . '></div>
 											</div>
 											
+											<!--
 											<div class="form-group row">
 												<label class="col-sm-2 col-form-label" for="contentCategoryType">' . Lang::getLang('contentCategoryType') . '</label>
 												<div class="col-sm-10">
@@ -136,12 +171,19 @@ final class ContentView {
 													</select>
 												</div>
 											</div>
+											-->
 											
 											<hr />
 											
 											<div class="form-group row">
 												<label class="col-sm-2 col-form-label" for="entrySeoURL">SEO URL</label>
-												<div class="col-sm-10"><input type="text" name="entrySeoURL" class="form-control col-sm-10" placeholder="alphanumeric and hyphens only " value="' . $content->entrySeoURL . '" required></div>
+												<div class="col-sm-10">
+													<div class="input-group">
+														<div class="input-group-prepend"><div class="input-group-text">https://' . $site->siteURL . '/</div></div>
+														<input type="text" name="entrySeoURL" class="form-control col-sm-10" placeholder="alphanumeric and hyphens only" value="' . $content->entrySeoURL . '" required>
+														<div class="input-group-append"><div class="input-group-text">/</div></div>
+													</div>
+												</div>
 											</div>
 											
 											<hr />
@@ -248,8 +290,37 @@ final class ContentView {
 		
 		$contentID = Content::publishedContentID($this->urlArray[0]);
 		if ($contentID) {
+
 			$content = new Content($contentID);
-			return $content->content();
+
+			$contentClassesArray = json_decode($content->contentClasses, true);
+
+			if (json_last_error() === JSON_ERROR_NONE) {
+
+				$heads = array();
+				$tails = array();
+
+				if (isset($contentClassesArray['id']) || isset($contentClassesArray['container'])) {
+					$heads[] = '<div id="' . $contentClassesArray['id'] . '" class="' . $contentClassesArray['container'] . '">';
+					$tails[] = '</div>';
+				}
+				if (isset($contentClassesArray['row'])) {
+					$heads[] = '<div class="' . $contentClassesArray['row'] . '">';
+					$tails[] = '</div>';
+				}
+				if (isset($contentClassesArray['col'])) {
+					$heads[] = '<div class="' . $contentClassesArray['col'] . '">';
+					$tails[] = '</div>';
+				}
+
+				return implode('', $heads) . $content->content() . implode('', $tails);
+
+			} else {
+
+				return $content->content();
+
+			}
+
 		}
 		
 	}

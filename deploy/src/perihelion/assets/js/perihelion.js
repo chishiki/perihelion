@@ -173,6 +173,20 @@ $(window).on('load', function() {
 
 		});
 
+		$('#content_form_container_select').on('change', function() {
+
+			var containerClasses = $(this).val();
+			console.log(containerClasses);
+			if (containerClasses === 'container-fluid' || containerClasses === 'container') {
+				$('#content_form_row_input').val('row');
+				$('#content_form_col_input').val('col-12');
+			} else {
+				$('#content_form_row_input').val('');
+				$('#content_form_col_input').val('');
+			}
+
+		});
+
 		console.log("perihelion.js has loaded");
 
 });

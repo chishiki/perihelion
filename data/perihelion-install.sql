@@ -30,14 +30,15 @@ INSERT INTO `perihelion_Content` VALUES
     '2073-12-18', -- entryPublishEndDate
     'Index', -- entryTitleEnglish
     'インデックス', -- entryTitleJapanese
-    '<div class=\"container-fluid\"><div class=\"row\"><div class=\"col-12 col-md-8 offset-md-2\">Perihelion is a content management system for building dynamic responsive websites and a prototype and systems development framework that enables the rapid development and deployment of highly customizable modular functionality.</div></div></div>', -- entryContentEnglish
-    '<div class=\"container-fluid\"><div class=\"row\"><div class=\"col-12 col-md-8 offset-md-2\">ペリヘリオンは動的なレスポンシブWebサイトを構築するためのコンテントマネージメントシステムであり、高度にカスタマイズ可能なモジュール機能の迅速な開発と展開を可能にするプロトタイプおよびシステム開発フレームワークです。</div></div></div>', -- entryContentJapanese
+    'Perihelion is a content management system for building dynamic responsive websites and a prototype and systems development framework that enables the rapid development and deployment of highly customizable modular functionality.', -- entryContentEnglish
+    'ペリヘリオンは動的なレスポンシブWebサイトを構築するためのコンテントマネージメントシステムであり、高度にカスタマイズ可能なモジュール機能の迅速な開発と展開を可能にするプロトタイプおよびシステム開発フレームワークです。', -- entryContentJapanese
     0, -- entryViews
     'Index', -- contentMetaKeywordsEnglish
     'インデックス', -- contentMetaKeywordsJapanese
     'Index', -- contentMetaDescriptionEnglish
     'インデックス', -- contentMetaDescriptionJapanese
-    0 -- contentLock
+    0, -- contentLock
+    '{"id":null,"container":"container-fluid","row":"row","col":"col-12 col-md-8 offset-md-2"}' -- contentClasses
 );
 
 INSERT INTO `perihelion_Menu` VALUES

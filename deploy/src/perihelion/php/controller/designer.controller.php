@@ -54,6 +54,10 @@ class DesignerController {
 					foreach ($this->inputArray AS $property => $value) {
 						if (isset($content->$property)) {
 							$content->$property = $value;
+							if ($property == 'contentClasses') {
+								foreach ($value AS $k => $v) { if (empty($v)) { $value[$k] = null; } }
+								$content->$property = json_encode($value);
+							}
 						}
 					} // refactor & secure
 					
@@ -91,6 +95,10 @@ class DesignerController {
 					foreach ($this->inputArray AS $property => $value) {
 						if (isset($content->$property)) {
 							$content->$property = $value;
+							if ($property == 'contentClasses') {
+								foreach ($value AS $k => $v) { if (empty($v)) { $value[$k] = null; } }
+								$content->$property = json_encode($value);
+							}
 						}
 					} // refactor & secure
 					

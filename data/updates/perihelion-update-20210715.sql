@@ -1,0 +1,2 @@
+ALTER TABLE `perihelion_Content` ADD COLUMN `contentClasses` TEXT NOT NULL AFTER `contentLock`;
+UPDATE `perihelion_Content` SET `contentClasses` = '{"id":null,"container":null,"row":null,"col":null}' WHERE `contentID` > 0;

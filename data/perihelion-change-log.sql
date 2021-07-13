@@ -157,3 +157,8 @@ SET @now := now();
 INSERT INTO perihelion_Lang VALUES ('scripts', 'Scripts', 0, 'スクリプト', 0, @now);
 INSERT INTO perihelion_Lang VALUES ('createContent', 'Create Content', 0, 'コンテント新規作成', 0, @now);
 INSERT INTO perihelion_Lang VALUES ('contentCategoryType', 'Content Type', 0, 'コンテントタイプ', 0, @now);
+
+/* @chishiki 2021-07-12 */
+
+ALTER TABLE `perihelion_Content` ADD COLUMN `contentClasses` TEXT NOT NULL AFTER `contentLock`;
+UPDATE `perihelion_Content` SET `contentClasses` = '{"id":null,"container":null,"row":null,"col":null}' WHERE `contentID` > 0;

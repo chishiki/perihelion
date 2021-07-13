@@ -220,6 +220,7 @@ CREATE TABLE `perihelion_Content` (
   `contentMetaDescriptionEnglish` varchar(255) NOT NULL,
   `contentMetaDescriptionJapanese` varchar(255) NOT NULL,
   `contentLock` int(1) NOT NULL,
+  `contentClasses` text NOT NULL,
   PRIMARY KEY (`contentID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1001 DEFAULT CHARSET=utf8mb4;
 

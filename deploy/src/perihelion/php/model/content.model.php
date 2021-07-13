@@ -55,7 +55,8 @@ final class Content extends ORM {
 	public $contentMetaDescriptionEnglish;
 	public $contentMetaDescriptionJapanese;
 	public $contentLock;
-	
+	public $contentClasses;
+
 	public function __construct($contentID = null) {
 
 		$dt = new DateTime();
@@ -88,6 +89,7 @@ final class Content extends ORM {
 		$this->contentMetaDescriptionEnglish = '';
 		$this->contentMetaDescriptionJapanese = '';
 		$this->contentLock = 0;
+		$this->contentClasses = '{"id":null,"container":"container","row":"row","col":"col-12"}';
 
 		if ($contentID) {
 
