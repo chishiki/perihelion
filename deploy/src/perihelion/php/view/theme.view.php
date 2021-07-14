@@ -12,7 +12,7 @@ class ThemeView {
 		$this->errorArray = $errorArray;
 	}
 
-	public function themeForm($action, $themeID = null) {
+	public function themeForm($action, $themeID = null, $errorArray) {
 		
 		if ($action == 'update' && $themeID) {
 			$theme = new Theme($themeID);
@@ -21,6 +21,28 @@ class ThemeView {
 			$theme = new Theme();
 			$actionURL = '/' . Lang::languageUrlPrefix() . 'designer/themes/create/';
 		}
+
+		/* Maybe this Block could go in the constructor */
+    $css_error = null;
+    $name_error = null;
+    $nameInputError = null;
+    $cssTextErrors = null;
+
+    if (!empty($errorArray)) {
+      //print_r($errorArray);
+      if(isset($errorArray['themeNameError'])) {
+        $name_error = $errorArray['themeNameError'][0];
+        $nameInputError = 'is-invalid';
+      }
+      if(isset($errorArray['themeCSSError'])) {
+        $css_error =  $errorArray['themeCSSError'][0];
+        $cssTextErrors = 'is-invalid';
+      }
+    }
+
+
+
+
 		if (!empty($this->inputArray)) { foreach ($this->inputArray AS $key => $value) { if (isset($theme->$key)) { $theme->$key = $value; } } }
 		
 		$h = "<div id=\"perihelionThemeForm\">";
@@ -41,13 +63,21 @@ class ThemeView {
 											<div class="form-group row">
 												<label class="col-sm-2 col-form-label" for="themeName">' . Lang::getLang('themeName') . '</label>
 												<div class="col-sm-4">
-													<input type="text" id="themeName" name="themeName" class="form-control" placeholder="Theme Name" value="' . $theme->themeName . '"' . ($action=='update'?' readonly="readonly"':'') . '>
+													<input type="text" id="themeName" name="themeName" class="form-control ' . $nameInputError . ' " placeholder="Theme Name" value="' . $theme->themeName . '"' . ($action=='update'?' readonly="readonly"':'') . '>
+													<div class="invalid-feedback">
+                           ' . $name_error . '
+                           </div>
 												</div>
 											</div>
 
 											<div class="form-group row">
 												<label class="col-sm-2 col-form-label" for="themeCss">' . Lang::getLang('css') . '</label>
-												<div class="col-sm-10"><textarea class="form-control" rows="25" id="themeCss" name="themeCss" placeholder="valid CSS only">' . $theme->themeCss . '</textarea></div>
+												<div class="col-sm-10">
+												<textarea class="form-control  ' . $cssTextErrors . ' " rows="25" id="themeCss" name="themeCss" placeholder="valid CSS only">' . $theme->themeCss . '</textarea>
+												　<div class="invalid-feedback">
+                           ' . $css_error . '
+                          </div>
+												</div>
 											</div>
 
 											<!--

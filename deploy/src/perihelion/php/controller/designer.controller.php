@@ -124,7 +124,14 @@ class DesignerController {
 				// if (!isset($this->inputArray['xxxxxxx'])) { $theme->xxxxxxx = 0; }
 				// $this->errorArray = Contract::validate($this->inputArray, 'create');
 
-				if (empty($this->errorArray)) {
+        // Set Errors
+        if (empty($this->inputArray['themeName'])){
+          $this->errorArray['themeNameError'][] = 'Please Enter a Theme Name';
+        }
+        if (empty($this->inputArray['themeCss'])){
+          $this->errorArray['themeCSSError'][] = 'Please Enter Valid CSS';
+        }
+				elseif (empty($this->errorArray)) {
 
 					// please explicitly allow field to be updated here
 					foreach ($this->inputArray AS $property => $value) {
