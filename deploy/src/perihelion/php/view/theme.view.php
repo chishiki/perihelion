@@ -120,10 +120,10 @@ class ThemeView {
 													$h .= "<td class=\"text-center\">" . $theme->themeCreationDateTime . "</td>";
 													$h .= "<td class=\"text-center\">";
 														if ($themeID == $site->themeID) {
-															$h .= "<span class=\"fas fa-check\" style=\"color:#000;\"></span>";
+															$h .= "<span class=\"fas fa-check\" style=\"color:#000;\"></span> Current";
 														} else {
 															$select_theme = '/' . Lang::languageUrlPrefix() . 'designer/themes/select/' . $themeID . '/';
-															$h .= "<a class=\"btn btn-secondary btn-sm\" href=\"" . $select_theme . "\"><span class=\"fas fa-check\" style=\"color:#fff;\"></span></a>";
+															$h .= "<a class=\"btn btn-secondary btn-sm\" href=\"" . $select_theme . "\"><span class=\"\" style=\"color:#fff;\"></span> Select</a>";
 														}
 													$h .= "</td>";
 													$h .= "<td class=\"text-center\"><a class=\"btn btn-secondary btn-sm\" href=\"/" . Lang::languageUrlPrefix() . "designer/themes/update/" . $themeID . "/\">" . Lang::getLang('update') . "</a></td>";
