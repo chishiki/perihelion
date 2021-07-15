@@ -5,6 +5,7 @@ class Controller {
 	private $urlArray;
 	private $inputArray;
 	private $moduleArray;
+	private $jsonStr;
 	
 	public function __construct() {
 		
@@ -40,6 +41,9 @@ class Controller {
 		}
 
 		if (!empty($_POST)) { $this->inputArray = $_POST; } else { $this->inputArray = array(); }
+
+		$jsonStr = file_get_contents('php://input');
+		$this->jsonStr = (!empty($jsonStr)) ? $jsonStr : null;
 
 		$this->moduleArray = array();
 		$modulePaths = array_filter(glob($_SERVER['DOCUMENT_ROOT'] . '/satellites/*'), 'is_dir');
@@ -177,7 +181,7 @@ class Controller {
 				    foreach ($this->moduleArray AS $moduleName) {
 				        if ($this->urlArray[1] == $moduleName) {
 							$apiClass = ModuleUtilities::moduleToClassName($moduleName, 'API');
-				            $api = new $apiClass($this->urlArray,$this->inputArray);
+				            $api = new $apiClass($this->urlArray,$this->inputArray, $this->jsonStr);
 				        }
 				    }
 					$response = $api->response();
