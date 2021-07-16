@@ -840,6 +840,5 @@ REPLACE INTO `perihelion_Lang` VALUES
 ('contentClassesFixedWidth', 'Fixed Width', 0, '固定幅', 0, @now),
 ('contentClassesRow', 'Rows', 0, '行', 0, @now),
 ('contentClassesCol', 'Columns', 0, '列', 0, @now),
-('usingWysiwygMayChangeDisplayFormat', 'Please note that using the WYSIWYG may change the actual display format.', 0, 'WYSIWYGを使用すると実際に表示するフォーマットが変わってしまう場合がある事にご注意ください。', 0, @now);
-
-
+('usingWysiwygMayChangeDisplayFormat', 'Please note that using the WYSIWYG may change the actual display format.', 0, 'WYSIWYGを使用すると実際に表示するフォーマットが変わってしまう場合がある事にご注意ください。', 0, @now),
+('select', 'Select', 0, '選択する', 0, @now);
