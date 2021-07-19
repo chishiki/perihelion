@@ -86,6 +86,16 @@ class NavBarView {
 
 					}
 
+					foreach ($this->moduleArray AS $moduleName) {
+						$moduleNavbarItemsView = ModuleUtilities::moduleToClassName($moduleName, 'NavbarItemsView');
+						if (class_exists($moduleNavbarItemsView)) {
+							$navbarItems = new $moduleNavbarItemsView();
+							if (method_exists($navbarItems, 'itemsLeft')) {
+								$h .= $navbarItems->itemsLeft();
+							}
+						}
+					}
+
 					if (Auth::isLoggedIn()) { $h .= self::masterMenu(); }
 		
 				$h .= '</ul>';
@@ -105,15 +115,22 @@ class NavBarView {
 				}
 				*/
 
-				$h .= '
-					<ul class="navbar-nav ml-auto">
-						<li id="navbar_language_link" class="nav-item">
-							<a class="nav-link" href="'. Lang::switchLanguageURL() . '">' . ($_SESSION['lang']=='ja'?'English':'日本語') . '</a>
-						</li>
-					</ul>
-				';
+				$h .= '<ul class="navbar-nav ml-auto">';
+					foreach ($this->moduleArray AS $moduleName) {
+						$moduleNavbarItemsView = ModuleUtilities::moduleToClassName($moduleName, 'NavbarItemsView');
+						if (class_exists($moduleNavbarItemsView)) {
+							$navbarItems = new $moduleNavbarItemsView();
+							if (method_exists($navbarItems, 'itemsRight')) {
+								$h .= $navbarItems->itemsRight();
+							}
+						}
+					}
+					$h .= '<li id="navbar_language_link" class="nav-item">';
+						$h .= '<a class="nav-link" href="'. Lang::switchLanguageURL() . '">' . ($_SESSION['lang']=='ja'?'English':'日本語') . '</a>';
+					$h .= '</li>';
+				$h .= '</ul>';
 
-    		$h .= '</div>';
+			$h .= '</div>';
 		$h .= '</nav>';
 
 		return $h;
