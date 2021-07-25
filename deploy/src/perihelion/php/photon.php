@@ -7,6 +7,9 @@ if (file_exists($awsAutoloaderPath)) { require($_SERVER['DOCUMENT_ROOT'] . '/per
 // https://docs.aws.amazon.com/sdk-for-php/v3/developer-guide/welcome.html
 // https://github.com/aws/aws-sdk-php
 	
+require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/controller/interface/state.controller.interface.php');
+require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/controller/interface/view.controller.interface.php');
+
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/controller/_perihelion.controller.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/controller/_state.controller.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/controller/_view.controller.php');
