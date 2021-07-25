@@ -184,7 +184,7 @@ class PageView {
 		foreach ($this->moduleArray as $moduleName) {
 			$navbarViewClass = ModuleUtilities::moduleToClassName($moduleName, 'NavbarView');
 			if (class_exists($navbarViewClass)) {
-				$navbar = new $navbarViewClass($this->urlArray, $this->inputArray, $this->inputArray);
+				$navbar = new $navbarViewClass($this->urlArray, $this->inputArray, $this->moduleArray, $this->errorArray);
 				return $navbar->navbar();
 			}
 		}
