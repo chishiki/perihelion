@@ -40,9 +40,10 @@ class Mail extends ORM {
 
 		$mailHeader = "From: $mailSender\n";
 		$mailHeader .= "Reply-To: $mailSender\n";
+		$mailHeader .= "MIME-Version: 1.0\n";
+		$mailHeader .= "Content-Type: text/plain; charset=UTF-8\n";
 			
 		if ($mailType == 'html') {
-			$mailHeader .= "MIME-Version: 1.0\n";
 			$mailHeader .= "Content-Type: text/html; charset=UTF-8\n";
 		}
 
