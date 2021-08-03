@@ -51,7 +51,7 @@ class Mail extends ORM {
 		
 		
 		
-		if (mail($mailRecipient,$mailSubject,$mailMessage,$mailHeader)) {
+		if (mail($mailRecipient,$mailSubject,$mailMessage,$mailHeader, '-f ' . $mailSender)) {
 			
 			// SAVE MAIL TO DB
 			$mail = new Mail();
