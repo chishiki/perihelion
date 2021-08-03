@@ -57,6 +57,29 @@ div.perihelion-footer p {
 	height:200px;
 }
 
+/* === START SPINNER === */
+
+#spin_doctor {
+	position:fixed;
+	top:0%;
+	left:0%;
+	width:100%;
+	height:100%;
+	background:white;
+	opacity:.5;
+}
+
+#spin_doctor .spinner-inner {
+	padding-top:20%;
+}
+
+#spin_doctor .spinner-border {
+	width:5rem;
+	height:5rem;
+}
+
+/* === END SPINNER === */
+
 /* >= 576px (sm) */
 @media only screen and (min-width: 576px) {
 
