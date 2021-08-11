@@ -137,7 +137,7 @@ class NavBarView {
 
 	}
 	
-	public static function masterMenu() {
+	public static function masterMenu($arg = null) {
 
 		$lup = Lang::languageUrlPrefix();
 		$role = Auth::getUserRole();
@@ -148,6 +148,10 @@ class NavBarView {
 		if (in_array($role,Config::read('manager.menu.access'))) {
 			$canViewCoreManagerMenus = true;
 			$dropdownAnchor = 'navbar' . ucfirst($role);
+		}
+
+		if (isset($arg['dropdown-anchor'])) {
+			$dropdownAnchor = $arg['dropdown-anchor'];
 		}
 
 		$h = "<li class=\"nav-item dropdown\">\n";
@@ -161,7 +165,7 @@ class NavBarView {
     		    $h .= ' aria-expanded="false"';
     		$h .= '>' . Lang::getLang($dropdownAnchor) . '</a>';
 
-			$h .= '<div class="dropdown-menu" aria-labelledby="navbarDropdownMasterMenu">';
+			$h .= '<div class="dropdown-menu' . (isset($arg['dropdown-menu'])?' '.$arg['dropdown-menu']:'') . '" aria-labelledby="navbarDropdownMasterMenu">';
 
 				if ($canViewCoreManagerMenus) {
 
