@@ -11,7 +11,7 @@
 !/data/updates/
 
 # VENDOR
-
+/vendor/*
 /deploy/src/perihelion/vendor/*
 !/deploy/src/perihelion/vendor/readme.md
 
