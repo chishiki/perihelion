@@ -63,7 +63,7 @@ class Audit {
 		
 	}
 
-	public static function getAuditTrailArray($siteID, $auditUserID, $auditObject, $startDate, $endDate, $limit = '100') { // admin|manager
+	public static function getAuditTrailArray($siteID, $auditUserID, $auditObject, $startDate, $endDate, $limit = '250') { // admin|manager
 
 		$auditTrailArray = array();
 		

@@ -296,7 +296,7 @@ final class NewFileList {
 		}
 
 		$query = 'SELECT ' . $selector . ' FROM perihelion_File WHERE ' . implode(' AND ',$where) . ' ORDER BY ' . implode(', ',$orderBy);
-		if ($arg->limit) { $query .= ' LIMIT ' . $arg->limit . ($arg->offset?', '.$arg->offset:''); }
+		if ($arg->limit) { $query .= ' LIMIT ' . ($arg->offset?$arg->offset.', ':'') . $arg->limit; }
 
 		$nucleus = Nucleus::getInstance();
 		$statement = $nucleus->database->prepare($query);

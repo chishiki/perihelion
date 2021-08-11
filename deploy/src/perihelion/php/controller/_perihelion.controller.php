@@ -5,6 +5,7 @@ class Controller {
 	private $urlArray;
 	private $inputArray;
 	private $moduleArray;
+	private $jsonStr;
 	
 	public function __construct() {
 		
@@ -40,6 +41,9 @@ class Controller {
 		}
 
 		if (!empty($_POST)) { $this->inputArray = $_POST; } else { $this->inputArray = array(); }
+
+		$jsonStr = file_get_contents('php://input');
+		$this->jsonStr = (!empty($jsonStr)) ? $jsonStr : null;
 
 		$this->moduleArray = array();
 		$modulePaths = array_filter(glob($_SERVER['DOCUMENT_ROOT'] . '/satellites/*'), 'is_dir');
@@ -177,7 +181,7 @@ class Controller {
 				    foreach ($this->moduleArray AS $moduleName) {
 				        if ($this->urlArray[1] == $moduleName) {
 							$apiClass = ModuleUtilities::moduleToClassName($moduleName, 'API');
-				            $api = new $apiClass($this->urlArray,$this->inputArray);
+				            $api = new $apiClass($this->urlArray,$this->inputArray, $this->jsonStr);
 				        }
 				    }
 					$response = $api->response();
@@ -208,7 +212,7 @@ class Controller {
 					}
 
 					require_once Config::read('perihelion.path') . 'vendor/autoload.php';
-
+				
 					$defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
 					$fontDirs = $defaultConfig['fontDir'];
 
@@ -219,14 +223,30 @@ class Controller {
 						'fontDir' => array_merge($fontDirs, [
 							'perihelion/assets/fonts',
 						]),
-						'fontdata' => array_merge($fontData, [
-							'takao_gothic' => ['R' => 'TakaoGothic.ttf'],
-							'takao_pgothic' => ['R' => 'TakaoPGothic.ttf']
-						]),
+						'fontdata' => [
+							// Takaoフォント(Pゴシック)
+							'takao_pgothic' => [
+								'R' => 'TakaoPGothic.ttf'
+							],
+							// Takaoフォント(ゴシック)
+							'takao_gothic' => [
+								'R' => 'TakaoGothic.ttf'
+							],
+							// Takaoフォント(P明朝)
+							'takao_pmincho' => [
+								'R' => 'TakaoPMincho.ttf'
+							],
+							// Takaoフォント(明朝)
+							'takao_mincho' => [
+								'R' => 'TakaoMincho.ttf'
+							]
+						],
 						'default_font' => 'takao_pgothic',
-						'tempDir' => sys_get_temp_dir(),
+						'tempDir' => sys_get_temp_dir()
 					]);
-
+					$mpdf->autoScriptToLang = true;
+					$mpdf->autoLangToFont = true;
+					
 					$stylesheet = file_get_contents(Config::read('web.root') . 'perihelion/assets/css/print.css');
 					$mpdf->WriteHTML($stylesheet,\Mpdf\HTMLParserMode::HEADER_CSS);
 					$mpdf->WriteHTML($doc);
