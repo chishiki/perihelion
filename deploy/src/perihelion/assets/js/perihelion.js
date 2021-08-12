@@ -187,6 +187,32 @@ $(window).on('load', function() {
 
 		});
 
+		$(".clickable-row").click(function() {
+			window.location = $(this).data("url");
+		});
+
+		$('[data-toggle="tooltip"]').tooltip({ boundary: 'window' });
+
+		/* === START SPINNER === */
+
+		$('form').submit(function(e){
+			if( $(this).hasClass('form-submitted') ){
+				e.preventDefault();
+				return;
+			}
+			$(this).addClass('form-submitted');
+			$('button[type=submit]', this).addClass('disabled');
+			displaySpinner();
+		});
+
+		var displaySpinner = function() {
+			var spinDoctor = '<div id="spin_doctor"><div class="d-flex justify-content-center spinner-inner">'
+				+ '<div class="spinner-border" role="status"></div></div></div>';
+			$('body').append(spinDoctor);
+		}
+
+		/* === END SPINNER === */
+
 		console.log("perihelion.js has loaded");
 
 });

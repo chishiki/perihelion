@@ -1,6 +1,6 @@
 <?php
 
-class ViewController {
+final class ViewController implements ViewControllerInterface {
 	
 	private $urlArray;
 	private $inputArray;

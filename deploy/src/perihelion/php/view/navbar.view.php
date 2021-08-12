@@ -86,6 +86,16 @@ class NavBarView {
 
 					}
 
+					foreach ($this->moduleArray AS $moduleName) {
+						$moduleNavbarItemsView = ModuleUtilities::moduleToClassName($moduleName, 'NavbarItemsView');
+						if (class_exists($moduleNavbarItemsView)) {
+							$navbarItems = new $moduleNavbarItemsView();
+							if (method_exists($navbarItems, 'itemsLeft')) {
+								$h .= $navbarItems->itemsLeft();
+							}
+						}
+					}
+
 					if (Auth::isLoggedIn()) { $h .= self::masterMenu(); }
 		
 				$h .= '</ul>';
@@ -105,22 +115,29 @@ class NavBarView {
 				}
 				*/
 
-				$h .= '
-					<ul class="navbar-nav ml-auto">
-						<li id="navbar_language_link" class="nav-item">
-							<a class="nav-link" href="'. Lang::switchLanguageURL() . '">' . ($_SESSION['lang']=='ja'?'English':'日本語') . '</a>
-						</li>
-					</ul>
-				';
+				$h .= '<ul class="navbar-nav ml-auto">';
+					foreach ($this->moduleArray AS $moduleName) {
+						$moduleNavbarItemsView = ModuleUtilities::moduleToClassName($moduleName, 'NavbarItemsView');
+						if (class_exists($moduleNavbarItemsView)) {
+							$navbarItems = new $moduleNavbarItemsView();
+							if (method_exists($navbarItems, 'itemsRight')) {
+								$h .= $navbarItems->itemsRight();
+							}
+						}
+					}
+					$h .= '<li id="navbar_language_link" class="nav-item">';
+						$h .= '<a class="nav-link" href="'. Lang::switchLanguageURL() . '">' . ($_SESSION['lang']=='ja'?'English':'日本語') . '</a>';
+					$h .= '</li>';
+				$h .= '</ul>';
 
-    		$h .= '</div>';
+			$h .= '</div>';
 		$h .= '</nav>';
 
 		return $h;
 
 	}
 	
-	public static function masterMenu() {
+	public static function masterMenu($arg = null) {
 
 		$lup = Lang::languageUrlPrefix();
 		$role = Auth::getUserRole();
@@ -131,6 +148,10 @@ class NavBarView {
 		if (in_array($role,Config::read('manager.menu.access'))) {
 			$canViewCoreManagerMenus = true;
 			$dropdownAnchor = 'navbar' . ucfirst($role);
+		}
+
+		if (isset($arg['dropdown-anchor'])) {
+			$dropdownAnchor = $arg['dropdown-anchor'];
 		}
 
 		$h = "<li class=\"nav-item dropdown\">\n";
@@ -144,7 +165,7 @@ class NavBarView {
     		    $h .= ' aria-expanded="false"';
     		$h .= '>' . Lang::getLang($dropdownAnchor) . '</a>';
 
-			$h .= '<div class="dropdown-menu" aria-labelledby="navbarDropdownMasterMenu">';
+			$h .= '<div class="dropdown-menu' . (isset($arg['dropdown-menu'])?' '.$arg['dropdown-menu']:'') . '" aria-labelledby="navbarDropdownMasterMenu">';
 
 				if ($canViewCoreManagerMenus) {
 
