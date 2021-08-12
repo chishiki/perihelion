@@ -841,9 +841,7 @@ REPLACE INTO `perihelion_Lang` VALUES
 ('contentClassesRow', 'Rows', 0, '行', 0, @now),
 ('contentClassesCol', 'Columns', 0, '列', 0, @now),
 ('usingWysiwygMayChangeDisplayFormat', 'Please note that using the WYSIWYG may change the actual display format.', 0, 'WYSIWYGを使用すると実際に表示するフォーマットが変わってしまう場合がある事にご注意ください。', 0, @now),
+('select', 'Select', 0, '選択する', 0, @now);
 ('menuItemDisabled', 'Disabled', 0, '無効', 0, @now),
 ('menuItemClasses', 'Classes', 0, 'クラス名', 0, @now);
-
 -- ('xxxxxxx', 'xxxxxxx', 0, 'xxxxxxx', 0, @now),
-
-
