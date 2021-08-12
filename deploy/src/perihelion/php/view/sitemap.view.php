@@ -7,7 +7,7 @@ class SitemapXmlView {
 	public function __construct() {
 
 		$site = new Site($_SESSION['siteID']);
-		$siteURL = $site->siteURL;
+		$siteURL = 'https://' . $site->siteURL;
 			
 		$this->xml = '<?xml version="1.0" encoding="UTF-8"?>';
 		$this->xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
@@ -16,7 +16,7 @@ class SitemapXmlView {
 			$this->xml .= '<url><loc>' . $siteURL . '/</loc></url>';
 			
 			// PAGES
-			$publishedPages = Page::getPublishedPageArray();
+			$publishedPages = (new Page)->getPublishedPageArray();
 			foreach ($publishedPages AS $value) { $this->xml .= '<url><loc>' . $siteURL . '/' . $value . '/</loc></url>'; }
 
 			// GENERAL
