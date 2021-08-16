@@ -52,6 +52,8 @@ class Controller {
 		    $this->moduleArray[] = substr($modulePath, strrpos($modulePath, '/') + 1);
 		}
 
+		require_once Config::read('perihelion.path') . 'vendor/autoload.php';
+
 	}
 
 	public function orbit() {
