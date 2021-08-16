@@ -29,6 +29,7 @@
     "php": ">=7.4",
     "aws/aws-sdk-php": "3.*",
     "mpdf/mpdf": "8.*",
-    "geoip2/geoip2": "2.*"
+    "geoip2/geoip2": "2.*",
+    "twilio/sdk": "6.*"
   }
 }
