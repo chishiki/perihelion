@@ -52,6 +52,7 @@
 	// Twilio
 	Config::write('account.sid', 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
 	Config::write('auth.token', 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+	Config::write('phone.number', '+00000000000'); // +10000000000
 	Config::write('phone.number.sid', 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
 
 	// Design Classes
