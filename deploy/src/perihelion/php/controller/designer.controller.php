@@ -126,10 +126,12 @@ class DesignerController {
 
         // Set Errors
         if (empty($this->inputArray['themeName'])){
-          $this->errorArray['themeNameError'][] = 'Please Enter a Theme Name';
+          // テーマ名を入力してください Please Enter a Theme Name pleaseEnterThemeName
+          $this->errorArray['themeNameError'][] = Lang::getLang('pleaseEnterThemeName');
         }
         if (empty($this->inputArray['themeCss'])){
-          $this->errorArray['themeCSSError'][] = 'Please Enter Valid CSS';
+          // 有効なCSSを入力してください Please Enter Valid CSS pleaseEnterValidCSS
+          $this->errorArray['themeCSSError'][] = Lang::getLang('pleaseEnterValidCSS');
         }
 				elseif (empty($this->errorArray)) {
 
@@ -181,11 +183,16 @@ class DesignerController {
 				// validation
 				if ($themeID != $this->inputArray['themeID']) { $this->errorArray['themeID'][] = 'themeID mismatch'; }
 				if ($theme->siteID != $_SESSION['siteID']) { $this->errorArray['siteID'][] = 'siteID mismatch'; }
-				
-				if (empty($this->errorArray)) {
-					
-					
-					
+
+        // Set Errors only need to check CSS as theme name cant be updated
+        // todo: Validate CSS input
+        if (empty($this->inputArray['themeCss'])){
+          // 有効なCSSを入力してください Please Enter Valid CSS pleaseEnterValidCSS
+          $this->errorArray['themeCSSError'][] = Lang::getLang('pleaseEnterValidCSS');
+        }
+
+				elseif (empty($this->errorArray)) {
+
 					// please explicitly allow field to be updated here
 					foreach ($this->inputArray AS $property => $value) {
 						if (isset($theme->$property)) {

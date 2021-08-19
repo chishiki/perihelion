@@ -71,9 +71,10 @@ class ThemeView {
 											</div>
 
 											<div class="form-group row">
-												<label class="col-sm-2 col-form-label" for="themeCss">' . Lang::getLang('css') . '</label>
+												<label class="col-sm-2 col-form-label" for="themeCss">' . Lang::getLang('CSS') . '</label>
 												<div class="col-sm-10">
-												<textarea class="form-control  ' . $cssTextErrors . ' " rows="25" id="themeCss" name="themeCss" placeholder="valid CSS only">' . $theme->themeCss . '</textarea>
+												<!-- valid CSS only 有効なCSSのみ validCSSOnly --> 
+												<textarea class="form-control  ' . $cssTextErrors . ' " rows="25" id="themeCss" name="themeCss" placeholder="' . Lang::getLang('validCSSOnly') . '">' . $theme->themeCss . '</textarea>
 												　<div class="invalid-feedback">
                            ' . $css_error . '
                           </div>
@@ -150,7 +151,7 @@ class ThemeView {
 													$h .= "<td class=\"text-center\">" . $theme->themeCreationDateTime . "</td>";
 													$h .= "<td class=\"text-center\">";
 														if ($themeID == $site->themeID) {
-															$h .= "<span class=\"fas fa-check\" style=\"color:#000;\"></span>" . Lang::getLang('selectedTheme') . " "; 
+															$h .= "<span class=\"fas fa-check\" style=\"color:#000;\"> </span> " . Lang::getLang('selectedTheme');
 														} else {
 															$select_theme = '/' . Lang::languageUrlPrefix() . 'designer/themes/select/' . $themeID . '/';
 															$h .= "<a class=\"btn btn-secondary btn-sm\" href=\"" . $select_theme . "\"><span class=\"\" style=\"color:#fff;\"></span> " . Lang::getLang('select') . "</a>";
