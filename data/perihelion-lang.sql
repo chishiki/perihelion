@@ -843,6 +843,9 @@ REPLACE INTO `perihelion_Lang` VALUES
 ('usingWysiwygMayChangeDisplayFormat', 'Please note that using the WYSIWYG may change the actual display format.', 0, 'WYSIWYGを使用すると実際に表示するフォーマットが変わってしまう場合がある事にご注意ください。', 0, @now),
 ('select', 'Select', 0, '選択する', 0, @now);
 ('menuItemDisabled', 'Disabled', 0, '無効', 0, @now),
-('menuItemClasses', 'Classes', 0, 'クラス名', 0, @now);
+('menuItemClasses', 'Classes', 0, 'クラス名', 0, @now),
+('pleaseEnterValidCSS', 'Please Enter Valid CSS', 0, '有効なCSSを入力してください', 0, @now),
+('validCSSOnly', 'valid CSS only', 0, '有効なCSSのみ', 0, @now),
+('pleaseEnterThemeName', 'Please Enter a Theme Name', 0, 'テーマ名を入力してください', 0, @now);
 -- ('xxxxxxx', 'xxxxxxx', 0, 'xxxxxxx', 0, @now),
 

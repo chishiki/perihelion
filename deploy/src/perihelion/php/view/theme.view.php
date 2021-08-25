@@ -22,14 +22,13 @@ class ThemeView {
 			$actionURL = '/' . Lang::languageUrlPrefix() . 'designer/themes/create/';
 		}
 
-		/* Maybe this Block could go in the constructor */
+		/* Set Errors */
     $css_error = null;
     $name_error = null;
     $nameInputError = null;
     $cssTextErrors = null;
 
     if (!empty($errorArray)) {
-      //print_r($errorArray);
       if(isset($errorArray['themeNameError'])) {
         $name_error = $errorArray['themeNameError'][0];
         $nameInputError = 'is-invalid';
@@ -39,9 +38,6 @@ class ThemeView {
         $cssTextErrors = 'is-invalid';
       }
     }
-
-
-
 
 		if (!empty($this->inputArray)) { foreach ($this->inputArray AS $key => $value) { if (isset($theme->$key)) { $theme->$key = $value; } } }
 		
@@ -69,19 +65,16 @@ class ThemeView {
                            </div>
 												</div>
 											</div>
-
 											<div class="form-group row">
 												<label class="col-sm-2 col-form-label" for="themeCss">' . Lang::getLang('CSS') . '</label>
 												<div class="col-sm-10">
-												<!-- valid CSS only 有効なCSSのみ validCSSOnly --> 
 												<textarea class="form-control  ' . $cssTextErrors . ' " rows="25" id="themeCss" name="themeCss" placeholder="' . Lang::getLang('validCSSOnly') . '">' . $theme->themeCss . '</textarea>
-												　<div class="invalid-feedback">
+												<div class="invalid-feedback">
                            ' . $css_error . '
                           </div>
 												</div>
 											</div>
-
-											<!--
+											<!-- todo: remove this code
 											<div class="form-group row">
 												<label class="col-sm-2 col-form-label" for="imageToBeUploaded">' . Lang::getLang('images') . '</label>
 												<div class="col-sm-10"><input type="file" name="imageToBeUploaded" value="addAnImage"></div>
@@ -91,7 +84,6 @@ class ThemeView {
 												<div class="col-sm-10"><input type="file" name="faviconToBeUploaded" value="uploadFavicon"></div>
 											</div>
 											-->
-
 											<div class="form-group row">
 												<div class="col-sm-12 text-right"><button type="submit" class="btn btn-primary" name="submit">' . Lang::getLang($action) . '</button></div>
 											</div>

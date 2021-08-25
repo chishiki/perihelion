@@ -120,17 +120,12 @@ class DesignerController {
 			if (!empty($this->inputArray)) {
 				
 				$theme = new Theme();
-				
-				// if (!isset($this->inputArray['xxxxxxx'])) { $theme->xxxxxxx = 0; }
-				// $this->errorArray = Contract::validate($this->inputArray, 'create');
 
         // Set Errors
         if (empty($this->inputArray['themeName'])){
-          // テーマ名を入力してください Please Enter a Theme Name pleaseEnterThemeName
           $this->errorArray['themeNameError'][] = Lang::getLang('pleaseEnterThemeName');
         }
         if (empty($this->inputArray['themeCss'])){
-          // 有効なCSSを入力してください Please Enter Valid CSS pleaseEnterValidCSS
           $this->errorArray['themeCSSError'][] = Lang::getLang('pleaseEnterValidCSS');
         }
 				elseif (empty($this->errorArray)) {
@@ -176,9 +171,6 @@ class DesignerController {
 			if (!empty($this->inputArray)) {
 				
 				$theme = new Theme($themeID);
-				
-				// booleans
-				// if (!isset($this->inputArray['entryPublished'])) { $theme->entryPublished = 0; }
 
 				// validation
 				if ($themeID != $this->inputArray['themeID']) { $this->errorArray['themeID'][] = 'themeID mismatch'; }
@@ -187,7 +179,6 @@ class DesignerController {
         // Set Errors only need to check CSS as theme name cant be updated
         // todo: Validate CSS input
         if (empty($this->inputArray['themeCss'])){
-          // 有効なCSSを入力してください Please Enter Valid CSS pleaseEnterValidCSS
           $this->errorArray['themeCSSError'][] = Lang::getLang('pleaseEnterValidCSS');
         }
 
