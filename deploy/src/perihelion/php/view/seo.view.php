@@ -31,7 +31,7 @@ class SeoView {
 					$h .= '<div class="col-sm-12">';
 
 							$h .= '<div class="card" >';
-								$h .= '<div class="card-header"><div class="card-title">' . Lang::getLang('seo') . '</div></div>';
+								$h .= '<div class="card-header"><div class="card-title"><h3>' . Lang::getLang('seo') . '</h3></div></div>';
 								$h .= '<div class="card-body">';
 
 									$h .= '<form method="post" action="' . $formURL . '">';
@@ -129,9 +129,9 @@ class SeoView {
 							$h .= '<div class="card" >';
 
 								$h .= '<div class="card-header">';
-									$h .= '<div class="card-title">';
+									$h .= '<div class="card-title"><h3>';
 										$h .= Lang::getLang('seo') . ' <a class="btn btn-secondary btn-sm float-right" href="' . $actionURL . '"><span class="fas fa-plus"></span></a>';
-									$h .= '</div>';
+									$h .= '</h3></div>';
 								$h .= '</div>';
 
 								$h .= '<div class="card-body">';

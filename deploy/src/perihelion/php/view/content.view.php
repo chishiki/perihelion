@@ -60,11 +60,11 @@ final class ContentView {
 									$h .= '<div class="card-title">';
 										$h .= '<a href="/' . Lang::prefix() . 'designer/content/">' . Lang::getLang('contentList') . '</a> &rArr; ';
 										if ($action == 'update') {
-											$h .= Lang::getLang('updateContent') . '  &rArr; ' . $content->title();
+											$h .= Lang::getLang('updateContent') . '<h3>' . $content->title();
 											if ($content->entrySeoURL != '') {
-												$h .= '<a class="btn btn-secondary btn-sm float-right" href="/' . Lang::prefix() . $content->entrySeoURL . '/" target="_blank"><span class="fas fa-eye' . ($content->entryPublished?"":"-slash") . '"></span></a>';
+												$h .= '<a class="btn btn-secondary btn-sm float-right" href="/' . Lang::prefix() . $content->entrySeoURL . '/" target="_blank"><span class="fas fa-eye' . ($content->entryPublished?"":"-slash") . '"></span></a></h3>';
 											}
-										} else { $h .= Lang::getLang('createContent'); }
+										} else { $h .= '<h3>' . Lang::getLang('createContent') . '</h3>'; }
 									$h .= '</div>';
 								$h .= '</div>';
 								$h .= '<div class="card-body">';

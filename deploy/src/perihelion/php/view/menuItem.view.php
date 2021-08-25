@@ -36,7 +36,7 @@ class MenuItemView {
 						$h .= "<div class=\"card\" >";
 
 							$h .= "<div class=\"card-header perihelionMenuItemPanelHeading\">";
-								$h .= "<div class=\"card-title\">" . Lang::getLang($panelTitle) . "</div>";
+								$h .= "<div class=\"card-title\"><h3>" . Lang::getLang($panelTitle) . "</h3></div>";
 							$h .= "</div>";
 
 							$h .= "<div class=\"card-body\">";

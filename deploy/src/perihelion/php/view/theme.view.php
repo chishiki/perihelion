@@ -29,7 +29,7 @@ class ThemeView {
 					$h .= "<div class=\"col-sm-12\">";
 
 							$h .= "<div class=\"card\" >";
-								$h .= "<div class=\"card-header\"><div class=\"card-title\">" . Lang::getLang('theme') . "</div></div>";
+								$h .= "<div class=\"card-header\"><div class=\"card-title\"><h3>" . Lang::getLang('theme') . "</h3></div></div>";
 								$h .= "<div class=\"card-body\">";
 
 									$h .= '
@@ -93,8 +93,9 @@ class ThemeView {
 							$h .= "<div class=\"card\" >";
 
 								$h .= "<div class=\"card-header\">";
-									$h .= "<div class=\"card-title\">";
-										$h .= Lang::getLang('themes') . " <a class=\"btn btn-secondary btn-sm float-right\" href=\"" . $actionURL . "\"><span class=\"fas fa-plus\"></span></a>";
+									$h .= "<div class=\"card-title\"><h3>";
+										$h .= Lang::getLang('themes') . "<a class=\"btn btn-secondary btn-sm float-right\" href=\"" .
+											$actionURL . "\"><span class=\"fas fa-plus\"></span></a></h3>";
 									$h .= "</div>";
 								$h .= "</div>";
 							

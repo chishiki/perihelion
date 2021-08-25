@@ -24,7 +24,7 @@ class TileView {
 					$h .= "<div class=\"col-sm-12\">";
 
 							$h .= "<div class=\"card\" >";
-								$h .= "<div class=\"card-header\"><div class=\"card-title\">" . Lang::getLang('tile') . "</div></div>";
+								$h .= "<div class=\"card-header\"><div class=\"card-title\"><h3>" . Lang::getLang('tile') . "</h3></div></div>";
 								$h .= "<div class=\"card-body\">";
 
 
@@ -50,7 +50,7 @@ class TileView {
 					$h .= "<div class=\"col-sm-12\">";
 
 							$h .= "<div class=\"card\" >";
-								$h .= "<div class=\"card-header\"><div class=\"card-title\">" . Lang::getLang('tiles') . "</div></div>";
+								$h .= "<div class=\"card-header\"><div class=\"card-title\"><h3>" . Lang::getLang('tiles') . "</h3></div></div>";
 								$h .= "<div class=\"card-body\">";
 
 									$h .= "<div class=\"list-group\">";
