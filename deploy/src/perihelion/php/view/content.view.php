@@ -2,14 +2,14 @@
 
 final class ContentView {
 	
-	private $urlArray;
-	private $inputArray;
-	public $errorArray;
+	private $loc;
+	private $input;
+	public $errors;
 	
-	public function __construct($urlArray, $inputArray, $errorArray) {
-		$this->urlArray = $urlArray;
-		$this->inputArray = $inputArray;
-		$this->errorArray = $errorArray;
+	public function __construct($loc = array(), $input = array(), $errors = array()) {
+		$this->loc = $loc;
+		$this->input = $input;
+		$this->errors = $errors;
 	}
 
 	public function contentForm($action, $contentID = null) {
@@ -286,9 +286,12 @@ final class ContentView {
 
 	}
 
-	public function easyContent() {
-		
-		$contentID = Content::publishedContentID($this->urlArray[0]);
+	public function easyContent($contentID = null) {
+
+		if (is_null($contentID)) {
+			$contentID = Content::publishedContentID($this->urlArray[0]);
+		}
+
 		if ($contentID) {
 
 			$content = new Content($contentID);

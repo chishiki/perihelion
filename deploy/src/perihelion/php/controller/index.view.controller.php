@@ -32,18 +32,10 @@ class IndexViewController {
 			$content = new Content($site->siteIndexContentID);
 			if ($content->entryPublished) {
 
-        // These could come from the content.view content.model contentClassesArray @see ContentView
+				$view = new ContentView();
+				$h = $view->easyContent($site->siteIndexContentID);
 
-        $h .= '<div id="contentClassesArray-id" class="container" >'; // container is only needed class here
-        $h .= '<hr/>'; // todo: remove and add a space
-        $h .= '<div class="row">';
-        $h .= '<div class="col-12" >';
-        $h .= $content->content();
-        $h .= '</div>';
-        $h .= '</div>';
-        $h .= '</div>';
-
-      }
+			}
 		}
 		
 		foreach ($this->moduleArray AS $moduleName) {
