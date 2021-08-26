@@ -20,7 +20,7 @@ final class ContentView {
 
 
 		if (json_decode($content->contentClasses)) {
-			$contentClassArray = json_decode($content->contentClasses);
+			$contentClassArray = json_decode($content->contentClasses, true);
 		} else {
 			$contentClassArray = array('id' => 'id_sample', 'container' => 'container', 'row' => 'row', 'col' => 'col-12');
 		}
