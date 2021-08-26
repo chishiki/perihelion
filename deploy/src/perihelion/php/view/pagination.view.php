@@ -68,7 +68,7 @@ final class PaginationView {
 						$class = '';
 						if ($page==$currentPage) { $class = ' active'; }
 						$h .= '<li class="page-item flex-fill' . ($page==$currentPage?' active':'') . '">';
-							$h .= '<a class="page-link text-center" href="' . $lang . $linkBaseURL . $page . '/">' . $page . '</a>';
+							$h .= '<a class="page-link text-center" href="' . $linkBaseURL . $page . '/">' . $page . '</a>';
 						$h .= '</li>';
 					}
 
