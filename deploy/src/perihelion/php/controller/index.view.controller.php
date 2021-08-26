@@ -33,7 +33,7 @@ class IndexViewController {
 			if ($content->entryPublished) {
 
 				$view = new ContentView();
-				$h = $view->easyContent($site->siteIndexContentID);
+				$h .= $view->easyContent($site->siteIndexContentID);
 
 			}
 		}

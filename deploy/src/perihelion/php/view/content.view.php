@@ -18,8 +18,10 @@ final class ContentView {
 		$content = new Content($contentID);
 		$actionURL = '/' . Lang::languageUrlPrefix() . 'designer/content/' . $action . '/' . ($contentID?$contentID.'/':'');
 
-		$contentClassArray = $content->contentClasses;
-		if (!json_decode($contentClassArray)) { // returns null if json cannot be decoded (e.g. value in DB is incorrect)
+
+		if (json_decode($content->contentClasses)) {
+			$contentClassArray = json_decode($content->contentClasses);
+		} else {
 			$contentClassArray = array('id' => 'id_sample', 'container' => 'container', 'row' => 'row', 'col' => 'col-12');
 		}
 
