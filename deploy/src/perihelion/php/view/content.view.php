@@ -19,8 +19,8 @@ final class ContentView {
 		$actionURL = '/' . Lang::languageUrlPrefix() . 'designer/content/' . $action . '/' . ($contentID?$contentID.'/':'');
 
 		$contentClassArray = array('id' => 'id_sample', 'container' => 'container', 'row' => 'row', 'col' => 'col-12');
-		if (!empty($this->inputArray)) {
-			foreach ($this->inputArray AS $key => $value) {
+		if (!empty($this->input)) {
+			foreach ($this->input AS $key => $value) {
 				if (isset($content->$key)) { $content->$key = $value; }
 				if ($key == 'contentClasses') { $contentClassArray = $value; }
 			}
@@ -289,7 +289,7 @@ final class ContentView {
 	public function easyContent($contentID = null) {
 
 		if (is_null($contentID)) {
-			$contentID = Content::publishedContentID($this->urlArray[0]);
+			$contentID = Content::publishedContentID($this->loc[0]);
 		}
 
 		if ($contentID) {
