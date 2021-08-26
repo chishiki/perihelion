@@ -34,7 +34,7 @@ class MenuView {
 					$h .= "<div class=\"col-sm-12\">";
 						$h .= "<div class=\"card\" >";
 							$h .= "<div class=\"card-header\">";
-								$h .= "<div class=\"card-title\">" . Lang::getLang('menuManager') . "<a href=\"/" . Lang::prefix() . "designer/menus/item/create/\"><span class=\"fas fa-plus float-right\"></span></a></div>";
+								$h .= "<div class=\"card-title\"><h3>" . Lang::getLang('menuManager') . "<a class=\"btn btn-secondary btn-sm float-right\" href=\"/" . Lang::prefix() . "designer/menus/item/create/\"><span class=\"fas fa-plus\"></span></a></h3></div>";
 							$h .= "</div>";
 							$h .= "<div class=\"card-body\">";
 								if (!empty($topLevelItems)) {
