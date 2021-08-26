@@ -120,11 +120,15 @@ class DesignerController {
 			if (!empty($this->inputArray)) {
 				
 				$theme = new Theme();
-				
-				// if (!isset($this->inputArray['xxxxxxx'])) { $theme->xxxxxxx = 0; }
-				// $this->errorArray = Contract::validate($this->inputArray, 'create');
 
-				if (empty($this->errorArray)) {
+        // Set Errors
+        if (empty($this->inputArray['themeName'])){
+          $this->errorArray['themeNameError'][] = Lang::getLang('pleaseEnterThemeName');
+        }
+        if (empty($this->inputArray['themeCss'])){
+          $this->errorArray['themeCSSError'][] = Lang::getLang('pleaseEnterValidCSS');
+        }
+				elseif (empty($this->errorArray)) {
 
 					// please explicitly allow field to be updated here
 					foreach ($this->inputArray AS $property => $value) {
@@ -167,18 +171,19 @@ class DesignerController {
 			if (!empty($this->inputArray)) {
 				
 				$theme = new Theme($themeID);
-				
-				// booleans
-				// if (!isset($this->inputArray['entryPublished'])) { $theme->entryPublished = 0; }
 
 				// validation
 				if ($themeID != $this->inputArray['themeID']) { $this->errorArray['themeID'][] = 'themeID mismatch'; }
 				if ($theme->siteID != $_SESSION['siteID']) { $this->errorArray['siteID'][] = 'siteID mismatch'; }
-				
-				if (empty($this->errorArray)) {
-					
-					
-					
+
+        // Set Errors only need to check CSS as theme name cant be updated
+        // todo: Validate CSS input
+        if (empty($this->inputArray['themeCss'])){
+          $this->errorArray['themeCSSError'][] = Lang::getLang('pleaseEnterValidCSS');
+        }
+
+				elseif (empty($this->errorArray)) {
+
 					// please explicitly allow field to be updated here
 					foreach ($this->inputArray AS $property => $value) {
 						if (isset($theme->$property)) {

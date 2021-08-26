@@ -57,8 +57,9 @@ class DesignerViewController {
 		if ($this->urlArray[1] == 'themes') {
 
 			$view = new ThemeView($this->urlArray, $this->inputArray, $this->errorArray);
-			if ($this->urlArray[1] == 'themes' && $this->urlArray[2] == 'create') { return $nav . $view->themeForm('create'); }
-			if ($this->urlArray[1] == 'themes' && $this->urlArray[2] == 'update' && ctype_digit($this->urlArray[3])) { return $nav . $view->themeForm('update',$this->urlArray[3]); }
+			if ($this->urlArray[1] == 'themes' && $this->urlArray[2] == 'create') { return $nav . $view->themeForm('create', 0 , $this->errorArray); }
+			if ($this->urlArray[1] == 'themes' && $this->urlArray[2] == 'update' && ctype_digit($this->urlArray[3])) {
+			  return $nav . $view->themeForm('update',$this->urlArray[3], $this->errorArray); }
 			if ($this->urlArray[1] == 'themes') { return $nav . $view->themeList(); }
 			
 		}
