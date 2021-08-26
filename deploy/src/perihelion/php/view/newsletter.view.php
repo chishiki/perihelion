@@ -48,9 +48,9 @@ class NewsletterView {
 					$h .= "<div class=\"col-sm-12\">";
 						$h .= "<div class=\"card\" >";
 							$h .= "<div class=\"card-header\">";
-								$h .= "<div class=\"card-title\">";
+								$h .= "<div class=\"card-title\"><h3>";
 									$h .= Lang::getLang('subscribers');
-								$h .= "</div>";
+								$h .= "</h3></div>";
 							$h .= "</div>";
 							$h .= "<div class=\"card-body\">";
 								$h .= "<div class=\"table-responsive\">";

@@ -40,7 +40,7 @@ class SiteView {
 						$h .= "<div class=\"card\" >";
 						
 							$h .= "<div class=\"card-header\">";
-								$h .= "<div class=\"card-title clearfix\">" . Lang::getLang('settings') . "</div>";
+								$h .= "<div class=\"card-title clearfix\"><h3>" . Lang::getLang('settings') . "</h3></div>";
 							$h .= "</div>";
 							
 							$h .= "<div class=\"card-body\">";
@@ -172,7 +172,7 @@ class SiteView {
 						$h .= "<div class=\"card\" >";
 						
 							$h .= "<div class=\"card-header\">";
-								$h .= "<div class=\"card-title clearfix\">" . Lang::getLang('settings') . "</div>";
+								$h .= "<div class=\"card-title clearfix\"><h3>" . Lang::getLang('settings') . "</h3></div>";
 							$h .= "</div>";
 							
 							$h .= "<div class=\"card-body\">";
@@ -263,7 +263,7 @@ class SiteView {
 						$h .= "<div class=\"card\" >";
 						
 							$h .= "<div class=\"card-header\">";
-								$h .= "<div class=\"card-title clearfix\">" . Lang::getLang('settings') . "</div>";
+								$h .= "<div class=\"card-title clearfix\"><h3>" . Lang::getLang('settings') . "</h3></div>";
 							$h .= "</div>";
 							
 							$h .= "<div class=\"card-body\">";
@@ -358,7 +358,7 @@ class SiteView {
 						$h .= "<div class=\"card\" >";
 						
 							$h .= "<div class=\"card-header\">";
-								$h .= "<div class=\"card-title clearfix\">" . Lang::getLang('settings') . "</div>";
+								$h .= "<div class=\"card-title clearfix\"><h3>" . Lang::getLang('settings') . "</h3></div>";
 							$h .= "</div>";
 							
 							$h .= "<div class=\"card-body\">";
