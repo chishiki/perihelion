@@ -25,7 +25,7 @@ class UptimeView {
 					$h .= "<div class=\"col-sm-12\">";
 						$h .= "<div class=\"card\" >";
 							$h .= "<div class=\"card-header perihelionUptimeHeading\">";
-								$h .= "<div class=\"card-title\">" . Lang::getLang('uptime') . "</div>";
+								$h .= "<div class=\"card-title\"><h3>" . Lang::getLang('uptime') . "</h3></div>";
 							$h .= "</div>";
 							$h .= "<div class=\"card-body\">";
 								$h .= "<div class=\"row\">";

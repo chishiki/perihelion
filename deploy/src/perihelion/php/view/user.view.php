@@ -288,9 +288,9 @@ class UserView {
 						
 						$h .= '<div class="card" >';
 							$h .= '<div class="card-header">';
-								$h .= '<div class="card-title">';
+								$h .= '<div class="card-title"><h3>';
 									$h .= Lang::getLang('userManager') . '<a href="/' . $lang . 'manager/users/grant-access/"><span class="fas fa-plus float-right"></span></a>';
-								$h .= '</div>';
+								$h .= '</h3></div>';
 							$h .= '</div>';
 							$h .= '<div class="card-body">';
 								if (!empty($userArray)) {
