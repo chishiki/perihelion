@@ -106,3 +106,5 @@ INSERT INTO `perihelion_Theme` VALUES
 (1,@siteID,@now,@userID,'perihelion','/*\r\nsite-specific CSS can be placed below\r\ngenerally speaking it will override Bootstrap and Perihelion CSS\r\n*/','#000000','#ffffff');
 
 INSERT INTO `perihelion_User` VALUES (@userID,@now,@now,0,'0000-00-00 00:00:00','admin','Perihelion Admin',@adminEmail,0,0,'$2y$10$88BtCGM4/l2Ny8MY1OrfOewxuOZUtOF5U5//bbCQz6MYSwPd24xqO',@siteID,@now,@now,0,1);
+
+INSERT INTO `perihelion_UserRole` (`siteID`, `userID`, `userRole`, `lastVisit`) VALUES (@siteID, @userID, 'siteManager', @now);
