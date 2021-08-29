@@ -51,7 +51,7 @@ class ORM {
 
 		$objectVariableArray = get_object_vars($object);
 		$tableName = $tablePrefix . $objectName;
-		if (!self::tableExists($tableName)) { die("ORM::update($objectName) => A '$tableName' table does not exist OR the table is empty."); }
+		// if (!self::tableExists($tableName)) { die("ORM::update($objectName) => A '$tableName' table does not exist OR the table is empty."); }
 		
 		$scooby = array();
 		foreach ($conditions AS $condition => $value) { $scooby[] = "$condition = :$condition"; }
@@ -111,7 +111,7 @@ class ORM {
 		if (in_array($objectName,$undeletableObjects)) { die("ORM::delete() => $objectName cannot be deleted."); }
 		
 		$tableName = $tablePrefix . $objectName;
-		if (!self::tableExists($tableName)) { die('ORM::delete($object) => A table does not exist with that object name OR the table is empty.'); }
+		// if (!self::tableExists($tableName)) { die('ORM::delete($object) => A table does not exist with that object name OR the table is empty.'); }
 		
 		// create delete query
 		$scooby = array();
@@ -142,15 +142,15 @@ class ORM {
 		
 	}
 
+	/*
 	private static function tableExists($tableName) {
-	
+
 		$nucleus = Nucleus::getInstance();
-		$queryTableCheck = "SELECT 1 FROM `$tableName` LIMIT 1";
-		$statement = $nucleus->database->prepare($queryTableCheck);
-		$statement->execute();
-		if ($row = $statement->fetch()){ return true; } else { return false; }
+		$result = $nucleus->database->query("SHOW TABLES LIKE '$tableName'");
+		if ($result !== false && $result->rowCount() > 0) { return true; } else { return false; }
 		
 	}
+	*/
 
 }
 
