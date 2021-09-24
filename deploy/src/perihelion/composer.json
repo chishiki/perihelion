@@ -52,9 +52,9 @@
       "type": "package",
       "package": {
         "name": "popperjs/popper-core",
-        "version": "2.9.2",
+        "version": "1.16.1",
         "dist": {
-          "url": "https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js",
+          "url": "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js",
           "type": "file"
         }
       }
@@ -75,9 +75,8 @@
   "require": {
     "datatables/datatables": "1.*",
     "furf/jquery-ui-touch-punch": "^0.2",
-    "popperjs/popper-core": "2.*",
+    "popperjs/popper-core": "1.16.1",
     "logicify/jquery-locationpicker-plugin": "^0.1",
-
     "ckeditor/ckeditor": "4.*",
     "components/jquery": "3.*",
     "components/jqueryui": "1.*",
