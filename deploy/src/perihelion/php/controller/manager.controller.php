@@ -1,6 +1,6 @@
 <?php
 
-class ManagerController {
+final class ManagerController implements StateControllerInterface {
 
 	private $urlArray;
 	private $inputArray;

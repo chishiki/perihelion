@@ -1,6 +1,6 @@
 <?php
 
-class ContactController {
+final class ContactController implements StateControllerInterface {
 
 	private $urlArray;
 	private $inputArray;

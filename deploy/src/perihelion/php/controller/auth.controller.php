@@ -1,6 +1,6 @@
 <?php
 
-class AuthController {
+final class AuthController implements StateControllerInterface {
 
 	private $urlArray;
 	private $inputArray;

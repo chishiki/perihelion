@@ -1,6 +1,6 @@
 <?php
 
-class NewsletterController {
+final class NewsletterController implements StateControllerInterface {
 
 	private $urlArray;
 	private $inputArray;

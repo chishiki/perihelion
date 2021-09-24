@@ -1,6 +1,6 @@
 <?php
 
-class AdminController {
+final class AdminController implements StateControllerInterface {
 
 	private $urlArray;
 	private $inputArray;

@@ -1,6 +1,6 @@
 <?php
 
-class DesignerController {
+final class DesignerController implements StateControllerInterface {
 
 	private $urlArray;
 	private $inputArray;

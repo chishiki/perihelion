@@ -1,6 +1,6 @@
 <?php
 
-class EnquiryController {
+final class EnquiryController implements StateControllerInterface {
 
 	private $urlArray;
 	private $inputArray;

@@ -1,6 +1,6 @@
 <?php
 
-class ProfileController {
+final class ProfileController implements StateControllerInterface {
 
 	private $urlArray;
 	private $inputArray;
