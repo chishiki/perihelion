@@ -96,6 +96,14 @@ class PageView {
 		$h .= '<script type="text/javascript" src="/perihelion/vendor/components/jquery/jquery.min.js"></script>';
 		$h .= '<script type="text/javascript" src="/perihelion/vendor/components/jqueryui/jquery-ui.min.js"></script>';
 		$h .= '<script type="text/javascript" src="/perihelion/vendor/furf/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>';
+		if (Config::read('vue.js') === true) {
+			if (Config::read('environment') == 'prod') {
+				$h .= '<script type="text/javascript" src="/perihelion/vendor/vuejs/vue/dist/vue.min.js"></script>';
+			}
+			if (Config::read('environment') == 'dev') {
+				$h .= '<script type="text/javascript" src="/perihelion/vendor/vuejs/vue/dist/vue.js"></script>';
+			}
+		}
 		$h .= '<script type="text/javascript" src="/perihelion/vendor/desandro/masonry/dist/masonry.pkgd.min.js"></script>';
 		$h .= '<script type="text/javascript" src="/perihelion/vendor/popperjs/popper-core/popper.min.js"></script>';
 		$h .= '<script type="text/javascript" src="/perihelion/vendor/twbs/bootstrap/dist/js/bootstrap.min.js"></script>';
@@ -168,11 +176,11 @@ class PageView {
 				if (!in_array($this->urlArray[0],$integratedErrorMessages)) { $h .= $this->errors(); }
 				$h .= '<div id="perihelion_main">' . $html . '</div>';
 				$h .= $this->footer();
-				if (!in_array($this->urlArray[0],$scriptFilter)) { $h .= $this->scripts('footer'); }
-				if (Config::read('javascript.required') == true) {
-					$h .= '<noscript><h1 class="enable-javascript">' . Lang::getLang('youMustEnableJavaScript') . '</h1></noscript>';
-				}
 			$h .= '</div>';
+			if (!in_array($this->urlArray[0],$scriptFilter)) { $h .= $this->scripts('footer'); }
+			if (Config::read('javascript.required') == true) {
+				$h .= '<noscript><h1 class="enable-javascript">' . Lang::getLang('youMustEnableJavaScript') . '</h1></noscript>';
+			}
 		$h .= '</body>';
 
 		return $h;

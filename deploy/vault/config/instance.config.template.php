@@ -49,6 +49,9 @@
 	// CKEditor
 	Config::write('ckeditor', false);
 
+	// Vue.js
+	Config::write('vue.js', false);
+
 	// Twilio
 	Config::write('account.sid', 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
 	Config::write('auth.token', 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');

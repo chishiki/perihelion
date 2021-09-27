@@ -70,6 +70,18 @@
           "type": "git"
         }
       }
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "vuejs/vue",
+        "version": "2.6.14",
+        "source": {
+          "url": "https://github.com/vuejs/vue",
+          "reference": "dev",
+          "type": "git"
+        }
+      }
     }
   ],
   "require": {
@@ -81,6 +93,7 @@
     "components/jquery": "3.*",
     "components/jqueryui": "1.*",
     "desandro/masonry": "4.*",
-    "twbs/bootstrap": "4.*"
+    "twbs/bootstrap": "4.*",
+    "vuejs/vue": "2.6.*"
   }
 }
