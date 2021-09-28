@@ -98,10 +98,10 @@ class PageView {
 		$h .= '<script type="text/javascript" src="/perihelion/vendor/furf/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>';
 		if (Config::read('vue.js') === true) {
 			if (Config::read('environment') == 'prod') {
-				$h .= '<script type="text/javascript" src="/perihelion/vendor/vuejs/vue/dist/vue.min.js"></script>';
+				$h .= '<script defer type="text/javascript" src="/perihelion/vendor/vuejs/vue/dist/vue.min.js"></script>';
 			}
 			if (Config::read('environment') == 'dev') {
-				$h .= '<script type="text/javascript" src="/perihelion/vendor/vuejs/vue/dist/vue.js"></script>';
+				$h .= '<script defer type="text/javascript" src="/perihelion/vendor/vuejs/vue/dist/vue.js"></script>';
 			}
 		}
 		$h .= '<script type="text/javascript" src="/perihelion/vendor/desandro/masonry/dist/masonry.pkgd.min.js"></script>';
@@ -122,22 +122,8 @@ class PageView {
 		}
 
 		foreach ($this->moduleArray AS $moduleName) {
-
-			$versionDateTime = new DateTime();
-
-			$jsPhysicalPath = Config::read('web.root') . 'satellites/' . $moduleName . '/assets/js/*.js';
-			foreach (glob($jsPhysicalPath) AS $script) {
-
-				$jsPath = '';
-				$numberOfSlashes = substr_count($script, '/');
-				$jsPathPieces = explode('/', $script);
-				foreach ($jsPathPieces AS $k => $v) {
-					if ($k > ($numberOfSlashes - 5)) { $jsPath .= '/' . $v; }
-				}
-				$h .= '<script type="text/javascript" src="' . $jsPath . '?version=' . $versionDateTime->format('Ymd') . '"></script>';
-
-			}
-			
+			$moduleScripts = $this->moduleScripts($moduleName);
+			foreach ($moduleScripts AS $scriptInclude) { $h .= $scriptInclude; }
 		}
 
 		if (Config::read('javascript.required') == true) {
@@ -155,6 +141,34 @@ class PageView {
 
 		return $h;
 			
+	}
+
+	private function moduleScripts($moduleName) {
+
+		$moduleScripts = array();
+		$dt = new DateTime();
+		$versionDateTime = $dt->format('Ymd');
+
+		$jsPhysicalPath = Config::read('web.root') . 'satellites/' . $moduleName . '/assets/js/*.js';
+		foreach (glob($jsPhysicalPath) AS $script) {
+			$jsPath = '';
+			$numberOfSlashes = substr_count($script, '/');
+			$jsPathPieces = explode('/', $script);
+			foreach ($jsPathPieces AS $k => $v) { if ($k > ($numberOfSlashes - 5)) { $jsPath .= '/' . $v; } }
+			$moduleScripts[] = '<script type="text/javascript" src="' . $jsPath . '?version=' . $versionDateTime . '"></script>';
+		}
+
+		$jsDeferPhysicalPath = Config::read('web.root') . 'satellites/' . $moduleName . '/assets/js/defer/*.js';
+		foreach (glob($jsDeferPhysicalPath) AS $script) {
+			$jsPath = '';
+			$numberOfSlashes = substr_count($script, '/');
+			$jsPathPieces = explode('/', $script);
+			foreach ($jsPathPieces AS $k => $v) { if ($k > ($numberOfSlashes - 6)) { $jsPath .= '/' . $v; } }
+			$moduleScripts[] = '<script defer type="text/javascript" src="' . $jsPath . '?version=' . $versionDateTime . '"></script>';
+		}
+
+		return $moduleScripts;
+
 	}
 	
 	private function body($html) {
