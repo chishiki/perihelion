@@ -97,8 +97,8 @@ class ORM {
 		}
 		
 	}
-	
-	public static function delete($object, $conditions, $audit = true , $tablePrefix = 'perihelion_') {
+
+	public static function delete($object, $conditions, $audit = true , $tablePrefix = 'perihelion_', $limit = 1) { // $limit = null (no limit)
 		
 		// SAMPLE USAGE //
 		// $content = new Content(123456);
@@ -117,7 +117,9 @@ class ORM {
 		$scooby = array();
 		foreach ($conditions AS $key => $value) { $scooby[] = "$key = '$value'"; }
 		$scoobyString = implode(' AND ', $scooby);
-		$query = "DELETE FROM $tableName WHERE $scoobyString LIMIT 1";
+
+		$query = "DELETE FROM $tableName WHERE $scoobyString";
+		if (!is_null($limit)) { $query .= " LIMIT " . $limit; }
 
 		// build prepared statement
 		$nucleus = Nucleus::getInstance();
