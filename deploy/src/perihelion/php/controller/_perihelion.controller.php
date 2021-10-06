@@ -204,7 +204,11 @@ class Controller {
 							$pdfClass = ModuleUtilities::moduleToClassName($moduleName, 'PDF');
 							if (class_exists($pdfClass)) {
 								$pdf = new $pdfClass($this->urlArray,$this->inputArray);
-								$doc = $pdf->doc();
+								if (method_exists($pdfClass, 'mpdf') && !is_null($pdf->mpdf())) {
+									$mpdf = $pdf->mpdf();
+								} else {
+									$doc = $pdf->doc();
+								}
 								if (method_exists($pdfClass, 'getFileObject') && method_exists($pdfClass, 'getFileObjectID')) {
 									$fileObject = $pdf->getFileObject();
 									$fileObjectID = $pdf->getFileObjectID();
@@ -213,45 +217,12 @@ class Controller {
 						}
 					}
 
+					if (!isset($mpdf)) {
+						$pmpdf = new PerihelionMPDF($doc);
+						$mpdf = $pmpdf->mpdf($doc);
+					}
+
 					require_once Config::read('perihelion.path') . 'vendor/autoload.php';
-				
-					$defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
-					$fontDirs = $defaultConfig['fontDir'];
-
-					$defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
-					$fontData = $defaultFontConfig['fontdata'];
-
-					$mpdf = new \Mpdf\Mpdf([
-						'fontDir' => array_merge($fontDirs, [
-							'perihelion/assets/fonts',
-						]),
-						'fontdata' => [
-							// Takaoフォント(Pゴシック)
-							'takao_pgothic' => [
-								'R' => 'TakaoPGothic.ttf'
-							],
-							// Takaoフォント(ゴシック)
-							'takao_gothic' => [
-								'R' => 'TakaoGothic.ttf'
-							],
-							// Takaoフォント(P明朝)
-							'takao_pmincho' => [
-								'R' => 'TakaoPMincho.ttf'
-							],
-							// Takaoフォント(明朝)
-							'takao_mincho' => [
-								'R' => 'TakaoMincho.ttf'
-							]
-						],
-						'default_font' => 'takao_pgothic',
-						'tempDir' => sys_get_temp_dir()
-					]);
-					$mpdf->autoScriptToLang = true;
-					$mpdf->autoLangToFont = true;
-					
-					$stylesheet = file_get_contents(Config::read('web.root') . 'perihelion/assets/css/print.css');
-					$mpdf->WriteHTML($stylesheet,\Mpdf\HTMLParserMode::HEADER_CSS);
-					$mpdf->WriteHTML($doc);
 
 					$printPDF = new PrintPDF($this->urlArray, $this->moduleArray);
 					$filename = $printPDF->filename('pdf');

@@ -31,4 +31,46 @@ final class PrintPDF {
 
 }
 
+final class PerihelionMPDF {
+
+	private $mpdf;
+
+	public function __construct($doc) {
+
+		$defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
+		$fontDirs = $defaultConfig['fontDir'];
+
+		$defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
+		$fontData = $defaultFontConfig['fontdata'];
+
+		$this->mpdf = new \Mpdf\Mpdf([
+			'fontDir' => array_merge($fontDirs, [
+				'perihelion/assets/fonts',
+			]),
+			'fontdata' => [
+				'takao_pgothic' => ['R' => 'TakaoPGothic.ttf'],
+				'takao_gothic' => ['R' => 'TakaoGothic.ttf'],
+				'takao_pmincho' => ['R' => 'TakaoPMincho.ttf'],
+				'takao_mincho' => ['R' => 'TakaoMincho.ttf']
+			],
+			'default_font' => 'takao_pgothic',
+			'tempDir' => sys_get_temp_dir()
+		]);
+		$this->mpdf->autoScriptToLang = true;
+		$this->mpdf->autoLangToFont = true;
+
+		$stylesheet = file_get_contents(Config::read('web.root') . 'perihelion/assets/css/print.css');
+		$this->mpdf->WriteHTML($stylesheet,\Mpdf\HTMLParserMode::HEADER_CSS);
+		$this->mpdf->WriteHTML($doc);
+
+	}
+
+	public function mpdf() {
+
+		return $this->mpdf;
+
+	}
+
+}
+
 ?>
