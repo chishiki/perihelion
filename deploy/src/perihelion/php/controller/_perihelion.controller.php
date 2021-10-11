@@ -203,23 +203,20 @@ class Controller {
 						if ($this->urlArray[1] == $moduleName) {
 							$pdfClass = ModuleUtilities::moduleToClassName($moduleName, 'PDF');
 							if (class_exists($pdfClass)) {
-								$pdf = new $pdfClass($this->urlArray,$this->inputArray);
-								if (method_exists($pdfClass, 'mpdf') && !is_null($pdf->mpdf())) {
-									$mpdf = $pdf->mpdf();
+								// customOutputメソッドがある場合は、PerihelionMPDFを継承したSatellite用カスタムPDFクラス
+								$pdfClazz = new $pdfClass($this->urlArray,$this->inputArray);
+								if (method_exists($pdfClass, 'customOutput')) {
+									$mpdf = $pdfClazz->customOutput();
 								} else {
-									$doc = $pdf->doc();
+									$pmpdf = new PerihelionMPDF($pdfClazz->doc());
+									$mpdf = $pmpdf->getMpdf();
 								}
 								if (method_exists($pdfClass, 'getFileObject') && method_exists($pdfClass, 'getFileObjectID')) {
-									$fileObject = $pdf->getFileObject();
-									$fileObjectID = $pdf->getFileObjectID();
+									$fileObject = $pdfClazz->getFileObject();
+									$fileObjectID = $pdfClazz->getFileObjectID();
 								}
 							}
 						}
-					}
-
-					if (!isset($mpdf)) {
-						$pmpdf = new PerihelionMPDF($doc);
-						$mpdf = $pmpdf->mpdf($doc);
 					}
 
 					require_once Config::read('perihelion.path') . 'vendor/autoload.php';
@@ -242,6 +239,7 @@ class Controller {
 					}
 
 					$mpdf->Output($filename,\Mpdf\Output\Destination::DOWNLOAD);
+					break;
 				 
 				case 'print':
 					
