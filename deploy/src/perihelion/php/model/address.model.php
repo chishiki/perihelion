@@ -79,18 +79,27 @@ class Address extends ORM {
 
 	public function stringAddress($lang = null) {
 
-		if (is_null($lang)) {  $lang = $_SESSION['lang']; }
-
 		$addy = '';
 
-		if ($lang == 'ja') {
-			$addy = $this->state . $this->city . $this->streetAddress1 . $this->streetAddress2 . ' 〒' . $this->postalCode;
+		if ($this->country == 'JP') {
+			$addyBits = array();
+			if ($this->state) { $addyBits[] = $this->state; }
+			if ($this->city) { $addyBits[] = $this->city; }
+			if ($this->streetAddress1) { $addyBits[] = $this->streetAddress1; }
+			if ($this->streetAddress2) { $addyBits[] = $this->streetAddress2; }
+			if (!empty($addyBits)) { $addyBits[] = ' '; }
+			if ($this->postalCode) { $addyBits[] = '〒' . $this->postalCode; }
+			if (!empty($addyBits)) { $addy = implode('', $addyBits); }
 		} else {
 			$addyBits = array();
 			if ($this->streetAddress1) { $addyBits[] = $this->streetAddress1 . ($this->streetAddress2?' '.$this->streetAddress2:''); }
 			if ($this->city) { $addyBits[] = $this->city; }
 			if ($this->state) { $addyBits[] = $this->state; }
-			if ($this->country) { $addyBits[] = $this->country . ($this->postalCode?' '.$this->postalCode:''); }
+			if ($this->country) {
+				$countries = new Countries();
+				$country = $countries->getCountry($this->country, 'en');
+				$addyBits[] = strtoupper($country) . ($this->postalCode?' '.$this->postalCode:'');
+			}
 			if (!empty($addyBits)) { $addy = implode(', ', $addyBits); }
 		}
 
