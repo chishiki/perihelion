@@ -1,5 +1,6 @@
 
 .block { display:block; }
+.inline { display:inline; }
 .inline-block { display:inline-block; }
 
 .float-left { float:left; }
@@ -32,7 +33,9 @@
 .blue { color:#00008b; }
 .gray, .grey { color:#808080; }
 
+.lightgray-background, lightgray-background { background-color:LightGray; }
 .gray-background, grey-background { background-color:#dddddd; }
+.darkgray-background, darkgray-background { background-color:DarkGray; }
 
 .border { border:1px solid #000; }
 .top-border { border-bottom:1px solid #000; }
@@ -103,9 +106,14 @@ table.stripes td {
     border-bottom:1px solid #000000;
 }
 
+table.layout-fixed {
+    table-layout:fixed;
+}
+
 .text-left { text-align:left; }
 .text-center { text-align:center; }
 .text-right { text-align:right; }
+.text-nowrap { white-space:nowrap; }
 
 .width-10 { width:10%; }
 .width-20 { width:20%; }
