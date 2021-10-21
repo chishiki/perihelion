@@ -31,11 +31,23 @@ final class PrintPDF {
 
 }
 
-final class PerihelionMPDF {
+class PerihelionMPDF {
 
-	private $mpdf;
+	protected $mpdf;
 
-	public function __construct($doc) {
+	public function __construct($doc = null) {
+
+		$this->mpdf =  $this->createMpdfInstance(/*$orientation=*/'P');
+		if (!is_null($doc)) {
+			$this->output($doc);			
+		}
+	}
+
+	public function getMpdf() {
+		return $this->mpdf;
+	}
+
+	protected function createMpdfInstance($orientation) {
 
 		$defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
 		$fontDirs = $defaultConfig['fontDir'];
@@ -44,6 +56,7 @@ final class PerihelionMPDF {
 		$fontData = $defaultFontConfig['fontdata'];
 
 		$this->mpdf = new \Mpdf\Mpdf([
+			'orientation' => $orientation,	// 'P':縦向き、'L':横向き
 			'fontDir' => array_merge($fontDirs, [
 				'perihelion/assets/fonts',
 			]),
@@ -59,16 +72,13 @@ final class PerihelionMPDF {
 		$this->mpdf->autoScriptToLang = true;
 		$this->mpdf->autoLangToFont = true;
 
+		return $this->mpdf;
+	}
+
+	public function output($doc) {
 		$stylesheet = file_get_contents(Config::read('web.root') . 'perihelion/assets/css/print.css');
 		$this->mpdf->WriteHTML($stylesheet,\Mpdf\HTMLParserMode::HEADER_CSS);
 		$this->mpdf->WriteHTML($doc);
-
-	}
-
-	public function mpdf() {
-
-		return $this->mpdf;
-
 	}
 
 }
