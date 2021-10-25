@@ -44,6 +44,8 @@ $(window).on('load', function() {
 		var langImagesSelected = ' Images Selected';
 		var langSelectFiles = 'Select Files';
 		var langFilesSelected = ' Files Selected';
+		var imageDeleteConfirm = '️Permanently delete this image?';
+		var fileDeleteConfirm = '️Permanently delete this file?';
 
 		if ($('body').hasClass('lang-ja')) {
 			lang = 'ja';
@@ -52,6 +54,8 @@ $(window).on('load', function() {
 			langImagesSelected = 'つのイメージ';
 			langSelectFiles = 'ファイル選択';
 			langFilesSelected = 'つのファイル';
+			imageDeleteConfirm = '️このイメージを削除しますか？';
+			fileDeleteConfirm = '️このファイルを削除しますか？';
 		}
 
 		$('.clickable').click(
@@ -137,39 +141,52 @@ $(window).on('load', function() {
 
 		$('.image-list-action > button.image-delete').on('click', function() {
 
-			var imageID = $(this).closest('tr').data('image-id');
+			if (window.confirm(imageDeleteConfirm)) {
 
-			$(this).closest('tr').remove();
+				var imageID = $(this).closest('tr').data('image-id');
 
-			var settings = {
-				url: "/api/v1/image/delete/",
-				method: "post",
-				data: { imageID : imageID },
-				dataType: "json"
-			};
+				$(this).closest('tr').remove();
 
-			$.ajax(settings).always(function(data) {
-				console.dir(data);
-			});
+				var settings = {
+					url: "/api/v1/image/delete/",
+					method: "post",
+					data: {imageID: imageID},
+					dataType: "json"
+				};
+
+				$.ajax(settings).always(function (data) {
+					console.dir(data);
+				});
+
+			} else {
+				return false;
+			}
+
 
 		});
 
 		$('.file-list-action > button.file-delete').on('click', function() {
 
-			var fileID = $(this).closest('tr').data('file-id');
+			if (window.confirm(fileDeleteConfirm)) {
 
-			$(this).closest('tr').remove();
+				var fileID = $(this).closest('tr').data('file-id');
 
-			var settings = {
-				url: "/api/v1/file/delete/",
-				method: "post",
-				data: { fileID : fileID },
-				dataType: "json"
-			};
+				$(this).closest('tr').remove();
 
-			$.ajax(settings).always(function(data) {
-				console.dir(data);
-			});
+				var settings = {
+					url: "/api/v1/file/delete/",
+					method: "post",
+					data: { fileID : fileID },
+					dataType: "json"
+				};
+
+				$.ajax(settings).always(function(data) {
+					console.dir(data);
+				});
+
+			} else {
+				return false;
+			}
 
 		});
 
