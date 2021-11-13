@@ -40,6 +40,7 @@ final class ViewController implements ViewControllerInterface {
 		if ($loc[0] == 'newsletter') { $view = new NewsletterViewController($loc, $input, $errors, $msg); }
 		if ($loc[0] == 'profile') { $view = new ProfileViewController($loc, $input, $errors); }
 		if ($loc[0] == 'support' && $isLoggedIn) { $view = new SupportViewController($loc, $input, $errors); }
+		if ($loc[0] == 'test' && Auth::isAdmin()) { $view = new PerihelionTestViewController($loc, $input, $mods, $errors, $msg); }
 
 		$authViews = array('account-recovery','account-recovery-mail-sent','login','reset-password');
 		if (in_array($loc[0],$authViews)) { $view = new AuthViewController($loc, $input, $errors, $mods); }

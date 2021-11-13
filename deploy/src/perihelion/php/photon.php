@@ -39,6 +39,7 @@ require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/controller/profile.controll
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/controller/profile.view.controller.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/controller/support.controller.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/controller/support.view.controller.php');
+require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/controller/test.view.controller.php');
 
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/model/nucleus.model.php'); // required by ORM
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/model/orm.model.php'); // extended by other model classes
@@ -128,6 +129,7 @@ require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/view/site.view.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/view/sitemap.view.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/view/support.view.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/view/theme.view.php');
+require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/view/test.view.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/view/tile.view.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/view/uptime.view.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/view/user.view.php');
