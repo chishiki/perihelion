@@ -45,20 +45,33 @@ class Lang extends ORM {
 			default:
 				$lang = $_SESSION['lang'];
 		}
-	
-		if ($lang == 'ja') { $lang = 'ja'; $langAttribute = "jaLang"; } else { $lang = 'en'; $langAttribute = "enLang"; }
-		$nucleus = Nucleus::getInstance();
-		$query = "SELECT $langAttribute AS resource FROM perihelion_Lang WHERE langKey = :langKey LIMIT 1";
-		$statement = $nucleus->database->prepare($query);
-		$statement->execute(array(':langKey' => $langKey));
-		if ($row = $statement->fetch()) { $resource = $row['resource']; } else { $resource = $langKey; }
-		
-		// check for exceptions
-		$ex = new LanguageException($langKey,$_SESSION['siteID']);
-		$exception = $ex->exception();
-		if ($exception) { $resource = $exception; }
-		
-		self::langCounterPlusOne($lang, $langKey);
+
+
+		$m = new Memcached();
+		$m->addServer('localhost', 11211);
+		$cacheLangKey = 'lang_' . $_SESSION['siteID'] . '_' . $langKey . '_' . $lang; // 'lang_<siteID>_<langKey>_<lang>'
+
+		$resource = $m->get($cacheLangKey);
+
+		if($resource === false && $m->getResultCode() == Memcached::RES_NOTFOUND) {
+
+			if ($lang == 'ja') { $lang = 'ja'; $langAttribute = "jaLang"; } else { $lang = 'en'; $langAttribute = "enLang"; }
+			$nucleus = Nucleus::getInstance();
+			$query = "SELECT $langAttribute AS resource FROM perihelion_Lang WHERE langKey = :langKey LIMIT 1";
+			$statement = $nucleus->database->prepare($query);
+			$statement->execute(array(':langKey' => $langKey));
+			if ($row = $statement->fetch()) { $resource = $row['resource']; } else { $resource = $langKey; }
+
+			// check for exceptions
+			$ex = new LanguageException($langKey,$_SESSION['siteID']);
+			$exception = $ex->exception();
+			if ($exception) { $resource = $exception; }
+
+			$m->set($cacheLangKey, $resource);
+			self::langCounterPlusOne($lang, $langKey);
+
+		}
+
 		return $resource;
 		
 	}
