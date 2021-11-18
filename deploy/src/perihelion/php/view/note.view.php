@@ -1,85 +1,72 @@
 <?php
 
-class NoteView {
+final class NoteView {
 
-	private $urlArray;
-	private $inputArray;
-	private $errorArray;
-	private $messageArray;
+	private $loc;
+	private $input;
+	private $errors;
+	private $messages;
 	
-	public function __construct(
-		$urlArray = array(), 
-		$inputArray = array(), 
-		$errorArray = array(), 
-		$messageArray = array()
-	) {
-		$this->urlArray = $urlArray;
-		$this->inputArray = $inputArray;
-		$this->errorArray = $errorArray;
-		$this->messageArray = $messageArray;
+	public function __construct($loc = array(), $input = array(), $errors = array(), $messages = array()) {
+
+		$this->loc = $loc;
+		$this->input = $input;
+		$this->errors = $errors;
+		$this->messages = $messages;
+
 	}
 	
-	public static function freshPerihelionNoteForm($formAction, $noteObject, $noteObjectID) {
+	public function NoteFormCreate($formAction, $noteObject, $noteObjectID) {
 	
-		$h = "<form id=\"freshPerihelionNoteCreate\"  method=\"post\" action=\"" . $formAction . "\">";
+		$form = '
+		
+			<form id="note_form"  method="post" action="' . $formAction . '">
+				<input type="hidden" name="noteObject" value="' . $noteObject . '">
+				<input type="hidden" name="noteObjectID" value="' . $noteObjectID . '">
+				<div class="form-row">
+					<div class="form-group col-12">
+						<textarea class="form-control ckeditor" id="note_content" name="noteContent" rows="10" placeholder="add note here..."></textarea>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-12 col-sm-6 offset-sm-6 col-md-4 offset-md-8 col-lg-3 offset-lg-9 col-xl-2 offset-xl-10">
+						<button type="submit" name="note-submit-create" class="btn btn-outline-primary btn-block">' . Lang::getLang('addNote') . '</button>
+					</div>
+				</div>
+			</form>
+			
+		';
 
-			$h .= "<input type=\"hidden\" name=\"noteObject\" value=\"" . $noteObject . "\">";
-			$h .= "<input type=\"hidden\" name=\"noteObjectID\" value=\"" . $noteObjectID . "\">";
-			$h .= "<div class=\"form-group row\">";
-										
-				$h .= "<div class=\"col-md-6 offset-md-4\">";
-					$h .= "<input type=\"text\" class=\"form-control\" id=\"noteContent\" name=\"noteContent\" placeholder=\"add note here...\">";
-				$h .= "</div>";
-					
-				$h .= "<div class=\"col-md-2\">";
-					$h .= "<button type=\"submit\" name=\"perihelionFreshNoteCreateSubmit\" class=\"btn btn-primary btn-block\">". Lang::getLang('addNote') . "</button>";
-				$h .= "</div>";
-				
-			$h .= "</div>";
-	
-		$h .= "</form>";
-
-		return $h;
+		return $form;
 		
 	}
 	
-	public static function freskPerihelionNotesList($adminPageURL, $noteObject, $nodeObjectID) {
-		
-		$notes = Note::notes($noteObject,$nodeObjectID);
-		
-		if (!empty($notes)) {
-			
-			$h = "<div class=\"row\">";
-				$h .= "<div class=\"col-12\">";
-					$h .= "<div class=\"table-responsive\">";
-						$h .= "<table class=\"table table-striped\">";
+	public function NotesList($baseURL, $noteObject = null, $noteObjectID = null) {
 
-							$h .= "<tr>";
-								$h .= "<th>" . Lang::getLang('note') . "</th>";
-								$h .= "<th class=\"text-right\">" . Lang::getLang('delete') . "</th>";
-							$h .= "</tr>";
-						
-							foreach ($notes as $noteID) {
-								$note = new Note($noteID);
-								$h .= "<tr>";
-									$h .= "<td>" . $note->noteContent . "</td>";
-									$h .= "<td class=\"text-right\">";
-										$h .= "<a class=\"btn btn-danger btn-sm\" href=\"/" . Lang::prefix() . $adminPageURL . "/update/" . $nodeObjectID . "/notes/delete/" . $noteID . "/\">";
-											$h .= "<span class=\"fas fa-trash-alt\" style=\"color:#fff;\"></span>";
-										$h .= "</a>";
-									$h .= "</td>";
-								$h .= "</tr>";
-							}
-						
-						$h .= "</table>";
-					$h .= "</div>";
-				$h .= "</div>";
-			$h .= "</div>";
-			return $h;
-			
+		$arg = new NoteListArguments();
+		$arg->noteObject = $noteObject;
+		$arg->noteObjectID = $noteObjectID;
+		$nl = new NoteList($arg);
+		$notes = $nl->getNotes();
+
+		$noteList = '';
+		foreach ($notes as $note) {
+
+			$creator = new User($note['creator']);
+
+			$noteList .= '
+				<div class="card mb-3">
+					<div class="card-header">' . $creator->getUserDisplayName() . ' <small>[' . $note['created'] . ']</small></div>
+					<div class="card-body">
+						<p class="card-text">' . $note['noteContent'] . '</p>
+					</div>
+				</div>
+			';
+
 		}
-									
-		
+
+		return $noteList;
+
 	}
 	
 }
