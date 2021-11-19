@@ -71,11 +71,12 @@ final class AuthController implements StateControllerInterface {
 					if (empty($this->errorArray)) {
 						$userID = User::getUserID($userSelector);
 						Auth::login($userID);
-						/*
-						if (isset($_SESSION['forward_url'])) { $forward_url = $_SESSION['forward_url']; unset($_SESSION['forward_url']); }
-						else { $forward_url = "/" . Lang::prefix(); }
+						$forward_url = "/" . Lang::prefix();
+						if (isset($_SESSION['forward_url'])) {
+							$forward_url = $_SESSION['forward_url'];
+							unset($_SESSION['forward_url']);
+						}
 						header("Location: $forward_url");
-						*/
 					}
 					
 				}

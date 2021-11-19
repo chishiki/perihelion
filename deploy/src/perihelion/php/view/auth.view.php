@@ -18,8 +18,7 @@ class AuthView
 
 	}
 
-	public function login()
-	{
+	public function login() {
 
 		$error = false;
 		$errorMessage = '';
@@ -95,19 +94,18 @@ class AuthView
 
 	}
 
-	public function loginSuccessful()
-	{
+	public function loginSuccessful() {
 
 		$site = new Site($_SESSION['siteID']);
 		$navbar = new NavBar($this->urlArray, $this->inputArray, array(), $site->siteNavMenuID);
 		$items = $navbar->getNavBarItems();
 
-		if (!empty($moduleName)) {
+		if (!empty($this->modules)) {
 			foreach ($this->modules as $moduleName) {
-				$moduleDashboardView = ModuleUtilities::moduleToClassName($moduleName, 'DashboardView');
-				if (class_exists($moduleDashboardView)) {
-					$view = new $moduleDashboardView($this->urlArray);
-					$h = $view->dashboard();
+				$moduleIndexView = ModuleUtilities::moduleToClassName($moduleName, 'IndexView');
+				if (class_exists($moduleIndexView)) {
+					$view = new $moduleIndexView($this->urlArray);
+					$h = $view->getView();
 				}
 			}
 		}
@@ -158,43 +156,48 @@ class AuthView
 	public function accountRecovery() {
 
 		if (isset($this->inputArray['userEmail'])) { $userEmail = $this->inputArray['userEmail']; } else { $userEmail = ''; }
+
+		$form = '
+
+			<div class="container">
+				<div id="perihelionAccountRecovery" class="col-12 col-lg-8 offset-lg-2 col-xl-6 offset-xl-3">
+				
+					<div class="card">
+						<div class="card-header">
+							<div class="card-title">' . strtoupper(Lang::getLang('accountRecovery')) . '</div>
+						</div>
+						
+						<div class="card-body">
+						
+							<form role="form" id="perihelionAccountRecoveryForm" name="login" class="" method="post" action="/' . Lang::prefix() . 'account-recovery/">
+							
+								<div class="form-row mb-2' . (isset($this->inputArray['userEmail'])?" has-error":"") . '">
+									<div class="form-group col-12">
+										<div class="input-group">
+											<div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-envelope"></i></span></div>
+											<input id="userEmail" type="email" class="form-control" name="userEmail" value="' . $userEmail . '" placeholder="email" required>
+										</div>
+									</div>
+								</div>
+								
+								<div class="form-row">
+									<div class="form-group col-12 col-md-6 offset-md-6">
+										<input type="submit" name="perihelionAccountRecoverySubmit" id="perihelionAccountRecoverySubmit" class="btn btn-secondary btn-block" value="' . Lang::getLang('getRecoveryMail') . '">
+									</div>
+								</div>
+								
+							</form>
+							
+						</div>
+						
+					</div>
+					
+				</div>
+			</div>
 		
-		$h = "<div class=\"container\">";
-			$h .= "<div id=\"perihelionAccountRecovery\" class=\"mainbox col-md-6 offset-md-3 col-sm-8 offset-sm-2\">";
-				$h .= "<div class=\"card\" >";
-					
-					$h .= "<div class=\"card-header\">";
-						$h .= "<div class=\"card-title\">" . strtoupper(Lang::getLang('accountRecovery')) . "</div>";
-					$h .= "</div>";
+		';
 
-					$h .= "<div style=\"padding-top:30px\" class=\"card-body\">";
-						$h .= "<form role=\"form\" id=\"perihelionAccountRecoveryForm\" name=\"login\" class=\"\" method=\"post\" action=\"/account-recovery/\">";
-					
-							$h .= "<div class=\"form-row mb-2" . (isset($this->inputArray['userEmail'])?" has-error":"") . "\">";
-								$h .= '<div class="col-12">';
-									$h .= "<div class=\"input-group\">";
-										$h .= '<div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-envelope"></i></span></div>';
-										$h .= "<input id=\"userEmail\" type=\"email\" class=\"form-control\" name=\"userEmail\" value=\"" . $userEmail . "\" placeholder=\"email\" required>";
-									$h .= "</div>";
-									if (isset($this->errorArray['userEmail'])) {
-										foreach ($this->errorArray['userEmail'] AS $message) { $h .= "<small>" . $message . "</small> "; }
-									}
-								$h .= '</div>';
-							$h .= "</div>";
-
-							$h .= "<div class=\"form-row\">";
-								$h .= '<div class="col-12">';
-									$h .= "<input type=\"submit\" name=\"perihelionAccountRecoverySubmit\" id=\"perihelionAccountRecoverySubmit\" class=\"btn btn-secondary float-right\" value=\"" . Lang::getLang('getRecoveryMail') . "\">";
-								$h .= '</div>';
-							$h .= "</div>";
-
-						$h .= "</form>";
-					$h .= "</div>";
-				$h .= "</div>";
-			$h .= "</div>";
-		$h .= "</div>";
-
-		return $h;
+		return $form;
 		
 	}
 	
@@ -203,65 +206,65 @@ class AuthView
 		$accountRecoveryMash = $this->urlArray[1];
 		if (isset($this->inputArray['userEmail'])) { $userEmail = $this->inputArray['userEmail']; } else { $userEmail = ''; }
 	
-		$h = "<div class=\"container\">";
-			$h .= "<div id=\"resetPassword\" class=\"mainbox col-md-6 offset-md-3 col-sm-8 offset-sm-2\">";
-				$h .= "<div class=\"card\" >";
+		$h = '<div class="container">';
+			$h .= '<div id="resetPassword" class="mainbox col-md-6 offset-md-3 col-sm-8 offset-sm-2">';
+				$h .= '<div class="card" >';
 				
-					$h .= "<div class=\"card-header\">";
-						$h .= "<div class=\"card-title\">" . strtoupper(Lang::getLang('accountRecovery')) . "</div>";
-					$h .= "</div>";
+					$h .= '<div class="card-header">';
+						$h .= '<div class="card-title">' . strtoupper(Lang::getLang('accountRecovery')) . '</div>';
+					$h .= '</div>';
 
-					$h .= "<div style=\"padding-top:30px\" class=\"card-body\">";
+					$h .= '<div style="padding-top:30px" class="card-body">';
 
-						$h .= "<form role=\"form\" id=\"resetPasswordForm\" name=\"resetPassword\" class=\"\" method=\"post\" action=\"/reset-password/" . $accountRecoveryMash . "/\">";
+						$h .= '<form role="form" id="resetPasswordForm" name="resetPassword" class="" method="post" action="/reset-password/' . $accountRecoveryMash . '/">';
 						
-							$h .= "<input type=\"hidden\" name=\"confirmMash\" value=\"" . $accountRecoveryMash . "\">";
+							$h .= '<input type="hidden" name="confirmMash" value="' . $accountRecoveryMash . '">';
 
-							$h .= "<div class=\"form-row mb-2" . (isset($this->errorArray['userEmail'])?" has-error":"") . "\">";
+							$h .= '<div class="form-row mb-2' . (isset($this->errorArray['userEmail'])?" has-error":"") . '">';
 								$h .= '<div class="col-12">';
-									$h .= "<div class=\"input-group\">";
+									$h .= '<div class="input-group">';
 										$h .= '<div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-envelope"></i></span></div>';
 										$h .= '<input type="text" id="userEmail" class="form-control" name="userEmail" value="' . $userEmail . '" placeholder="email" autocomplete="off" data-lpignore="true" required>';
-									$h .= "</div>";
-									if (isset($this->errorArray['userEmail'])) { foreach ($this->errorArray['userEmail'] AS $message) { $h .= "<small>" . $message . "</small> "; } }
+									$h .= '</div>';
+									if (isset($this->errorArray['userEmail'])) { foreach ($this->errorArray['userEmail'] AS $message) { $h .= '<small>' . $message . '</small> '; } }
 								$h .= '</div>';
-							$h .= "</div>";
+							$h .= '</div>';
 							
-							$h .= "<div class=\"form-row mb-2" . (isset($this->errorArray['password'])?" has-error":"") . "\">";
+							$h .= '<div class="form-row mb-2' . (isset($this->errorArray['password'])?" has-error":"") . '">';
 								$h .= '<div class="col-12">';
-									$h .= "<div class=\"input-group\">";
+									$h .= '<div class="input-group">';
 										$h .= '<div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-lock"></i></span></div>';
-										$h .= "<input type=\"password\" id=\"register-password\" class=\"form-control\" name=\"password\" placeholder=\"new password\" autocomplete=\"off\" data-lpignore=\"true\" required>";
-									$h .= "</div>";
+										$h .= '<input type="password" id="register-password" class="form-control" name="password" placeholder="new password" autocomplete="off" data-lpignore="true" required>';
+									$h .= '</div>';
 								$h .= '</div>';
-							$h .= "</div>";
+							$h .= '</div>';
 							
-							$h .= "<div class=\"form-row mb-2" . (isset($this->errorArray['password'])?" has-error":"") . "\">";
+							$h .= '<div class="form-row mb-2' . (isset($this->errorArray['password'])?" has-error":"") . '">';
 								$h .= '<div class="col-12">';
-									$h .= "<div class=\"input-group\">";
+									$h .= '<div class="input-group">';
 										$h .= '<div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-lock"></i></span></div>';
-										$h .= "<input type=\"password\" id=\"register-confirm-password\" class=\"form-control\" name=\"confirmPassword\" placeholder=\"confirm new password\" autocomplete=\"off\" data-lpignore=\"true\" required>";
-									$h .= "</div>";
-									if (isset($this->errorArray['password'])) { foreach ($this->errorArray['password'] AS $message) { $h .= "<small>" . $message . "</small> "; } }
+										$h .= '<input type="password" id="register-confirm-password" class="form-control" name="confirmPassword" placeholder="confirm new password" autocomplete="off" data-lpignore="true" required>';
+									$h .= '</div>';
+									if (isset($this->errorArray['password'])) { foreach ($this->errorArray['password'] AS $message) { $h .= '<small>' . $message . '</small> '; } }
 								$h .= '</div>';
-							$h .= "</div>";
+							$h .= '</div>';
 							
 							if (isset($this->errorArray['mash'])) { foreach ($this->errorArray['mash'] AS $message) {
 								$h .= '<div class="form-row mb-2"><div class="col-12"><div class="alert alert-danger"><small>' . $message . '</small></div></div></div>'; }
 							}
 							
-							$h .= "<div class=\"form-row\">";
+							$h .= '<div class="form-row">';
 								$h .= '<div class="col-12">';
 									$h .= '<input type="submit" name="resetPasswordSubmit" id="resetPasswordSubmit" class="btn btn-secondary float-right" value="' . strtoupper(Lang::getLang('accessYourAccount')) . '">';
 								$h .= '</div>';
-							$h .= "</div>";
+							$h .= '</div>';
 
-						$h .= "</form>";
+						$h .= '</form>';
 
-					$h .= "</div>";
-				$h .= "</div>";
-			$h .= "</div>";
-		$h .= "</div>";
+					$h .= '</div>';
+				$h .= '</div>';
+			$h .= '</div>';
+		$h .= '</div>';
 			
 		return $h;
 		
@@ -269,14 +272,14 @@ class AuthView
 
 	public function accountRecoveryMailSent() {
 	
-		$h = "<div class=\"container alert alert-success\">";
-			$h .= "<b>An email has been sent to you containing a link to reset your password</u>.</b>";
-			$h .= "<ul>";
-				$h .= "<li>It can take a few minutes to receive your account recovery email.</li>";
-				$h .= "<li>Please check your spam folder if you do not see the email in your inbox.</li>";
-				$h .= "<li>Only your most recent account recovery email will work.</li>";
-			$h .= "<ul>";
-		$h .= "</div>";
+		$h = '<div class="container alert alert-success">';
+			$h .= '<b>An email has been sent to you containing a link to reset your password</u>.</b>';
+			$h .= '<ul>';
+				$h .= '<li>It can take a few minutes to receive your account recovery email.</li>';
+				$h .= '<li>Please check your spam folder if you do not see the email in your inbox.</li>';
+				$h .= '<li>Only your most recent account recovery email will work.</li>';
+			$h .= '<ul>';
+		$h .= '</div>';
 		return $h;
 		
 	}
