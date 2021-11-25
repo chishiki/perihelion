@@ -106,6 +106,26 @@ class Address extends ORM {
 		return $addy;
 
 	}
+
+	public function stateList() {
+
+		$where = array();
+		$where[] = 'biomass_Report.siteID = :siteID';
+		$where[] = 'perihelion_Address.deleted = 0';
+		$where[] = 'perihelion_Address.addressDefault = 1';
+
+		$query = 'SELECT DISTINCT state FROM perihelion_Address LEFT JOIN biomass_Report 
+		ON perihelion_Address.addressObjectID = biomass_Report.shopID WHERE ' . implode(' AND ', $where) . '';
+
+		$nucleus = Nucleus::getInstance();
+		$statement = $nucleus->database->prepare($query);
+		$statement->bindParam(':siteID', $_SESSION['siteID'], PDO::PARAM_INT);
+		$statement->execute();
+		$stateList = array();
+		$stateList = $statement->fetchAll(PDO::FETCH_COLUMN);
+		return $stateList;
+		
+	}
 		
 }
 
@@ -113,19 +133,37 @@ class Addresses {
 	
 	private $addresses;
 	
-	public function __construct($addressObject, $addressObjectID) {
+	public function __construct($addressObject, $addressObjectID, $addressDefault = null) {
 
-		$query = "SELECT addressID FROM perihelion_Address ";
-		$query .= "WHERE siteID = :siteID AND addressObject = :addressObject AND addressObjectID = :addressObjectID AND deleted = 0 ";
-		$query .= "ORDER BY created ASC";
+		$where = array();
+		$where[] = 'siteID = :siteID';
+		$where[] = 'addressObject = :addressObject';
+		$where[] = 'addressObjectID = :addressObjectID';
+		if ($addressDefault) {$where[] = 'addressDefault = :addressDefault';}
+		$where[] = 'deleted = 0';
+
+		$query = 'SELECT addressID FROM perihelion_Address 
+		WHERE ' . implode(' AND ', $where) . ' ORDER BY created ASC';
 	
 		$nucleus = Nucleus::getInstance();
 		$statement = $nucleus->database->prepare($query);
-		$statement->execute(array(':siteID' => $_SESSION['siteID'], ':addressObject' => $addressObject, ':addressObjectID' => $addressObjectID));
+		$statement->bindParam(':siteID', $_SESSION['siteID'], PDO::PARAM_INT);
+		$statement->bindParam(':addressObject', $addressObject, PDO::PARAM_STR);
+		$statement->bindParam(':addressObjectID', $addressObjectID, PDO::PARAM_INT);
+		if ($addressDefault) {$statement->bindParam(':addressDefault', $addressDefault, PDO::PARAM_INT);}
+
+		$statement->execute();
 		
-		$this->addresses = array();
-		while ($row = $statement->fetch()) { $this->addresses[] = $row['addressID']; }
-	
+		
+		if ($addressDefault) {
+			$row = $statement->fetch();
+			$this->addresses[] = $row['addressID'];
+		} else {
+			$this->addresses = array();
+			while ($row = $statement->fetch()) { $this->addresses[] = $row['addressID']; }
+
+		}
+
 	}
 	
 	public function list() {
