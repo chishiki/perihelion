@@ -234,6 +234,22 @@ class AddressView {
 
 	}
 
+	public function stateDropdown($selectedState = null) {
+
+		$a = new Address();
+		$stateList = $a->stateList();
+
+		$dropdown = '<select class="form-control" name="state">';
+		$dropdown .= '<option value="">都道府県 [全て]</option>'; 
+		foreach ($stateList AS $state) {
+			$a = new Address($state);
+			$dropdown .= '<option value="' . $state . '"' . ($selectedState == $state?' selected':'') .'>' . $state . '</option>';
+		}
+		$dropdown .= '</select>';
+		return $dropdown;
+
+	}
+
 }
 
 ?>
