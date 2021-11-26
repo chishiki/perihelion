@@ -846,6 +846,9 @@ REPLACE INTO `perihelion_Lang` VALUES
 ('menuItemClasses', 'Classes', 0, 'クラス名', 0, @now),
 ('pleaseEnterValidCSS', 'Please Enter Valid CSS', 0, '有効なCSSを入力してください', 0, @now),
 ('validCSSOnly', 'valid CSS only', 0, '有効なCSSのみ', 0, @now),
-('pleaseEnterThemeName', 'Please Enter a Theme Name', 0, 'テーマ名を入力してください', 0, @now);
+('pleaseEnterThemeName', 'Please Enter a Theme Name', 0, 'テーマ名を入力してください', 0, @now),
+('siteSettingsUpdateSuccessful', 'Site settings updated successfully.', 0, 'サイト設定は更新済みです。', 0, @now),
+('updateProfileImage', 'Update Profile Image', 0, 'プロフィール画像更新', 0, @now),
+('yourProfileHasBeenSuccessfullyUpdated', 'Your profile has been successfully updated.', 0, 'プロフィールは更新済みです。', 0, @now);
 -- ('xxxxxxx', 'xxxxxxx', 0, 'xxxxxxx', 0, @now),
 

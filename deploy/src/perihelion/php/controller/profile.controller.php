@@ -23,11 +23,7 @@ final class ProfileController implements StateControllerInterface {
 	public function setState() {
 		
 		if ($this->urlArray[0] == 'profile') {
-			
-			
-			
-			$successURL = "/" . Lang::languageUrlPrefix() . "profile/confirmation/";
-			
+
 			if (!empty($this->inputArray)) {
 
 				$user = new User($_SESSION['userID']);
@@ -74,6 +70,10 @@ final class ProfileController implements StateControllerInterface {
 					if ($this->inputArray['profileChangePassword']) {
 						$user->userPassword = password_hash($this->inputArray['userPassword'], PASSWORD_DEFAULT);
 					}
+
+					if (isset($_FILES['images-to-upload'])) {
+						Image::uploadImages($_FILES['images-to-upload'], 'User', $_SESSION['userID']);
+					}
 					
 					$site = new Site($_SESSION['siteID']);
 					$senderName = $site->siteAutomatedEmailSenderName;
@@ -90,8 +90,8 @@ final class ProfileController implements StateControllerInterface {
 
 					$conditions = array('userID' => $_SESSION['userID']);
 					User::update($user,$conditions);
-					
-					header("Location: $successURL");
+
+					$this->messageArray[] = Lang::getLang('yourProfileHasBeenSuccessfullyUpdated');
 					
 				}
 				

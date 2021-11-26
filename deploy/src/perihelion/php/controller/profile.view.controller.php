@@ -20,11 +20,7 @@ class ProfileViewController {
 		
 		if ($this->urlArray[0] == 'profile') {
 			$view = new ProfileView($this->urlArray,$this->inputArray,$this->errorArray);
-			if ($this->urlArray[1] == 'confirmation') {
-				return $view->profileUpdateConfirmation();
-			} else {
-				return $view->profileForm();
-			}
+			return $view->profileForm();
 		}
 
 	}
