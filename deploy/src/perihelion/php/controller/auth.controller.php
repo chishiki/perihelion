@@ -50,9 +50,10 @@ final class AuthController implements StateControllerInterface {
 						$site = new Site($_SESSION['siteID']);
 						$siteName = $site->getTitle();
 						$siteURL = $site->siteURL;
+						$fromAddress = $site->siteAutomatedEmailSenderName . ' <' . $site->siteAutomatedEmailAddress . '>';
 
 						$mailMessage = "<html><body>Hello <b>" . $userDisplayName . "</b>,<br /><br />You can use your email address to reset your password at the following URL:<br /><br />http://" . $siteURL . "/reset-password/" . $accountRecoveryMash . "/<br /><br /><i>Only your most recent account recovery link is valid.<br />This account recovery link is only valid for 24 hours.</i></body></html>";
-						Mail::sendEmail($userEmail, "perihelion.zenidev.com <noreply@zenidev.com>", "Account Recovery for $siteName", $mailMessage, $_SESSION['siteID'], $_SESSION['userID'], "html");
+						Mail::sendEmail($userEmail, $fromAddress, "Account Recovery for $siteName", $mailMessage, $_SESSION['siteID'], $_SESSION['userID'], "html");
 
 						header("Location: /account-recovery-mail-sent/");
 						
