@@ -849,6 +849,8 @@ REPLACE INTO `perihelion_Lang` VALUES
 ('pleaseEnterThemeName', 'Please Enter a Theme Name', 0, 'テーマ名を入力してください', 0, @now),
 ('siteSettingsUpdateSuccessful', 'Site settings updated successfully.', 0, 'サイト設定は更新済みです。', 0, @now),
 ('updateProfileImage', 'Update Profile Image', 0, 'プロフィール画像更新', 0, @now),
-('yourProfileHasBeenSuccessfullyUpdated', 'Your profile has been successfully updated.', 0, 'プロフィールは更新済みです。', 0, @now);
+('yourProfileHasBeenSuccessfullyUpdated', 'Your profile has been successfully updated.', 0, 'プロフィールは更新済みです。', 0, @now),
+('siteEmailUpdateSuccessful', 'Site email configuration has been updated.', 0, 'サイトのメール設定は更新済みです。', 0, @now);
+
 -- ('xxxxxxx', 'xxxxxxx', 0, 'xxxxxxx', 0, @now),
 

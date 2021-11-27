@@ -143,11 +143,11 @@ class NavBarView {
 		$role = Auth::getUserRole();
 
 		$canViewCoreManagerMenus = false;
-		$dropdownAnchor = 'settings';
+		$dropdownAnchor = Lang::getLang('settings');
 
 		if (in_array($role,Config::read('manager.menu.access'))) {
 			$canViewCoreManagerMenus = true;
-			$dropdownAnchor = 'navbar' . ucfirst($role);
+			$dropdownAnchor = Lang::getLang('navbar' . ucfirst($role));
 		}
 
 		if (isset($arg['dropdown-anchor'])) {
@@ -163,7 +163,7 @@ class NavBarView {
     		    $h .= ' data-toggle="dropdown"';
     		    $h .= ' aria-haspopup="true"';
     		    $h .= ' aria-expanded="false"';
-    		$h .= '>' . Lang::getLang($dropdownAnchor) . '</a>';
+    		$h .= '>' . $dropdownAnchor . '</a>';
 
 			$h .= '<div class="dropdown-menu' . (isset($arg['dropdown-menu'])?' '.$arg['dropdown-menu']:'') . '" aria-labelledby="navbarDropdownMasterMenu">';
 
