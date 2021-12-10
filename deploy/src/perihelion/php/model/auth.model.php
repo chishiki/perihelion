@@ -1,6 +1,6 @@
 <?php
 
-class Auth {
+final class Auth {
 
 	public static function checkAuth($userSelector, $password) {
 
@@ -12,11 +12,11 @@ class Auth {
 		$userRole = new UserRole($_SESSION['siteID'],$userID);
 
 		if (!$userID || (!password_verify($password, $user->userPassword))) {
-			$errorArray['login'][] = 'Authentication failed. Please try again or <a href="/account-recovery/">recover your account details</a>.';
+			$errorArray['login'][] = Lang::getLang('authFailedTryAgainOrRecover');
 		} elseif (!$userRole->getUserRole() && $_SESSION['siteID'] != 1) {
-			$errorArray['login'][] = 'Please contact ' . Config::read('support.email') . ' for access to this domain.';
+			$errorArray['login'][] = Lang::getLang('authPleaseContactSupportForAccessToDomain');
 		} elseif ($user->userBlackList) {
-			$errorArray['login'][] = 'There seems to be a problem with your account. Please contact ' . Config::read('support.email') . '.';
+			$errorArray['login'][] = Lang::getLang('authProblemExistsPleaseContactSupport');
 		}
 
 		return $errorArray;
@@ -54,6 +54,8 @@ class Auth {
 
 		Session::setSession('userID', $userID);
 		Session::setSession('userRoleForCurrentSite', $userRole->getUserRole()); // => change to userRole
+
+		Session::setSession('user', array());
 			
 		$user = new User($userID);
 		$user->setUserLastVisitDateTime();
