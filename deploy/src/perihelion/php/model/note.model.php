@@ -55,6 +55,14 @@ final class Note extends ORM {
 		
 	}
 
+	public function deleteNote() {
+
+		$this->deleted = 1;
+		$cond = array('noteID' => $this->noteID);
+		self::update($this, $cond);
+
+	}
+
 }
 
 final class NoteList {

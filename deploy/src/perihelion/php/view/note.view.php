@@ -56,7 +56,12 @@ final class NoteView {
 
 			$noteList .= '
 				<div class="card mb-3">
-					<div class="card-header">' . $creator->getUserDisplayName() . ' <small>[' . $note['created'] . ']</small></div>
+					<div class="card-header d-flex flex-column flex-sm-row justify-content-sm-between">
+						<span>' . $creator->getUserDisplayName() . ' <small>[' . $note['created'] . ']</small></span>
+						<button type="button" class="btn btn-sm btn-outline-danger note-delete d-block d-sm-inline" data-note-id="' . $note['noteID'] . '">
+							<span class="far fa-trash-alt"></span> ' . Lang::getLang('delete') . '
+						</button>
+					</div>
 					<div class="card-body">
 						<p class="card-text">' . $note['noteContent'] . '</p>
 					</div>

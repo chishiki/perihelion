@@ -75,6 +75,21 @@ final class PerihelionAPI {
 
 			}
 
+			if ($loc[2] == 'note') {
+
+				// need an API key check here (!)
+
+				if ($loc[3] == 'delete') {
+
+					// /api/v1/note/delete/
+					$note = new Note($input['noteID']);
+					$note->deleteNote();
+					return json_encode($note);
+
+				}
+
+			}
+
 		}
 
 		$response = '{"api":"perihelion"}';

@@ -46,6 +46,7 @@ $(window).on('load', function() {
 		var langFilesSelected = ' Files Selected';
 		var imageDeleteConfirm = '️Permanently delete this image?';
 		var fileDeleteConfirm = '️Permanently delete this file?';
+		var noteDeleteConfirm = '️Permanently delete this note?';
 
 		if ($('body').hasClass('lang-ja')) {
 			lang = 'ja';
@@ -56,6 +57,7 @@ $(window).on('load', function() {
 			langFilesSelected = 'つのファイル';
 			imageDeleteConfirm = '️このイメージを削除しますか？';
 			fileDeleteConfirm = '️このファイルを削除しますか？';
+			noteDeleteConfirm = '️このノートを削除しますか？';
 		}
 
 		$('.clickable').click(
@@ -177,6 +179,31 @@ $(window).on('load', function() {
 					url: "/api/v1/file/delete/",
 					method: "post",
 					data: { fileID : fileID },
+					dataType: "json"
+				};
+
+				$.ajax(settings).always(function(data) {
+					console.dir(data);
+				});
+
+			} else {
+				return false;
+			}
+
+		});
+
+		$('button.note-delete').on('click', function() {
+
+			if (window.confirm(noteDeleteConfirm)) {
+
+				var noteID = $(this).data('note-id');
+
+				$(this).closest('div.card').remove();
+
+				var settings = {
+					url: "/api/v1/note/delete/",
+					method: "post",
+					data: { noteID : noteID },
 					dataType: "json"
 				};
 
