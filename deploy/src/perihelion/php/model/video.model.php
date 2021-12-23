@@ -1,6 +1,6 @@
 <?php
 
-class Video extends ORM {
+final class Video extends ORM {
 
 	public $videoID;
 	public $siteID;
@@ -72,6 +72,26 @@ class Video extends ORM {
 	        $videoID = $match[1];
 	    }
 	    return $videoID;
+	}
+
+}
+
+final class VideoEmbedArguments {
+
+	public $host; // [youtube|vimeo]
+	public $videoID; // string
+	public $isModal; // boolean
+	public $allowFullScreen; // boolean
+	public $iframeParameters; // [width|frameborder|border|cellspacing|style|{etc}]
+
+	public function __construct() {
+
+		$this->host = 'youtube';
+		$this->videoID = '';
+		$this->isModal = false;
+		$this->allowFullScreen = true;
+		$this->iframeParameters = array();
+
 	}
 
 }
