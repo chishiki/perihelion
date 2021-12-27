@@ -113,6 +113,7 @@ class Address extends ORM {
 		$where[] = 'biomass_Report.siteID = :siteID';
 		$where[] = 'perihelion_Address.deleted = 0';
 		$where[] = 'perihelion_Address.addressDefault = 1';
+		$where[] = 'perihelion_Address.state != ""';
 
 		$query = 'SELECT DISTINCT state FROM perihelion_Address LEFT JOIN biomass_Report 
 		ON perihelion_Address.addressObjectID = biomass_Report.shopID WHERE ' . implode(' AND ', $where) . '';
