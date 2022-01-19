@@ -55,6 +55,7 @@ require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/model/blacklistWord.model.p
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/model/carousel.model.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/model/carouselPanel.model.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/model/config.model.php');
+require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/model/codeGenerator.model.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/model/contact.model.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/model/contactForm.model.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/model/content.model.php');
