@@ -91,6 +91,13 @@ class AdminViewController {
 
 		}
 
+		if ($this->urlArray[1] == 'dev') {
+
+			$view = new DevView($this->urlArray,$this->inputArray,$this->errorArray);
+			return $menu->adminSubMenu() . $view->compileFileView();
+
+		}
+
 	}
 	
 }

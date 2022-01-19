@@ -54,23 +54,23 @@ final class CodeGenerator {
 
 			$primaryKeys = array();
 			foreach ($this->fieldArray['keys'] AS $keyName => $key) {
-				$model .= "public " . ($key['type']=="int"?"int":"string") . "$" . $keyName . ";\n";
+				$model .= "\tpublic " . ($key['type']=="int"?"int":"string") . " $" . $keyName . ";\n";
 				if ($key['primary']) { $primaryKeys[] = $keyName; }
 			}
 
-			$model .= "public int \$siteID;";
-			$model .= "public int \$creator;";
-			$model .= "public string \$created;";
-			$model .= "public ?string \$updated;";
-			$model .= "public int \$deleted;";
+			$model .= "\tpublic int \$siteID;\n";
+			$model .= "\tpublic int \$creator;\n";
+			$model .= "\tpublic string \$created;\n";
+			$model .= "\tpublic ?string \$updated;\n";
+			$model .= "\tpublic int \$deleted;\n";
 
 			foreach ($this->fieldArray['fields'] AS $fieldName => $field) {
-				$model .= "public " . ($field['nullable']?"?":"") . ($field['type']=="int"?"int":"string") . " $" . $fieldName . ";\n";
+				$model .= "\tpublic " . ($field['nullable']?"?":"") . ($field['type']=="int"?"int":"string") . " $" . $fieldName . ";\n";
 			}
 
 			$model .= "\n";
 
-			$model .= "public function __construct(";
+			$model .= "\tpublic function __construct(";
 				if (!empty($primaryKeys)) {
 					$parameters = array();
 					foreach ($primaryKeys AS $primaryKey) {
@@ -80,25 +80,25 @@ final class CodeGenerator {
 				}
 			$model .= ") {\n\n";
 
-				$model .= "\$dt = new DateTime();\n\n";
+				$model .= "\t\t\$dt = new DateTime();\n\n";
 
 				foreach ($this->fieldArray['keys'] AS $keyName => $key) {
-					$model .= "\$this->" . $keyName . " = " . $key['default-value'] . ";\n";
+					$model .= "\t\t\$this->" . $keyName . " = " . $key['default-value'] . ";\n";
 				}
 
-				$model .= "\$this->siteID = \$_SESSION['siteID'];";
-				$model .= "\$this->creator = \$_SESSION['userID'];";
-				$model .= "\$this->created =\$dt->format('Y-m-d H:i:s');";
-				$model .= "\$this->updated = null;";
-				$model .= "\$this->deleted = 0;";
+				$model .= "\t\t\$this->siteID = \$_SESSION['siteID'];\n";
+				$model .= "\t\t\$this->creator = \$_SESSION['userID'];\n";
+				$model .= "\t\t\$this->created = \$dt->format('Y-m-d H:i:s');\n";
+				$model .= "\t\t\$this->updated = null;\n";
+				$model .= "\t\t\$this->deleted = 0;\n";
 
 				foreach ($this->fieldArray['fields'] AS $fieldName => $field) {
-					$model .= "\$this->" . $fieldName . " = " . $field['default-value'] . ";\n";
+					$model .= "\t\t\$this->" . $fieldName . " = " . $field['default-value'] . ";\n";
 				}
 
 				$model .= "\n";
 
-				$model .= "if (";
+				$model .= "\t\tif (";
 					if (!empty($primaryKeys)) {
 						$parameters = array();
 						foreach ($primaryKeys AS $primaryKey) {
@@ -108,42 +108,42 @@ final class CodeGenerator {
 					}
 				$model .= ") {\n\n";
 
-					$model .= "\$nucleus = Nucleus::getInstance()\n\n";
+					$model .= "\t\t\t\$nucleus = Nucleus::getInstance()\n\n";
 
-					$model .= "\$whereClause = array();\n";
-					$model .= "\$whereClause[] = 'siteID = :siteID';\n";
-					$model .= "\$whereClause[] = 'deleted = 0';\n";
+					$model .= "\t\t\t\$whereClause = array();\n";
+					$model .= "\t\t\t\$whereClause[] = 'siteID = :siteID';\n";
+					$model .= "\t\t\t\$whereClause[] = 'deleted = 0';\n";
 					if (!empty($primaryKeys)) {
 						foreach ($primaryKeys AS $primaryKey) {
-							$model .= "\$whereClause[] = '" . $primaryKey . " = :" . $primaryKey . "';\n";
+							$model .= "\t\t\t\$whereClause[] = '" . $primaryKey . " = :" . $primaryKey . "';\n";
 						}
 					}
 
 					$model .= "\n";
 
-					$model .= "\$query = 'SELECT * FROM " . $this->tableName . " WHERE ' . implode(' AND ', \$whereClause) . ' LIMIT 1';\n";
-					$model .= "\$statement = \$nucleus->database->prepare(\$query);\n";
-					$model .= "\$statement->bindParam(':siteID', \$_SESSION['siteID'], PDO::PARAM_INT);\n";
+					$model .= "\t\t\t\$query = 'SELECT * FROM " . $this->tableName . " WHERE ' . implode(' AND ', \$whereClause) . ' LIMIT 1';\n";
+					$model .= "\t\t\t\$statement = \$nucleus->database->prepare(\$query);\n";
+					$model .= "\t\t\t\$statement->bindParam(':siteID', \$_SESSION['siteID'], PDO::PARAM_INT);\n";
 					if (!empty($primaryKeys)) {
 						foreach ($primaryKeys AS $primaryKey) {
-							$model .= "\$statement->bindParam(':" . $primaryKey . "', $" . $primaryKey . ", PDO::PARAM_INT);\n";
+							$model .= "\t\t\t\$statement->bindParam(':" . $primaryKey . "', $" . $primaryKey . ", PDO::PARAM_INT);\n";
 						}
 					}
-					$model .= "\$statement->execute();\n\n";
+					$model .= "\t\t\t\$statement->execute();\n\n";
 
-					$model .= "if \$row = \$statement->fetch()) {\n";
-						$model .= "foreach \$row AS \$key => \$value) { if (property_exists(\$this, \$key)) { \$this->\$key = \$value; } }\n";
-					$model .= "}\n\n";
+					$model .= "\t\t\tif (\$row = \$statement->fetch()) {\n";
+						$model .= "\t\t\t\tforeach (\$row AS \$key => \$value) { if (property_exists(\$this, \$key)) { \$this->\$key = \$value; } }\n";
+					$model .= "\t\t\t}\n\n";
 
-				$model .= "}\n\n";
+				$model .= "\t\t}\n\n";
 
-			$model .= "}\n\n";
+			$model .= "\t}\n\n";
 
-			$model .= "public function markAsDeleted() {\n";
-				$model .= "\$dt = new DateTime();\n";
-				$model .= "\$this->updated = \$dt->format('Y-m-d H:i:s');\n";
-				$model .= "\$this->deleted = 1;\n";
-				$model .= "\$conditions = array(";
+			$model .= "\tpublic function markAsDeleted() {\n\n";
+				$model .= "\t\t\$dt = new DateTime();\n";
+				$model .= "\t\t\$this->updated = \$dt->format('Y-m-d H:i:s');\n";
+				$model .= "\t\t\$this->deleted = 1;\n";
+				$model .= "\t\t\$conditions = array(";
 					if (!empty($primaryKeys)) {
 						$parameters = array();
 						foreach ($primaryKeys AS $primaryKey) {
@@ -152,8 +152,8 @@ final class CodeGenerator {
 						$model .= implode(", ", $parameters);
 					}
 				$model .= ");\n";
-				$model .= "self::update(\$this, \$conditions, true, false, '" . $this->moduleName . "_');\n";
-			$model .= "}\n\n";
+				$model .= "\t\tself::update(\$this, \$conditions, true, false, '" . $this->moduleName . "_');\n\n";
+			$model .= "\t}\n\n";
 
 		$model .= "}";
 
@@ -301,14 +301,14 @@ final class CodeGenerator {
 	public function compileFile() {
 
 		$fileComponent = array();
-		$fileComponent[] = $this->generateSchema();
+		$fileComponent[] = "/*\n\n".$this->generateSchema()."\n\n*/";
 		$fileComponent[] = $this->generateModelClass();
 		$fileComponent[] = $this->generateListClass();
 		$fileComponent[] = $this->generateListArgumentClass();
 
 		$file = "<?php\n\n" . implode("\n\n\n\n", $fileComponent) . "\n\n?>";
 
-		return $file;
+		return htmlentities($file);
 
 	}
 
@@ -316,12 +316,12 @@ final class CodeGenerator {
 
 final class CodeGeneratorArguments {
 
-	public $moduleName;
-	public $className;
-	public $extendsORM;
-	public $fieldArray;
+	public string $moduleName;
+	public string $className;
+	public bool $extendsORM;
+	public array $fieldArray;
 
-	public function __constructor() {
+	public function __construct() {
 
 		$this->moduleName = 'module'; // eg 'inventory' etc
 		$this->className = 'Object'; // eg 'Product' etc
