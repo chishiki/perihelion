@@ -853,5 +853,8 @@ REPLACE INTO `perihelion_Lang` VALUES
 ('siteEmailUpdateSuccessful', 'Site email configuration has been updated.', 0, 'サイトのメール設定は更新済みです。', 0, @now),
 ('authFailedTryAgainOrRecover', 'Authentication failed. Please try again or <a href="/account-recovery/">recover your account details</a>.', 0, 'ログインできませんでした。<a href="/ja/account-recovery/">アカウントリカバリー</a>までどうぞ。', 0, @now),
 ('authPleaseContactSupportForAccessToDomain', 'Please contact support for access to this domain.', 0, 'このドメインにアクセスする為、サポートまでお問合せください。', 0, @now),
-('authProblemExistsPleaseContactSupport', 'There seems to be a problem with your account. Please contact support.', 0, 'アカウントに問題があります。サポートまでお問合せください。', 0, @now);
+('authProblemExistsPleaseContactSupport', 'There seems to be a problem with your account. Please contact support.', 0, 'アカウントに問題があります。サポートまでお問合せください。', 0, @now),
+('dev', 'Dev', 0, '開発', 0, @now);
+
+-- ('xxxxxxx', 'xxxxxxx', 0, 'xxxxxxx', 0, @now);
 

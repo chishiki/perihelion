@@ -150,7 +150,7 @@ class MenuView {
 		if (!in_array($role,$allowedUserRoles)) { die('adminSubMenu() permissions error'); }
 		
 		$h = "<div id=\"adminNavTabs\" class=\"fresh-perihelion-nav-tabs\">";
-			$h .= "<div class=\"container\">";
+			$h .= "<div class=\"container-fluid\">";
 				$h .= '<ul class="nav nav-tabs">';
 					$h .= '<li class="nav-item"><a class="nav-link' . ($page=='audit'?' active':'') . '" href="/' . $lang . 'admin/audit/">' . Lang::getLang('audit') . '</a></li>';
 					$h .= '<li class="nav-item"><a class="nav-link' . ($page=='uptime'?' active':'') . '" href="/' . $lang . 'admin/uptime/">' . Lang::getLang('uptime') . '</a></li>';
@@ -161,6 +161,7 @@ class MenuView {
 					$h .= '<li class="nav-item"><a class="nav-link' . ($page=='currency'?' active':'') . '" href="/' . $lang . 'admin/currency/">' . Lang::getLang('currency') . '</a></li>';
 					$h .= '<li class="nav-item"><a class="nav-link' . ($page=='blacklist'?' active':'') . '" href="/' . $lang . 'admin/blacklist/">' . Lang::getLang('blacklist') . '</a></li>';
 					$h .= '<li class="nav-item"><a class="nav-link' . ($page=='cron'?' active':'') . '" href="/' . $lang . 'admin/cron/">' . Lang::getLang('cron') . '</a></li>';
+					$h .= '<li class="nav-item"><a class="nav-link' . ($page=='dev'?' active':'') . '" href="/' . $lang . 'admin/dev/">' . Lang::getLang('dev') . '</a></li>';
 				$h .= '</ul>';
 			$h .= '</div>';
 		$h .= '</div>';
