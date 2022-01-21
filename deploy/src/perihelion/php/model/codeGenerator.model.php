@@ -5,6 +5,7 @@ final class CodeGenerator {
 	private string $moduleName;
 	private string $className;
 	private bool $extendsORM;
+	private bool $scope;
 	private array $fieldArray;
 	private string $tableName;
 
@@ -13,6 +14,7 @@ final class CodeGenerator {
 		$this->moduleName = $arg->moduleName;
 		$this->className = $arg->className;
 		$this->extendsORM = $arg->extendsORM;
+		$this->scope = $arg->scope;
 		$this->fieldArray = $arg->fieldArray;
 		$this->tableName = $arg->moduleName . "_" . $arg->className;
 
@@ -111,7 +113,7 @@ final class CodeGenerator {
 					$model .= "\t\t\t\$nucleus = Nucleus::getInstance()\n\n";
 
 					$model .= "\t\t\t\$whereClause = array();\n";
-					$model .= "\t\t\t\$whereClause[] = 'siteID = :siteID';\n";
+					if ($this->scope == 'site') { $model .= "\t\t\t\$whereClause[] = 'siteID = :siteID';\n"; }
 					$model .= "\t\t\t\$whereClause[] = 'deleted = 0';\n";
 					if (!empty($primaryKeys)) {
 						foreach ($primaryKeys AS $primaryKey) {
@@ -147,7 +149,7 @@ final class CodeGenerator {
 					if (!empty($primaryKeys)) {
 						$parameters = array();
 						foreach ($primaryKeys AS $primaryKey) {
-							$parameters[] = "'" . $primaryKey . "' => $" . $primaryKey;
+							$parameters[] = "'" . $primaryKey . "' => \$this->" . $primaryKey;
 						}
 						$model .= implode(", ", $parameters);
 					}
@@ -165,65 +167,65 @@ final class CodeGenerator {
 
 		$class = "final class " . ucfirst($this->moduleName) . $this->className . "List {\n\n";
 
-			$class .= "private array \$results = array();\n";
+			$class .= "\tprivate array \$results = array();\n";
 
-			$class .= "public function __construct(" . $this->className . "ListParameters \$arg) {\n\n";
+			$class .= "\tpublic function __construct(" . ucfirst($this->moduleName) . $this->className . "ListParameters \$arg) {\n\n";
 
-				$class .= "// WHERE\n";
-				$class .= "\$wheres = array();\n";
-				$class .= "\$wheres[] = '" . $this->tableName . ".deleted = 0';\n";
+				$class .= "\t\t// WHERE\n";
+				$class .= "\t\t\$wheres = array();\n";
+				$class .= "\t\t\$wheres[] = '" . $this->tableName . ".deleted = 0';\n";
 				foreach ($this->fieldArray['keys'] AS $keyName => $key) {
-					$class .= "if (!is_null(\$arg->" . $keyName . ")) { \$wheres[] = '" . $this->tableName . "." . $keyName . " = :" . $keyName . "'; }\n";
+					$class .= "\t\tif (!is_null(\$arg->" . $keyName . ")) { \$wheres[] = '" . $this->tableName . "." . $keyName . " = :" . $keyName . "'; }\n";
 				}
-				$class .= "if (!is_null(\$arg->creator)) { \$wheres[] = '" . $this->tableName . ".creator = :creator'; }\n";
-				$class .= "if (!is_null(\$arg->created)) { \$wheres[] = '" . $this->tableName . ".created = :created'; }\n";
-				$class .= "if (!is_null(\$arg->updated)) { \$wheres[] = '" . $this->tableName . ".updated = :updated'; }\n";
+				$class .= "\t\tif (!is_null(\$arg->creator)) { \$wheres[] = '" . $this->tableName . ".creator = :creator'; }\n";
+				$class .= "\t\tif (!is_null(\$arg->created)) { \$wheres[] = '" . $this->tableName . ".created = :created'; }\n";
+				$class .= "\t\tif (!is_null(\$arg->updated)) { \$wheres[] = '" . $this->tableName . ".updated = :updated'; }\n";
 				foreach ($this->fieldArray['fields'] AS $fieldName => $field) {
-					$class .= "if (!is_null(\$arg->" . $fieldName . ")) { \$wheres[] = '" . $this->tableName . "." . $fieldName . " = :" . $fieldName . "'; }\n";
+					$class .= "\t\tif (!is_null(\$arg->" . $fieldName . ")) { \$wheres[] = '" . $this->tableName . "." . $fieldName . " = :" . $fieldName . "'; }\n";
 				}
-				$class .= "\$where = ' WHERE ' . implode(' AND ', \$wheres);\n\n";
+				$class .= "\t\t\$where = ' WHERE ' . implode(' AND ', \$wheres);\n\n";
 
-				$class .= "// SELECTOR\n";
-				$class .= "\$selectorArray = array();\n";
-				$class .= "foreach (\$arg->resultSet AS \$fieldAlias) { \$selectorArray[] = \$fieldAlias['field'] . ' AS ' . \$fieldAlias['alias']; }\n";
-				$class .= "\$selector = implode(', ', \$selectorArray);\n\n";
+				$class .= "\t\t// SELECTOR\n";
+				$class .= "\t\t\$selectorArray = array();\n";
+				$class .= "\t\tforeach (\$arg->resultSet AS \$fieldAlias) { \$selectorArray[] = \$fieldAlias['field'] . ' AS ' . \$fieldAlias['alias']; }\n";
+				$class .= "\t\t\$selector = implode(', ', \$selectorArray);\n\n";
 
-				$class .= "// ORDER BY\n";
-				$class .= "\$orderBys = array();\n";
-				$class .= "foreach \$arg->orderBy AS \$fieldSort) { \$orderBys[] = \$fieldSort['field'] . ' ' . \$fieldSort['sort']; }\n\n";
-				$class .= "\$orderBy = '';\n";
-				$class .= "if (!empty(\$orderBys)) { \$orderBy = ' ORDER BY ' . implode(', ', \$orderBys); }\n\n";
+				$class .= "\t\t// ORDER BY\n";
+				$class .= "\t\t\$orderBys = array();\n";
+				$class .= "\t\tforeach \$arg->orderBy AS \$fieldSort) { \$orderBys[] = \$fieldSort['field'] . ' ' . \$fieldSort['sort']; }\n\n";
+				$class .= "\t\t\$orderBy = '';\n";
+				$class .= "\t\tif (!empty(\$orderBys)) { \$orderBy = ' ORDER BY ' . implode(', ', \$orderBys); }\n\n";
 
-				$class .= "// BUILD QUERY\n";
-				$class .= "\$query = 'SELECT ' . \$selector . ' FROM building_Residence' . \$where . \$orderBy;\n";
-				$class .= "if (\$arg->limit) { \$query .= ' LIMIT ' . (\$arg->offset?\$arg->offset.', ':'') . \$arg->limit; }\n\n";
+				$class .= "\t\t// BUILD QUERY\n";
+				$class .= "\t\t\$query = 'SELECT ' . \$selector . ' FROM building_Residence' . \$where . \$orderBy;\n";
+				$class .= "\t\tif (\$arg->limit) { \$query .= ' LIMIT ' . (\$arg->offset?\$arg->offset.', ':'') . \$arg->limit; }\n\n";
 
-				$class .= "// PREPARE QUERY, BIND PARAMS, EXECUTE QUERY\n";
-				$class .= "\$nucleus = Nucleus::getInstance();\n";
-				$class .= "\$statement = \$nucleus->database->prepare(\$query);\n";
+				$class .= "\t\t// PREPARE QUERY, BIND PARAMS, EXECUTE QUERY\n";
+				$class .= "\t\t\$nucleus = Nucleus::getInstance();\n";
+				$class .= "\t\t\$statement = \$nucleus->database->prepare(\$query);\n";
 				foreach ($this->fieldArray['keys'] AS $keyName => $key) {
-					$class .= "if (!is_null(\$arg->" . $keyName . ")) { \$statement->bindParam(':" . $keyName . "', \$arg->" . $keyName . ", PDO::" . ($key['type']=="int"?"PARAM_INT":"PARAM_STR") . "); }\n";
+					$class .= "\t\tif (!is_null(\$arg->" . $keyName . ")) { \$statement->bindParam(':" . $keyName . "', \$arg->" . $keyName . ", PDO::" . ($key['type']=="int"?"PARAM_INT":"PARAM_STR") . "); }\n";
 				}
-				$class .= "if (!is_null(\$arg->creator)) { \$statement->bindParam(':creator', \$arg->creator, PDO::PARAM_INT); }\n";
-				$class .= "if (!is_null(\$arg->created)) { \$statement->bindParam(':created', \$arg->created, PDO::PARAM_STR); }\n";
-				$class .= "if (!is_null(\$arg->updated)) { \$statement->bindParam(':updated', \$arg->updated, PDO::PARAM_STR); }\n";
+				$class .= "\t\tif (!is_null(\$arg->creator)) { \$statement->bindParam(':creator', \$arg->creator, PDO::PARAM_INT); }\n";
+				$class .= "\t\tif (!is_null(\$arg->created)) { \$statement->bindParam(':created', \$arg->created, PDO::PARAM_STR); }\n";
+				$class .= "\t\tif (!is_null(\$arg->updated)) { \$statement->bindParam(':updated', \$arg->updated, PDO::PARAM_STR); }\n";
 				foreach ($this->fieldArray['fields'] AS $fieldName => $field) {
-					$class .= "if (!is_null(\$arg->" . $fieldName . ")) { \$statement->bindParam(':" . $fieldName . "', \$arg->" . $fieldName . ", PDO::" . ($field['type']=="int"?"PARAM_INT":"PARAM_STR") . "); }\n";
+					$class .= "\t\tif (!is_null(\$arg->" . $fieldName . ")) { \$statement->bindParam(':" . $fieldName . "', \$arg->" . $fieldName . ", PDO::" . ($field['type']=="int"?"PARAM_INT":"PARAM_STR") . "); }\n";
 				}
-				$class .= "\$statement->execute();\n\n";
+				$class .= "\t\t\$statement->execute();\n\n";
 
-				$class .= "// WRITE QUERY RESULTS TO ARRAY\n";
-				$class .= "while (\$row = \$statement->fetch()) { \$this->results[] =\$row; }\n\n";
+				$class .= "\t\t// WRITE QUERY RESULTS TO ARRAY\n";
+				$class .= "\t\twhile (\$row = \$statement->fetch()) { \$this->results[] = \$row; }\n\n";
 
-			$class .= "}\n\n";
+			$class .= "\t}\n\n";
 
-			$class .= "public function results() {\n\n";
-				$class .= "return \$this->results;\n";
-			$class .= "}\n\n";
+			$class .= "\tpublic function results() {\n\n";
+				$class .= "\t\treturn \$this->results;\n";
+			$class .= "\t}\n\n";
 
-			$class .= "public function resultCount() {\n\n";
-				$class .= "return count(\$this->results);\n";
-			$class .= "}\n\n";
+			$class .= "\tpublic function resultCount() {\n\n";
+				$class .= "\t\treturn count(\$this->results);\n";
+			$class .= "\t}\n\n";
 
 		$class .= "}";
 		
@@ -235,62 +237,62 @@ final class CodeGenerator {
 
 		$class = "final class " . ucfirst($this->moduleName) . $this->className . "ListParameters {\n\n";
 
-			$class .= "// list filters\n";
+			$class .= "\t// list filters\n";
 			foreach ($this->fieldArray['keys'] AS $keyName => $key) {
-				$class .= "public ?" . ($key['type']=="int"?"int":"string") . "$" . $keyName . ";\n";
+				$class .= "\tpublic ?" . ($key['type']=="int"?"int":"string") . "$" . $keyName . ";\n";
 			}
-			$class .= "public ?int \$siteID;";
-			$class .= "public ?int \$creator;";
-			$class .= "public ?string \$created;";
-			$class .= "public ?string \$updated;";
+			$class .= "\tpublic ?int \$siteID;";
+			$class .= "\tpublic ?int \$creator;";
+			$class .= "\tpublic ?string \$created;";
+			$class .= "\tpublic ?string \$updated;";
 			foreach ($this->fieldArray['fields'] AS $fieldName => $field) {
-				$class .= "public ?" . ($field['type']=="int"?"int":"string") . " $" . $fieldName . ";\n";
+				$class .= "\tpublic ?" . ($field['type']=="int"?"int":"string") . " $" . $fieldName . ";\n";
 			}
 			$class .= "\n";
 
-			$class .= "// view parameters\n";
-			$class .= "public ?int \$currentPage;\n";
-			$class .= "public ?int \$numberOfPages;\n\n";
+			$class .= "\t// view parameters\n";
+			$class .= "\tpublic ?int \$currentPage;\n";
+			$class .= "\tpublic ?int \$numberOfPages;\n\n";
 
-			$class .= "// results, order, limit, offset\n";
-			$class .= "public array \$resultSet;\n";
-			$class .= "public array \$orderBy;\n";
-			$class .= "public ?int \$limit;\n";
-			$class .= "public ?int \$offset;\n\n";
+			$class .= "\t// results, order, limit, offset\n";
+			$class .= "\tpublic array \$resultSet;\n";
+			$class .= "\tpublic array \$orderBy;\n";
+			$class .= "\tpublic ?int \$limit;\n";
+			$class .= "\tpublic ?int \$offset;\n\n";
 
 
-			$class .= "public function __construct() {\n\n";
+			$class .= "\tpublic function __construct() {\n\n";
 
-				$class .= "// list filters\n";
+				$class .= "\t\t// list filters\n";
 				foreach ($this->fieldArray['keys'] AS $keyName => $key) {
-					$class .= "\$this->" . $keyName . " = null;\n";
+					$class .= "\t\t\$this->" . $keyName . " = null;\n";
 				}
-				$class .= "\$this->siteID = null;";
-				$class .= "\$this->creator = null;";
-				$class .= "\$this->created = null;";
-				$class .= "\$this->updated = null;";
+				$class .= "\t\t\$this->siteID = null;\n";
+				$class .= "\t\t\$this->creator = null;\n";
+				$class .= "\t\t\$this->created = null;\n";
+				$class .= "\t\t\$this->updated = null;\n";
 				foreach ($this->fieldArray['fields'] AS $fieldName => $field) {
-					$class .= "public ?" . ($field['type']=="int"?"int":"string") . " $" . $fieldName . ";\n";
+					$class .= "\t\t\$this->" . ($field['type']=="int"?"int":"string") . " $" . $fieldName . " = null;\n";
 				}
 				$class .= "\n";
 
-				$class .= "// view parameters\n";
-				$class .= "\$this->currentPage = null;\n";
-				$class .= "\$this->numberOfPages = null;\n\n";
+				$class .= "\t\t// view parameters\n";
+				$class .= "\t\t\$this->currentPage = null;\n";
+				$class .= "\t\t\$this->numberOfPages = null;\n\n";
 
-				$class .= "// results, order, limit, offset\n";
-				$class .= "\$this->resultSet = array();\n";
-				$class .= "\$object = new " . $this->className . "();\n";
-				$class .= "foreach (\$object AS \$key => \$value) {\n";
-					$class .= "\$this->resultSet[] = array('field' => 'building_Residence.'.\$key, 'alias' => \$key);\n";
-				$class .= "}\n";
-				$class .= "\$this->orderBy = array(\n";
-					$class .= "array('field' => '" . $this->tableName . ".created', 'sort' => 'DESC')\n";
-				$class .= ");\n";
-				$class .= "\$this->limit = null;\n";
-				$class .= "\$this->offset = null;\n\n";
+				$class .= "\t\t// results, order, limit, offset\n";
+				$class .= "\t\t\$this->resultSet = array();\n";
+				$class .= "\t\t\$object = new " . $this->className . "();\n";
+				$class .= "\t\tforeach (\$object AS \$key => \$value) {\n";
+					$class .= "\t\t\t\$this->resultSet[] = array('field' => '" . $this->tableName . ".'.\$key, 'alias' => \$key);\n";
+				$class .= "\t\t}\n";
+				$class .= "\t\t\$this->orderBy = array(\n";
+					$class .= "\t\t\tarray('field' => '" . $this->tableName . ".created', 'sort' => 'DESC')\n";
+				$class .= "\t\t);\n";
+				$class .= "\t\t\$this->limit = null;\n";
+				$class .= "\t\t\$this->offset = null;\n\n";
 
-			$class .= "}\n\n";
+			$class .= "\t}\n\n";
 
 		$class .= "}";
 
@@ -298,7 +300,7 @@ final class CodeGenerator {
 
 	}
 
-	public function compileFile() {
+	public function compileModelFile() {
 
 		$fileComponent = array();
 		$fileComponent[] = "/*\n\n".$this->generateSchema()."\n\n*/";
@@ -306,11 +308,15 @@ final class CodeGenerator {
 		$fileComponent[] = $this->generateListClass();
 		$fileComponent[] = $this->generateListArgumentClass();
 
-		$file = "<?php\n\n" . implode("\n\n\n\n", $fileComponent) . "\n\n?>";
+		$file = "<?php\n\n" . implode("\n\n", $fileComponent) . "\n\n?>";
 
 		return htmlentities($file);
 
 	}
+
+	public function compileViewFile() {}
+
+	public function compileControllerFile() {}
 
 }
 
@@ -324,8 +330,9 @@ final class CodeGeneratorArguments {
 	public function __construct() {
 
 		$this->moduleName = 'module'; // eg 'inventory' etc
-		$this->className = 'Object'; // eg 'Product' etc
+		$this->className = 'Component'; // eg 'Product' etc
 		$this->extendsORM = true;
+		$this->scope = 'site'; // [site|global]
 		$this->fieldArray = array( // an array structured as following is expected by CodeGenerator
 			'keys' => array(
 				'keyNameA' => array (

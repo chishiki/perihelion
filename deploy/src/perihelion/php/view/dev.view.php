@@ -23,9 +23,20 @@ final class DevView {
 
 		$arg = new CodeGeneratorArguments();
 		$codeGenerator = new CodeGenerator($arg);
-		$body = '<pre>' . $codeGenerator->compileFile() . '</pre>';
-		$card = new CardView('compile_file_view', array('container-fluid'), '', array('col-12'), 'COMPILE FILE', $body, false);
-		return $card->card();
+
+		$body = '<button type="button" class="btn btn-outline-secondary btn-sm clippy float-right" data-clippable-id="model_code"><span class="far fa-copy"></span></button>';
+		$body .= '<pre id="model_code" class="clippable">' . $codeGenerator->compileModelFile() . '</pre>';
+		$modelFileCard = new CardView('compile_model_file', array('container-fluid'), '', array('col-12'), 'COMPILE MODEL FILE', $body, true);
+
+		$body = '<button type="button" class="btn btn-outline-secondary btn-sm clippy float-right" data-clippable-id="view_code"><span class="far fa-copy"></span></button>';
+		$body .= '<pre id="view_code" class="clippable">' . $codeGenerator->compileViewFile() . '</pre>';
+		$viewFileCard = new CardView('compile_view_file', array('container-fluid'), '', array('col-12'), 'COMPILE VIEW FILE', $body, true);
+
+		$body = '<button type="button" class="btn btn-outline-secondary btn-sm clippy float-right" data-clippable-id="controller_code"><span class="far fa-copy"></span></button>';
+		$body .= '<pre id="controller_code" class="clippable">' . $codeGenerator->compileViewFile() . '</pre>';
+		$controllerFileCard = new CardView('compile_controller_file', array('container-fluid'), '', array('col-12'), 'COMPILE CONTROLLER FILE', $body, true);
+
+		return $modelFileCard->card(); /* . $viewFileCard->card() . $controllerFileCard->card() */
 
 	}
 
