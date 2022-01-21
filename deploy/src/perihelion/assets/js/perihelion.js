@@ -237,6 +237,20 @@ $(window).on('load', function() {
 
 		$('[data-toggle="tooltip"]').tooltip({ boundary: 'window' });
 
+		var copyToClipboard = function(text) {
+			navigator.clipboard.writeText(text).then(function () {
+				alert('Successfully copied to clipboard.')
+			}, function () {
+				alert('Failed to copy to clipboard. Check clipboard permissions.')
+			});
+		};
+
+		$('button.clippy').on('click', function() {
+			const id = $(this).data('clippableId');
+			const content = $('#'+id).text();
+			copyToClipboard(content);
+		});
+
 		/* === START SPINNER === */
 
 		$('form').submit(function(e){
