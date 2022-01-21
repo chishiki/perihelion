@@ -237,6 +237,12 @@ $(window).on('load', function() {
 
 		$('[data-toggle="tooltip"]').tooltip({ boundary: 'window' });
 
+		$(document).on('click', '.delete-row-button', function(){
+			$(this).closest('tr').remove();
+		});
+
+		/* === START CLIPPY */
+
 		var copyToClipboard = function(text) {
 			navigator.clipboard.writeText(text).then(function () {
 				alert('Successfully copied to clipboard.')
@@ -250,6 +256,8 @@ $(window).on('load', function() {
 			const content = $('#'+id).text();
 			copyToClipboard(content);
 		});
+
+		/* === END CLIPPY === */
 
 		/* === START SPINNER === */
 
