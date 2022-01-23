@@ -101,7 +101,7 @@ final class PerihelionAPI {
 						$dv = new DevView();
 
 						if (isset($input['new-key-row'])) {
-							return $dv->codeGeneratorFormKeyRow();
+							return $dv->codeGeneratorFormKeyRow(null, 'int', 'NOT NULL', 'zero', false, true, false);
 						}
 
 						if (isset($input['new-field-row'])) {
