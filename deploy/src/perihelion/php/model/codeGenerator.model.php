@@ -5,7 +5,7 @@ final class CodeGenerator {
 	private string $moduleName;
 	private string $className;
 	private bool $extendsORM;
-	private bool $scope;
+	private string $scope;
 	private array $fieldArray;
 	private string $tableName;
 
@@ -167,7 +167,7 @@ final class CodeGenerator {
 
 		$class = "final class " . ucfirst($this->moduleName) . $this->className . "List {\n\n";
 
-			$class .= "\tprivate array \$results = array();\n";
+			$class .= "\tprivate array \$results = array();\n\n";
 
 			$class .= "\tpublic function __construct(" . ucfirst($this->moduleName) . $this->className . "ListParameters \$arg) {\n\n";
 
@@ -220,11 +220,11 @@ final class CodeGenerator {
 			$class .= "\t}\n\n";
 
 			$class .= "\tpublic function results() {\n\n";
-				$class .= "\t\treturn \$this->results;\n";
+				$class .= "\t\treturn \$this->results;\n\n";
 			$class .= "\t}\n\n";
 
 			$class .= "\tpublic function resultCount() {\n\n";
-				$class .= "\t\treturn count(\$this->results);\n";
+				$class .= "\t\treturn count(\$this->results);\n\n";
 			$class .= "\t}\n\n";
 
 		$class .= "}";

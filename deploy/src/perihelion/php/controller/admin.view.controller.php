@@ -118,10 +118,10 @@ class AdminViewController {
 					if (isset($key['primary'])) { $arg->fieldArray['keys'][$keyName]['primary'] = true; }
 					else { $arg->fieldArray['keys'][$keyName]['primary'] = false; }
 
-					if (isset($key['primary'])) { $arg->fieldArray['keys'][$keyName]['auto-increment'] = true; }
+					if (isset($key['auto-increment'])) { $arg->fieldArray['keys'][$keyName]['auto-increment'] = true; }
 					else { $arg->fieldArray['keys'][$keyName]['auto-increment'] = false; }
 
-					if (isset($key['primary'])) { $arg->fieldArray['keys'][$keyName]['nullable'] = true; }
+					if (isset($key['nullable'])) { $arg->fieldArray['keys'][$keyName]['nullable'] = true; }
 					else { $arg->fieldArray['keys'][$keyName]['nullable'] = false; }
 
 				}
@@ -137,7 +137,7 @@ class AdminViewController {
 					$arg->fieldArray['fields'][$fieldName]['default'] = $field['default'];
 					$arg->fieldArray['fields'][$fieldName]['default-value'] = $field['default-value'];
 
-					if (!empty($field['nullable'])) { $arg->fieldArray['fields'][$fieldName]['nullable'] = $field['nullable']; }
+					if (isset($field['nullable'])) { $arg->fieldArray['fields'][$fieldName]['nullable'] = true; }
 					else { $arg->fieldArray['fields'][$fieldName]['nullable'] = false; }
 
 				}
