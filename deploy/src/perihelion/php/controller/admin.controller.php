@@ -47,6 +47,12 @@ final class AdminController implements StateControllerInterface {
 
 		}
 
+		if ($this->urlArray[0] == 'admin' && $this->urlArray[1] == 'dev' && !empty($this->inputArray)) {
+
+			if (empty($this->inputArray['keys'])) { $this->errorArray['codeGenerator'][] = 'no keys'; }
+
+		}
+
 	}
 	
 	public function getErrors() {
