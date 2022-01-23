@@ -85,7 +85,7 @@ final class CodeGenerator {
 				$model .= "\t\t\$dt = new DateTime();\n\n";
 
 				foreach ($this->fieldArray['keys'] AS $keyName => $key) {
-					$model .= "\t\t\$this->" . $keyName . " = " . $key['default-value'] . ";\n";
+					$model .= "\t\t\$this->" . $keyName . " = " . $this->defaultValueDecoder($field['default-value']) . ";\n";
 				}
 
 				$model .= "\t\t\$this->siteID = \$_SESSION['siteID'];\n";
@@ -95,7 +95,7 @@ final class CodeGenerator {
 				$model .= "\t\t\$this->deleted = 0;\n";
 
 				foreach ($this->fieldArray['fields'] AS $fieldName => $field) {
-					$model .= "\t\t\$this->" . $fieldName . " = " . $field['default-value'] . ";\n";
+					$model .= "\t\t\$this->" . $fieldName . " = " . $this->defaultValueDecoder($field['default-value']) . ";\n";
 				}
 
 				$model .= "\n";
@@ -239,12 +239,12 @@ final class CodeGenerator {
 
 			$class .= "\t// list filters\n";
 			foreach ($this->fieldArray['keys'] AS $keyName => $key) {
-				$class .= "\tpublic ?" . ($key['type']=="int"?"int":"string") . "$" . $keyName . ";\n";
+				$class .= "\tpublic ?" . ($key['type']=="int"?"int":"string") . " $" . $keyName . ";\n";
 			}
-			$class .= "\tpublic ?int \$siteID;";
-			$class .= "\tpublic ?int \$creator;";
-			$class .= "\tpublic ?string \$created;";
-			$class .= "\tpublic ?string \$updated;";
+			$class .= "\tpublic ?int \$siteID;\n";
+			$class .= "\tpublic ?int \$creator;\n";
+			$class .= "\tpublic ?string \$created;\n";
+			$class .= "\tpublic ?string \$updated;\n";
 			foreach ($this->fieldArray['fields'] AS $fieldName => $field) {
 				$class .= "\tpublic ?" . ($field['type']=="int"?"int":"string") . " $" . $fieldName . ";\n";
 			}
@@ -318,6 +318,30 @@ final class CodeGenerator {
 
 	public function compileControllerFile() {}
 
+	private function defaultValueDecoder($defaultValue) {
+
+		switch($defaultValue) {
+
+			case 'zero':
+				$value = 0;
+				break;
+			case 'null':
+				$value = 'null';
+				break;
+			case 'empty-string':
+				$value = '\'\'';
+				break;
+			case 'current-timestamp':
+				$value = 'CURRENT_TIMESTAMP';
+				break;
+			default:
+				$value = 'null';
+		}
+
+		return $value;
+
+	}
+
 }
 
 final class CodeGeneratorArguments {
@@ -338,10 +362,10 @@ final class CodeGeneratorArguments {
 				'keyNameA' => array (
 					'type' => 'int',
 					'default' => 'NOT NULL',
-					'default-value' => 0,
-					'nullable' => false,
+					'default-value' => 'zero',
+					'primary' => true,
 					'auto-increment' => true,
-					'primary' => true
+					'nullable' => false
 				)
 			),
 			'fields' => array(
@@ -349,7 +373,7 @@ final class CodeGeneratorArguments {
 					'type' => 'int',
 					'parameter' => null, // int does not take a parameter in MySQL 8
 					'default' => 'NOT NULL',
-					'default-value' => '0',
+					'default-value' => 'zero',
 					'nullable' => false
 				),
 				'fieldNameB' => array (
@@ -361,9 +385,9 @@ final class CodeGeneratorArguments {
 				),
 				'fieldNameN' => array (
 					'type' => 'varchar',
-					'parameter' => '255',
+					'parameter' => 255,
 					'default' => 'NOT NULL',
-					'default-value' => '\'\'',
+					'default-value' => 'empty-string',
 					'nullable' => false
 				)
 			)

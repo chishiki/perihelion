@@ -94,7 +94,57 @@ class AdminViewController {
 		if ($this->urlArray[1] == 'dev') {
 
 			$view = new DevView($this->urlArray,$this->inputArray,$this->errorArray);
-			return $menu->adminSubMenu() . $view->compileFileView();
+			$arg = new CodeGeneratorArguments();
+
+			if (isset($this->inputArray['code-generator-submit'])) {
+
+				$input = $this->inputArray;
+
+				$arg->moduleName = $input['moduleName'];
+				$arg->className = $input['className'];
+				$arg->scope = $input['scope'];
+
+				if (isset($input['extendsORM'])) { $arg->extendsORM = true; } else { $arg->extendsORM = false; }
+
+				$arg->fieldArray = array();
+
+				foreach ($input['keys'] AS $oldKeyName => $key) {
+
+					$keyName = $key['keyName'];
+					$arg->fieldArray['keys'][$keyName]['type'] = $key['type'];
+					$arg->fieldArray['keys'][$keyName]['default'] = $key['default'];
+					$arg->fieldArray['keys'][$keyName]['default-value'] = $key['default-value'];
+
+					if (isset($key['primary'])) { $arg->fieldArray['keys'][$keyName]['primary'] = true; }
+					else { $arg->fieldArray['keys'][$keyName]['primary'] = false; }
+
+					if (isset($key['primary'])) { $arg->fieldArray['keys'][$keyName]['auto-increment'] = true; }
+					else { $arg->fieldArray['keys'][$keyName]['auto-increment'] = false; }
+
+					if (isset($key['primary'])) { $arg->fieldArray['keys'][$keyName]['nullable'] = true; }
+					else { $arg->fieldArray['keys'][$keyName]['nullable'] = false; }
+
+				}
+
+				foreach ($input['fields'] AS $fieldName => $field) {
+
+					$fieldName = $field['fieldName'];
+					$arg->fieldArray['fields'][$fieldName]['type'] = $field['type'];
+
+					if (!empty($field['parameter'])) { $arg->fieldArray['fields'][$fieldName]['parameter'] = $field['parameter']; }
+					else { $arg->fieldArray['fields'][$fieldName]['parameter'] = null; }
+
+					$arg->fieldArray['fields'][$fieldName]['default'] = $field['default'];
+					$arg->fieldArray['fields'][$fieldName]['default-value'] = $field['default-value'];
+
+					if (!empty($field['nullable'])) { $arg->fieldArray['fields'][$fieldName]['nullable'] = $field['nullable']; }
+					else { $arg->fieldArray['fields'][$fieldName]['nullable'] = false; }
+
+				}
+
+			}
+
+			return $menu->adminSubMenu() . $view->codeGeneratorForm($arg) . $view->codeGeneratorResults($arg);
 
 		}
 
