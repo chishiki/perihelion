@@ -241,7 +241,43 @@ $(window).on('load', function() {
 			$(this).closest('tr').remove();
 		});
 
-		/* === START CLIPPY */
+		/* === START DEV TOOLS === */
+
+		$('button#btn_code_generator_add_key_row').on('click', function() {
+
+			var settings = {
+				url: langPrefix + "/api/v1/partial/admin/dev/",
+				method: "post",
+				data: { "new-key-row" : true },
+				dataType: "string"
+			};
+
+			$.ajax(settings).always(function(data) {
+				var newRow = data.responseText;
+				$('#code_generator_form_key_rows tbody').append(newRow);
+			});
+
+		});
+
+		$('button#btn_code_generator_add_field_row').on('click', function() {
+
+			var settings = {
+				url: langPrefix + "/api/v1/partial/admin/dev/",
+				method: "post",
+				data: { "new-field-row" : true },
+				dataType: "string"
+			};
+
+			$.ajax(settings).always(function(data) {
+				var newRow = data.responseText;
+				$('#code_generator_form_field_rows tbody').append(newRow);
+			});
+
+		});
+
+		/* === END DEV TOOLS === */
+
+		/* === START CLIPPY === */
 
 		var copyToClipboard = function(text) {
 			navigator.clipboard.writeText(text).then(function () {

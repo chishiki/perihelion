@@ -90,6 +90,30 @@ final class PerihelionAPI {
 
 			}
 
+			if ($loc[2] == 'partial') {
+
+				if ($loc[3] == 'admin') {
+
+					if (!Auth::isAdmin()) { die('HTTP/1.1 401 Unauthorized'); } // really @chishiki? come on bro
+
+					if ($loc[4] == 'dev') {
+
+						$dv = new DevView();
+
+						if (isset($input['new-key-row'])) {
+							return $dv->codeGeneratorFormKeyRow();
+						}
+
+						if (isset($input['new-field-row'])) {
+							return $dv->codeGeneratorFormFieldRow();
+						}
+
+					}
+
+				}
+
+			}
+
 		}
 
 		$response = '{"api":"perihelion"}';

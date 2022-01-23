@@ -88,7 +88,7 @@ final class DevView {
 				</div>
 				<hr />
 				KEYS
-				<div class="table-responsive">
+				<div id="code_generator_form_key_rows" class="table-responsive">
 					<table class="table table-sm table-striped table-bordered">
 						<thead class="thead-light">
 							<th class="text-center">key name</th>
@@ -103,10 +103,11 @@ final class DevView {
 						<tbody>' . $keyRows . '</tbody>
 					</table>
 				</div>
+				<button type="button" id="btn_code_generator_add_key_row" class="btn btn-sm btn-outline-success">ADD KEY</button>
 				<hr />
 				FIELDS
-				<div class="table-responsive">
-					<table class="table table-sm table-striped table-bordered">
+				<div id="code_generator_form_field_rows" class="table-responsive">
+					<table id="code_generator_form_field_rows" class="table table-sm table-striped table-bordered">
 						<thead class="thead-light">
 							<th>field name</th>
 							<th>type</th>
@@ -119,6 +120,7 @@ final class DevView {
 						<tbody>' . $fieldRows . '</tbody>
 					</table>
 				</div>
+				<button type="button" id="btn_code_generator_add_field_row" class="btn btn-sm btn-outline-success">ADD FIELD</button>
 				<hr />
 				<div class="form-group form-check">
 					<input type="checkbox" class="form-check-input" id="extends_orm" name="extendsORM" value="1" ' . ($arg->extendsORM?' checked':'')  . '>
