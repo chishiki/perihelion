@@ -1,6 +1,6 @@
 <?php
 
-final class DevView {
+final class CodeGeneratorView {
 
 	private $loc;
 	private $input;
@@ -25,15 +25,15 @@ final class DevView {
 
 		$body = '<button type="button" class="btn btn-outline-secondary btn-sm clippy float-right" data-clippable-id="model_code"><span class="far fa-copy"></span></button>';
 		$body .= '<pre id="model_code" class="clippable">' . $codeGenerator->compileModelFile() . '</pre>';
-		$modelFileCard = new CardView('compile_model_file', array('container-fluid','mb-3'), '', array('col-12'), 'COMPILE MODEL FILE', $body, true);
+		$modelFileCard = new CardView('compile_model_file', array('container-fluid','mb-3'), '', array('col-12'), 'COMPILE MODEL FILE', $body, true, false);
 
 		$body = '<button type="button" class="btn btn-outline-secondary btn-sm clippy float-right" data-clippable-id="view_code"><span class="far fa-copy"></span></button>';
 		$body .= '<pre id="view_code" class="clippable">' . $codeGenerator->compileViewFile() . '</pre>';
-		$viewFileCard = new CardView('compile_view_file', array('container-fluid','mb-3'), '', array('col-12'), 'COMPILE VIEW FILE', $body, true);
+		$viewFileCard = new CardView('compile_view_file', array('container-fluid','mb-3'), '', array('col-12'), 'COMPILE VIEW FILE', $body, true, true);
 
 		$body = '<button type="button" class="btn btn-outline-secondary btn-sm clippy float-right" data-clippable-id="controller_code"><span class="far fa-copy"></span></button>';
 		$body .= '<pre id="controller_code" class="clippable">' . $codeGenerator->compileViewFile() . '</pre>';
-		$controllerFileCard = new CardView('compile_controller_file', array('container-fluid','mb-3'), '', array('col-12'), 'COMPILE CONTROLLER FILE', $body, true);
+		$controllerFileCard = new CardView('compile_controller_file', array('container-fluid','mb-3'), '', array('col-12'), 'COMPILE CONTROLLER FILE', $body, true, true);
 
 		return $modelFileCard->card(); /* . $viewFileCard->card() . $controllerFileCard->card() */
 
@@ -159,12 +159,7 @@ final class DevView {
 					<input type="text" class="form-control form-control-sm" name="keys[' . $keyName . '][keyName]" value="' . $keyName . '">
 				</td>
 				<td class="text-center">
-					<select name="keys[' . $keyName . '][type]" class="form-control form-control-sm">
-						<option value="int"' . ($type=='int'?' selected':'') . '>int</option>
-						<option value="varchar"' . ($type=='varchar'?' selected':'') . '>varchar</option>
-						<option value="datetime"' . ($type=='datetime'?' selected':'') . '>datetime</option>
-						<option value="text"' . ($type=='text'?' selected':'') . '>text</option>
-					</select>
+					' . $this->typeDropdown('keys[' . $keyName . '][type]', $type) . '
 				</td>
 				<td class="text-center">
 					<select name="keys[' . $keyName . '][default]" class="form-control form-control-sm">
@@ -209,12 +204,7 @@ final class DevView {
 					<input type="text" class="form-control form-control-sm" name="fields[' . $fieldName . '][fieldName]" value="' . $fieldName . '">
 				</td>
 				<td class="text-center">
-					<select name="fields[' . $fieldName . '][type]" class="form-control form-control-sm">
-						<option value="int"' . ($type=='int'?' selected':'') . '>int</option>
-						<option value="varchar"' . ($type=='varchar'?' selected':'') . '>varchar</option>
-						<option value="datetime"' . ($type=='datetime'?' selected':'') . '>datetime</option>
-						<option value="text"' . ($type=='text'?' selected':'') . '>text</option>
-					</select>
+					' . $this->typeDropdown('fields[' . $fieldName . '][type]', $type) . '
 				</td>
 				<td class="text-center">
 					<input type="text" class="form-control form-control-sm" name="fields[' . $fieldName . '][parameter]" value="' . $parameter . '">
@@ -235,6 +225,22 @@ final class DevView {
 					<button type="button" class="btn btn-sm btn-outline-danger btn-block delete-row-button"><span class="far fa-trash-alt"></span></button>
 				</td>
 			</tr>
+		';
+
+	}
+
+	private function typeDropdown($fieldName, $type) {
+
+		return '
+		
+			<select name="' . $fieldName . '" class="form-control form-control-sm">
+				<option value="int"' . ($type=='int'?' selected':'') . '>int</option>
+				<option value="decimal"' . ($type=='decimal'?' selected':'') . '>decimal</option>
+				<option value="varchar"' . ($type=='varchar'?' selected':'') . '>varchar</option>
+				<option value="datetime"' . ($type=='datetime'?' selected':'') . '>datetime</option>
+				<option value="text"' . ($type=='text'?' selected':'') . '>text</option>
+			</select>
+			
 		';
 
 	}

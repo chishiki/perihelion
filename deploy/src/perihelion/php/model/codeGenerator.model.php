@@ -26,7 +26,7 @@ final class CodeGenerator {
 
 			$primaryKeys = array();
 			foreach ($this->fieldArray['keys'] AS $keyName => $key) {
-				$schema .= "  `" . $keyName . "` " . $key['type'] . " " . $key['default'] . ($key['default']?" AUTO_INCREMENT":"") . ",\n";
+				$schema .= "  `" . $keyName . "` " . $key['type'] . " " . $key['default'] . ($key['auto-increment']?" AUTO_INCREMENT":"") . ",\n";
 				if ($key['primary']) { $primaryKeys[] = $keyName; }
 			}
 
@@ -110,7 +110,7 @@ final class CodeGenerator {
 					}
 				$model .= ") {\n\n";
 
-					$model .= "\t\t\t\$nucleus = Nucleus::getInstance()\n\n";
+					$model .= "\t\t\t\$nucleus = Nucleus::getInstance();\n\n";
 
 					$model .= "\t\t\t\$whereClause = array();\n";
 					if ($this->scope == 'site') { $model .= "\t\t\t\$whereClause[] = 'siteID = :siteID';\n"; }
@@ -192,7 +192,7 @@ final class CodeGenerator {
 
 				$class .= "\t\t// ORDER BY\n";
 				$class .= "\t\t\$orderBys = array();\n";
-				$class .= "\t\tforeach \$arg->orderBy AS \$fieldSort) { \$orderBys[] = \$fieldSort['field'] . ' ' . \$fieldSort['sort']; }\n\n";
+				$class .= "\t\tforeach (\$arg->orderBy AS \$fieldSort) { \$orderBys[] = \$fieldSort['field'] . ' ' . \$fieldSort['sort']; }\n\n";
 				$class .= "\t\t\$orderBy = '';\n";
 				$class .= "\t\tif (!empty(\$orderBys)) { \$orderBy = ' ORDER BY ' . implode(', ', \$orderBys); }\n\n";
 
@@ -219,11 +219,11 @@ final class CodeGenerator {
 
 			$class .= "\t}\n\n";
 
-			$class .= "\tpublic function results() {\n\n";
+			$class .= "\tpublic function results() : array {\n\n";
 				$class .= "\t\treturn \$this->results;\n\n";
 			$class .= "\t}\n\n";
 
-			$class .= "\tpublic function resultCount() {\n\n";
+			$class .= "\tpublic function resultCount() : int {\n\n";
 				$class .= "\t\treturn count(\$this->results);\n\n";
 			$class .= "\t}\n\n";
 
@@ -272,7 +272,7 @@ final class CodeGenerator {
 				$class .= "\t\t\$this->created = null;\n";
 				$class .= "\t\t\$this->updated = null;\n";
 				foreach ($this->fieldArray['fields'] AS $fieldName => $field) {
-					$class .= "\t\t\$this->" . ($field['type']=="int"?"int":"string") . " $" . $fieldName . " = null;\n";
+					$class .= "\t\t\$this->" . $fieldName . " = null;\n";
 				}
 				$class .= "\n";
 

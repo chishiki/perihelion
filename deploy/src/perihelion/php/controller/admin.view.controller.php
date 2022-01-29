@@ -93,7 +93,7 @@ class AdminViewController {
 
 		if ($this->urlArray[1] == 'dev') {
 
-			$view = new DevView($this->urlArray,$this->inputArray,$this->errorArray);
+			$view = new CodeGeneratorView($this->urlArray,$this->inputArray,$this->errorArray);
 			$arg = new CodeGeneratorArguments();
 
 			if (isset($this->inputArray['code-generator-submit'])) {
