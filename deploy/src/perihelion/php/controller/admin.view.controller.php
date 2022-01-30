@@ -124,6 +124,15 @@ class AdminViewController {
 					if (isset($key['nullable'])) { $arg->fieldArray['keys'][$keyName]['nullable'] = true; }
 					else { $arg->fieldArray['keys'][$keyName]['nullable'] = false; }
 
+					if (isset($key['form'])) { $arg->fieldArray['keys'][$keyName]['form'] = true; }
+					else { $arg->fieldArray['keys'][$keyName]['form'] = false; }
+
+					if (isset($key['list'])) { $arg->fieldArray['keys'][$keyName]['list'] = true; }
+					else { $arg->fieldArray['keys'][$keyName]['list'] = false; }
+
+					if (isset($key['filter'])) { $arg->fieldArray['keys'][$keyName]['filter'] = true; }
+					else { $arg->fieldArray['keys'][$keyName]['filter'] = false; }
+
 				}
 
 				foreach ($input['fields'] AS $fieldName => $field) {
@@ -139,6 +148,15 @@ class AdminViewController {
 
 					if (isset($field['nullable'])) { $arg->fieldArray['fields'][$fieldName]['nullable'] = true; }
 					else { $arg->fieldArray['fields'][$fieldName]['nullable'] = false; }
+
+					if (isset($field['form'])) { $arg->fieldArray['fields'][$fieldName]['form'] = true; }
+					else { $arg->fieldArray['fields'][$fieldName]['form'] = false; }
+
+					if (isset($field['list'])) { $arg->fieldArray['fields'][$fieldName]['list'] = true; }
+					else { $arg->fieldArray['fields'][$fieldName]['list'] = false; }
+
+					if (isset($field['filter'])) { $arg->fieldArray['fields'][$fieldName]['filter'] = true; }
+					else { $arg->fieldArray['fields'][$fieldName]['filter'] = false; }
 
 				}
 

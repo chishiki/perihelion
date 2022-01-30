@@ -371,85 +371,67 @@ final class CodeGenerator {
 
 			$view .= "\t\t\tif (\$" . implode(" && $",$keys) . ") {\n";
 				foreach ($keys AS $keyName) {
-					$view .= "\t\t\t\<input type\"hidden\" name=\"" . $keyName . "\" value=\"' . \$" . $keyName . " . '\">\n";
+					$view .= "\t\t\t\t\$form .= '<input type\"hidden\" name=\"" . $keyName . "\" value=\"' . \$" . $keyName . " . '\">';\n";
 				}
-			$view .= "\t\t\t}\n";
+			$view .= "\t\t\t}\n\n";
 
-		/*
+			$formKeys = array();
+			foreach ($this->fieldArray['keys'] AS $keyName => $key) {
+				if ($key['form'] == true) { $formKeys[$keyName] = $key; }
+			}
+			if (!empty($formKeys)) {
+				$view .= "\t\t\t\$form .= '<div class=\"form-row\">';\n\n";
+					foreach ($formKeys AS $keyName => $key) {
+						$view .= $this->formGroup($instance, $keyName, $key['type'], );
+					}
+				$view .= "\t\t\t\$form .= '</div>';\n\n";
+			}
 
-		\$form = '
+			$formFields = array();
+			$formTextareas = array();
+			foreach ($this->fieldArray['fields'] AS $fieldName => $field) {
+				if ($field['form'] == true) {
+					if ($field['type'] == 'text') {
+						$formTextareas[$fieldName] = $field;
+					} else {
+						$formFields[$fieldName] = $field;
+					}
+				}
+			}
+			if (!empty($formFields)) {
+				$view .= "\t\t\t\$form .= '<div class=\"form-row\">';\n\n";
+					foreach ($formFields AS $fieldName => $field) {
+						$view .= $this->formGroup($instance, $fieldName, $field['type']);
+					}
+				$view .= "\t\t\t\$form .= '</div>';\n\n";
+			}
+			if (!empty($formTextareas)) {
+				foreach ($formTextareas AS $fieldName => $textarea) {
+					$view .= "\t\t\t\$form .= '<div class=\"form-row\">';\n\n";
+						$view .= $this->formGroup($instance, $fieldName, $textarea['type'], array('col-12'));
+					$view .= "\t\t\t\$form .= '</div>';\n\n";
+				}
+			}
 
-			<form id="product_category_form_' . \$type . '" method="post" action="/' . Lang::prefix() . 'hardware/admin/product-categories/' . \$type . '/' . (\$productCategoryID?\$productCategoryID.'/':'') . '">
+			$view .= "\t\t\t\$form .= '<div class=\"form-row\">';\n\n";
 
-				' . (\$productCategoryID?'<input type="hidden" name="productCategoryID" value="' . \$productCategoryID . '">':'') . '
+				$view .= "\t\t\t\t\$form .= '<div class=\"form-group col-12 col-sm-4 col-md-3\">';\n";
+					$view .= "\t\t\t\t\t\$form .= '<a href\"/' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/\" class=\"btn btn-block btn-outline-secondary\" role=\"button\">' . Lang::getLang('returnToList') . '</a>';\n";
+				$view .= "\t\t\t\t\$form .= '</div>';\n\n";
 
-				<div class="form-row">
+				$view .= "\t\t\t\t\$form .= '<div class=\"form-group col-12 col-sm-4 col-md-3 offset-md-3\">';\n";
+					$view .= "\t\t\t\t\t\$form .= '<button type=\"submit\" name=\"" . $this->classNameHyphens . "-' . \$type . '\" class=\"btn btn-block btn-outline-'. (\$type=='create'?'success':'primary') . '\">' . Lang::getLang(\$type) . '</button>';\n";
+				$view .= "\t\t\t\t\$form .= '</div>';\n\n";
 
-					<div class="form-group col-12 col-sm-8 col-md-6">
-						<label for="productCategoryNameEnglish">' . Lang::getLang('productCategoryNameEnglish') . '</label>
-						<input type="text" class="form-control" name="productCategoryNameEnglish" value="' . \$category->productCategoryNameEnglish . '">
-					</div>
+				$view .= "\t\t\t\t\$form .= '<div class=\"form-group col-12 col-sm-4 col-md-3\">';\n";
+					$view .= "\t\t\t\t\t\$form .= '<a href\"/' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/\" class=\"btn btn-block btn-outline-secondary\" role=\"button\">' . Lang::getLang('cancel') . '</a>';\n";
+				$view .= "\t\t\t\t\$form .= '</div>';\n\n";
 
-				</div>
+			$view .= "\t\t\t\$form .= '</div>';\n\n";
 
-				<div class="form-row">
+		$view .= "\t\t\$form .= '</form>';\n\n";
 
-					<div class="form-group col-12">
-						<label for="productCategoryDescriptionEnglish">' . Lang::getLang('productCategoryDescriptionEnglish') . '</label>
-						<textarea class="form-control" name="productCategoryDescriptionEnglish">' . \$category->productCategoryDescriptionEnglish . '</textarea>
-					</div>
-
-				</div>
-
-				<hr />
-
-				<div class="form-row">
-
-					<div class="form-group col-12 col-sm-8 col-md-6">
-						<label for="productCategoryNameJapanese">' . Lang::getLang('productCategoryNameJapanese') . '</label>
-						<input type="text" class="form-control" name="productCategoryNameJapanese" value="' . \$category->productCategoryNameJapanese . '">
-					</div>
-
-				</div>
-
-				<div class="form-row">
-
-					<div class="form-group col-12">
-						<label for="productCategoryDescriptionJapanese">' . Lang::getLang('productCategoryDescriptionJapanese') . '</label>
-						<textarea class="form-control" name="productCategoryDescriptionJapanese">' . \$category->productCategoryDescriptionJapanese . '</textarea>
-					</div>
-
-				</div>
-
-				<hr />
-
-				<div class="form-row">
-
-					<div class="form-group col-12 col-sm-4 col-md-3">
-						<a href="/' . Lang::prefix() . 'hardware/admin/product-categories/" class="btn btn-block btn-outline-secondary" role="button">' . Lang::getLang('returnToList') . '</a>
-					</div>
-
-					<div class="form-group col-12 col-sm-4 col-md-3 offset-md-3">
-						<button type="submit" name="product-category-' . \$type . '" class="btn btn-block btn-outline-'. (\$type=='create'?'success':'primary') . '">' . Lang::getLang(\$type) . '</button>
-					</div>
-
-					<div class="form-group col-12 col-sm-4 col-md-3">
-						<a href="/' . Lang::prefix() . 'hardware/admin/product-categories/" class="btn btn-block btn-outline-secondary" role="button">' . Lang::getLang('cancel') . '</a>
-					</div>
-
-				</div>
-
-			</form>
-
-		';
-
-
-	}
-
-
-
-		";
-		*/
+		$view .= "\t\treturn \$form;\n\n";
 
 		$view .= "\t}\n\n";
 
@@ -480,18 +462,18 @@ final class CodeGenerator {
 
 	public function compileControllerFile() {}
 
-	private function formGroup($className, $fieldName, $fieldType, $defaultValue, $cols = array('col-12','col-sm-6','col-md-4','col-lg-3','col-xl-2')) {
+	private function formGroup($instance, $fieldName, $fieldType, $cols = array('col-12','col-sm-6','col-md-4','col-lg-3','col-xl-2')) {
 
 		$htmlFieldType = $this->mysqlTypeHtmlTypeDecoder($fieldType);
 
-		$formGroup = "\t\t\t<div class=\"form-group " . implode(" ", $cols) . "\">\n";
-			$formGroup .= "\t\t\t\t<label for=\"" . StringUtilities::camelToUnderscore($fieldName) . "\">' . Lang::getLang('" . $fieldName . "') . '</label>\n";
-			if ($htmlFieldType == 'textarea') {
-				$formGroup .= "\t\t\t\t<textarea id=\"" . StringUtilities::camelToUnderscore($fieldName) . "\" class=\"form-control\" name=\"" . $fieldName . "\">' . \$" . lcfirst($fieldName) . "->" . $fieldName . " . '</textarea>\n";
+		$formGroup = "\t\t\t\t\$form .= '<div class=\"form-group " . implode(" ", $cols) . "\">';\n";
+			$formGroup .= "\t\t\t\t\t\$form .= '<label for=\"" . StringUtilities::camelToUnderscore($fieldName) . "\">' . Lang::getLang('" . $fieldName . "') . '</label>';\n";
+			if ($fieldType == 'text') {
+				$formGroup .= "\t\t\t\t\t\$form .= '<textarea id=\"" . StringUtilities::camelToUnderscore($fieldName) . "\" class=\"form-control\" name=\"" . $fieldName . "\">' . \$" . $instance . "->" . $fieldName . " . '</textarea>';\n";
 			} else {
-				$formGroup .= "\t\t\t\t<input type=\"text\" id=\"" . StringUtilities::camelToUnderscore($fieldName) . "\" class=\"form-control\" name=\"" . $fieldName . "\" value=\"' . \$" . lcfirst($fieldName) . "->" . $fieldName . " . '\">\n";
+				$formGroup .= "\t\t\t\t\t\$form .= '<input type=\"" . $htmlFieldType . "\" id=\"" . StringUtilities::camelToUnderscore($fieldName) . "\" class=\"form-control\" name=\"" . $fieldName . "\" value=\"' . \$" . $instance . "->" . $fieldName . " . '\">';\n";
 			}
-		$formGroup .= "\t\t\t</div>";
+		$formGroup .= "\t\t\t\t\$form .= '</div>';\n\n";
 
 		return $formGroup;
 
@@ -517,7 +499,7 @@ final class CodeGenerator {
 				$type = 'date';
 				break;
 			case 'text':
-				$type = 'textearea';
+				$type = 'textarea';
 				break;
 			default:
 				$type = $fieldType;

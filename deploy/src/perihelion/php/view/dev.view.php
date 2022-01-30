@@ -25,17 +25,17 @@ final class CodeGeneratorView {
 
 		$body = '<button type="button" class="btn btn-outline-secondary btn-sm clippy float-right" data-clippable-id="model_code"><span class="far fa-copy"></span></button>';
 		$body .= '<pre id="model_code" class="clippable">' . $codeGenerator->compileModelFile() . '</pre>';
-		$modelFileCard = new CardView('compile_model_file', array('container-fluid','mb-3'), '', array('col-12'), 'COMPILE MODEL FILE', $body, true, false);
+		$modelFileCard = new CardView('compile_model_file', array('container-fluid','mb-3'), '', array('col-12'), 'MODEL FILE', $body, true, true);
 
 		$body = '<button type="button" class="btn btn-outline-secondary btn-sm clippy float-right" data-clippable-id="view_code"><span class="far fa-copy"></span></button>';
 		$body .= '<pre id="view_code" class="clippable">' . $codeGenerator->compileViewFile() . '</pre>';
-		$viewFileCard = new CardView('compile_view_file', array('container-fluid','mb-3'), '', array('col-12'), 'COMPILE VIEW FILE', $body, true, true);
+		$viewFileCard = new CardView('compile_view_file', array('container-fluid','mb-3'), '', array('col-12'), 'VIEW FILE', $body, true, false);
 
 		$body = '<button type="button" class="btn btn-outline-secondary btn-sm clippy float-right" data-clippable-id="controller_code"><span class="far fa-copy"></span></button>';
 		$body .= '<pre id="controller_code" class="clippable">' . $codeGenerator->compileViewFile() . '</pre>';
-		$controllerFileCard = new CardView('compile_controller_file', array('container-fluid','mb-3'), '', array('col-12'), 'COMPILE CONTROLLER FILE', $body, true, true);
+		$controllerFileCard = new CardView('compile_controller_file', array('container-fluid','mb-3'), '', array('col-12'), 'CONTROLLER FILES', $body, true, true);
 
-		return $modelFileCard->card(); /* . $viewFileCard->card() . $controllerFileCard->card() */
+		return $modelFileCard->card() . $viewFileCard->card(); /* . $controllerFileCard->card() */
 
 	}
 
@@ -50,7 +50,10 @@ final class CodeGeneratorView {
 				$key['default-value'],
 				$key['nullable'],
 				$key['primary'],
-				$key['auto-increment']
+				$key['auto-increment'],
+				$key['form'],
+				$key['list'],
+				$key['filter']
 			);
 		}
 
@@ -62,7 +65,10 @@ final class CodeGeneratorView {
 				$field['parameter'],
 				$field['default'],
 				$field['default-value'],
-				$field['nullable']
+				$field['nullable'],
+				$field['form'],
+				$field['list'],
+				$field['filter']
 			);
 		}
 
@@ -98,6 +104,9 @@ final class CodeGeneratorView {
 							<th class="text-center">nullable</th>
 							<th class="text-center">primary</th>
 							<th class="text-center">auto increment</th>
+							<th class="text-center">form</th>
+							<th class="text-center">list</th>
+							<th class="text-center">filter</th>
 							<th class="text-center">action</th>
 						</thead>
 						<tbody>' . $keyRows . '</tbody>
@@ -109,13 +118,16 @@ final class CodeGeneratorView {
 				<div id="code_generator_form_field_rows" class="table-responsive">
 					<table id="code_generator_form_field_rows" class="table table-sm table-striped table-bordered">
 						<thead class="thead-light">
-							<th>field name</th>
-							<th>type</th>
-							<th>parameter</th>
-							<th>default</th>
-							<th>default-value</th>
-							<th>nullable</th>
-							<th>action</th>
+							<th class="text-center">field name</th>
+							<th class="text-center">type</th>
+							<th class="text-center">parameter</th>
+							<th class="text-center">default</th>
+							<th class="text-center">default-value</th>
+							<th class="text-center">nullable</th>
+							<th class="text-center">form</th>
+							<th class="text-center">list</th>
+							<th class="text-center">filter</th>
+							<th class="text-center">action</th>
 						</thead>
 						<tbody>' . $fieldRows . '</tbody>
 					</table>
@@ -148,7 +160,10 @@ final class CodeGeneratorView {
 		$defaultValue = 'zero',
 		$nullable = false,
 		$primary = true,
-		$autoIncrement = true
+		$autoIncrement = true,
+		$form = false,
+		$list = true,
+		$filter = false
 	) {
 
 		if (is_null($keyName)) { $keyName = 'temp_key_name_' . Utilities::generateUniqueKey(); }
@@ -180,6 +195,15 @@ final class CodeGeneratorView {
 					<input type="checkbox" name="keys[' . $keyName . '][auto-increment]" value="true"' . ($autoIncrement?' checked':'') . '>
 				</td>
 				<td class="text-center">
+					<input type="checkbox" name="keys[' . $keyName . '][form]" value="true"' . ($form?' checked':'') . '>
+				</td>
+				<td class="text-center">
+					<input type="checkbox" name="keys[' . $keyName . '][list]" value="true"' . ($list?' checked':'') . '>
+				</td>
+				<td class="text-center">
+					<input type="checkbox" name="keys[' . $keyName . '][filter]" value="true"' . ($filter?' checked':'') . '>
+				</td>
+				<td class="text-center">
 					<button type="button" class="btn btn-sm btn-outline-danger btn-block delete-row-button"><span class="far fa-trash-alt"></span></button>
 				</td>
 			</tr>
@@ -193,7 +217,10 @@ final class CodeGeneratorView {
 		$parameter = null,
 		$default = 'NOT NULL',
 		$defaultValue = 'zero',
-		$nullable = false
+		$nullable = false,
+		$form = true,
+		$list = true,
+		$filter = false
 	) {
 
 		if (is_null($fieldName)) { $fieldName = 'temp_field_name_' . Utilities::generateUniqueKey(); }
@@ -222,6 +249,15 @@ final class CodeGeneratorView {
 					<input type="checkbox" name="fields[' . $fieldName . '][nullable]" value="true"' . ($nullable?' checked':'') . '>
 				</td>
 				<td class="text-center">
+					<input type="checkbox" name="fields[' . $fieldName . '][form]" value="true"' . ($form?' checked':'') . '>
+				</td>
+				<td class="text-center">
+					<input type="checkbox" name="fields[' . $fieldName . '][list]" value="true"' . ($list?' checked':'') . '>
+				</td>
+				<td class="text-center">
+					<input type="checkbox" name="fields[' . $fieldName . '][filter]" value="true"' . ($filter?' checked':'') . '>
+				</td>
+				<td class="text-center">
 					<button type="button" class="btn btn-sm btn-outline-danger btn-block delete-row-button"><span class="far fa-trash-alt"></span></button>
 				</td>
 			</tr>
@@ -233,10 +269,11 @@ final class CodeGeneratorView {
 
 		return '
 		
-			<select name="' . $fieldName . '" class="form-control form-control-sm">
+			<select id="cg_type_dropdown" name="' . $fieldName . '" class="form-control form-control-sm">
 				<option value="int"' . ($type=='int'?' selected':'') . '>int</option>
 				<option value="decimal"' . ($type=='decimal'?' selected':'') . '>decimal</option>
 				<option value="varchar"' . ($type=='varchar'?' selected':'') . '>varchar</option>
+				<option value="date"' . ($type=='date'?' selected':'') . '>date</option>
 				<option value="datetime"' . ($type=='datetime'?' selected':'') . '>datetime</option>
 				<option value="text"' . ($type=='text'?' selected':'') . '>text</option>
 			</select>
@@ -249,7 +286,7 @@ final class CodeGeneratorView {
 
 		return '
 		
-			<select name="' . $fieldName . '" class="form-control form-control-sm">
+			<select id="cg_default_value_dropdown" name="' . $fieldName . '" class="form-control form-control-sm">
 				<option value="zero"' . ($defaultValue=='zero'?' selected':'') . '>0</option>
 				<option value="null"' . ($defaultValue=='null'?' selected':'') . '>null</option>
 				<option value="empty-string"' . ($defaultValue=='empty-string'?' selected':'') . '>\'\'</option>
