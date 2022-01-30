@@ -7,7 +7,10 @@ final class CodeGenerator {
 	private bool $extendsORM;
 	private string $scope;
 	private array $fieldArray;
+
 	private string $tableName;
+	private String $classNameHyphens;
+	private String $classNameUnderscore;
 
 	public function __construct(CodeGeneratorArguments $arg) {
 
@@ -16,7 +19,10 @@ final class CodeGenerator {
 		$this->extendsORM = $arg->extendsORM;
 		$this->scope = $arg->scope;
 		$this->fieldArray = $arg->fieldArray;
-		$this->tableName = $arg->moduleName . "_" . $arg->className;
+
+		$this->tableName = $this->moduleName . "_" . $this->className;
+		$this->classNameHyphens = StringUtilities::camelToHyphen($this->className);
+		$this->classNameUnderscore = StringUtilities::camelToUnderscore($this->className);
 
 	}
 
@@ -314,9 +320,212 @@ final class CodeGenerator {
 
 	}
 
-	public function compileViewFile() {}
+	private function generateView($functions) {
+
+		$view = "final class " . ucfirst($this->moduleName) . $this->className . "View {\n\n";
+
+			$view .= "\tprivate array \$loc;\n";
+			$view .= "\tprivate array \$input;\n";
+			$view .= "\tprivate array \$modules;\n";
+			$view .= "\tprivate array \$errors;\n";
+			$view .= "\tprivate array \$messages;\n\n";
+
+			$view .= "\tpublic function __construct(\$loc = array(), \$input = array(), \$modules = array(), \$errors = array(), \$messages = array()) {\n\n";
+
+				$view .= "\t\t\$this->loc = \$loc;\n";
+				$view .= "\t\t\$this->input = \$input;\n";
+				$view .= "\t\t\$this->modules = \$modules;\n";
+				$view .= "\t\t\$this->errors = \$errors;\n";
+				$view .= "\t\t\$this->messages = \$messages;\n\n";
+
+			$view .= "\t}\n\n";
+
+			$view .= $functions;
+
+		$view .= "}\n\n";
+
+		return $view;
+
+	}
+
+	public function generateViewForm() {
+
+		$keys = array();
+		foreach ($this->fieldArray['keys'] AS $keyName => $key) { $keys[] = $keyName; }
+
+		$instance = lcfirst($this->className);
+
+		$view = "\tpublic function " . ucfirst($this->moduleName) . $this->className . "Form(\$type, ";
+			$params = array();
+			foreach ($keys AS $keyName) { $params[] = "\$" . $keyName . " = null"; }
+			$view .= implode(", ", $params);
+		$view .= ") {\n\n";
+
+			$view .= "\t\t\$" . $instance . " = new " . $this->className . "($" . implode(", $", $keys) . ");\n";
+			$view .= "\t\tif (!empty(\$this->input)) {\n";
+				$view .= "\t\t\tforeach(\$this->input AS \$key => \$value) { if(isset(\$" . $instance . "->\$key)) { \$" . $instance . "->\$key = \$value; } }\n";
+			$view .= "\t\t}\n\n";
+
+			$view .= "\t\t\$form = '<form id=\"" . $this->classNameUnderscore . "_' . \$type . '_form\" method=\"post\" action=\"' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/' . \$type . '/'  . ";
+			$view .= "($" . implode("&&$",$keys) . "?$" . implode(".'/'.$",$keys) . ".'/':'') . '\">';\n\n";
+
+			$view .= "\t\t\tif (\$" . implode(" && $",$keys) . ") {\n";
+				foreach ($keys AS $keyName) {
+					$view .= "\t\t\t\<input type\"hidden\" name=\"" . $keyName . "\" value=\"' . \$" . $keyName . " . '\">\n";
+				}
+			$view .= "\t\t\t}\n";
+
+		/*
+
+		\$form = '
+
+			<form id="product_category_form_' . \$type . '" method="post" action="/' . Lang::prefix() . 'hardware/admin/product-categories/' . \$type . '/' . (\$productCategoryID?\$productCategoryID.'/':'') . '">
+
+				' . (\$productCategoryID?'<input type="hidden" name="productCategoryID" value="' . \$productCategoryID . '">':'') . '
+
+				<div class="form-row">
+
+					<div class="form-group col-12 col-sm-8 col-md-6">
+						<label for="productCategoryNameEnglish">' . Lang::getLang('productCategoryNameEnglish') . '</label>
+						<input type="text" class="form-control" name="productCategoryNameEnglish" value="' . \$category->productCategoryNameEnglish . '">
+					</div>
+
+				</div>
+
+				<div class="form-row">
+
+					<div class="form-group col-12">
+						<label for="productCategoryDescriptionEnglish">' . Lang::getLang('productCategoryDescriptionEnglish') . '</label>
+						<textarea class="form-control" name="productCategoryDescriptionEnglish">' . \$category->productCategoryDescriptionEnglish . '</textarea>
+					</div>
+
+				</div>
+
+				<hr />
+
+				<div class="form-row">
+
+					<div class="form-group col-12 col-sm-8 col-md-6">
+						<label for="productCategoryNameJapanese">' . Lang::getLang('productCategoryNameJapanese') . '</label>
+						<input type="text" class="form-control" name="productCategoryNameJapanese" value="' . \$category->productCategoryNameJapanese . '">
+					</div>
+
+				</div>
+
+				<div class="form-row">
+
+					<div class="form-group col-12">
+						<label for="productCategoryDescriptionJapanese">' . Lang::getLang('productCategoryDescriptionJapanese') . '</label>
+						<textarea class="form-control" name="productCategoryDescriptionJapanese">' . \$category->productCategoryDescriptionJapanese . '</textarea>
+					</div>
+
+				</div>
+
+				<hr />
+
+				<div class="form-row">
+
+					<div class="form-group col-12 col-sm-4 col-md-3">
+						<a href="/' . Lang::prefix() . 'hardware/admin/product-categories/" class="btn btn-block btn-outline-secondary" role="button">' . Lang::getLang('returnToList') . '</a>
+					</div>
+
+					<div class="form-group col-12 col-sm-4 col-md-3 offset-md-3">
+						<button type="submit" name="product-category-' . \$type . '" class="btn btn-block btn-outline-'. (\$type=='create'?'success':'primary') . '">' . Lang::getLang(\$type) . '</button>
+					</div>
+
+					<div class="form-group col-12 col-sm-4 col-md-3">
+						<a href="/' . Lang::prefix() . 'hardware/admin/product-categories/" class="btn btn-block btn-outline-secondary" role="button">' . Lang::getLang('cancel') . '</a>
+					</div>
+
+				</div>
+
+			</form>
+
+		';
+
+
+	}
+
+
+
+		";
+		*/
+
+		$view .= "\t}\n\n";
+
+		return $view;
+
+	}
+
+	public function generateViewList() { }
+
+	public function generateViewFilters() { }
+
+	public function compileViewFile() : string {
+
+		$schema = "/*\n\n".$this->generateSchema()."\n\n*/";
+
+		$functionArray = array();
+		$functionArray[] = $this->generateViewForm();
+		// $functionArray[] = $this->generateViewList();
+		// $functionArray[] = $this->generateViewFilters();
+
+		$functions = implode("\n\n", $functionArray);
+		$view = $this->generateView($functions);
+		$file = "<?php\n\n" . $schema . "\n\n" . $view . "\n\n?>";
+
+		return htmlentities($file);
+
+	}
 
 	public function compileControllerFile() {}
+
+	private function formGroup($className, $fieldName, $fieldType, $defaultValue, $cols = array('col-12','col-sm-6','col-md-4','col-lg-3','col-xl-2')) {
+
+		$htmlFieldType = $this->mysqlTypeHtmlTypeDecoder($fieldType);
+
+		$formGroup = "\t\t\t<div class=\"form-group " . implode(" ", $cols) . "\">\n";
+			$formGroup .= "\t\t\t\t<label for=\"" . StringUtilities::camelToUnderscore($fieldName) . "\">' . Lang::getLang('" . $fieldName . "') . '</label>\n";
+			if ($htmlFieldType == 'textarea') {
+				$formGroup .= "\t\t\t\t<textarea id=\"" . StringUtilities::camelToUnderscore($fieldName) . "\" class=\"form-control\" name=\"" . $fieldName . "\">' . \$" . lcfirst($fieldName) . "->" . $fieldName . " . '</textarea>\n";
+			} else {
+				$formGroup .= "\t\t\t\t<input type=\"text\" id=\"" . StringUtilities::camelToUnderscore($fieldName) . "\" class=\"form-control\" name=\"" . $fieldName . "\" value=\"' . \$" . lcfirst($fieldName) . "->" . $fieldName . " . '\">\n";
+			}
+		$formGroup .= "\t\t\t</div>";
+
+		return $formGroup;
+
+	}
+
+	private function mysqlTypeHtmlTypeDecoder($fieldType) {
+
+		switch($fieldType) {
+
+			case 'int':
+				$type = 'number';
+				break;
+			case 'decimal':
+				$type = 'number';
+				break;
+			case 'varchar':
+				$type = 'text';
+				break;
+			case 'date':
+				$type = 'date';
+				break;
+			case 'datetime':
+				$type = 'date';
+				break;
+			case 'text':
+				$type = 'textearea';
+				break;
+			default:
+				$type = $fieldType;
+		}
+
+		return $type;
+
+	}
 
 	private function defaultValueDecoder($defaultValue) {
 
@@ -365,7 +574,10 @@ final class CodeGeneratorArguments {
 					'default-value' => 'zero',
 					'primary' => true,
 					'auto-increment' => true,
-					'nullable' => false
+					'nullable' => false,
+					'form' => false,
+					'list' => true,
+					'filter' => false
 				)
 			),
 			'fields' => array(
@@ -374,21 +586,30 @@ final class CodeGeneratorArguments {
 					'parameter' => null, // int does not take a parameter in MySQL 8
 					'default' => 'NOT NULL',
 					'default-value' => 'zero',
-					'nullable' => false
+					'nullable' => false,
+					'form' => true,
+					'list' => true,
+					'filter' => false
 				),
 				'fieldNameB' => array (
 					'type' => 'datetime',
 					'parameter' => null,
 					'default' => 'NULL',
 					'default-value' => 'null',
-					'nullable' => true
+					'nullable' => true,
+					'form' => true,
+					'list' => true,
+					'filter' => false
 				),
 				'fieldNameN' => array (
 					'type' => 'varchar',
 					'parameter' => 255,
 					'default' => 'NOT NULL',
 					'default-value' => 'empty-string',
-					'nullable' => false
+					'nullable' => false,
+					'form' => true,
+					'list' => true,
+					'filter' => false
 				)
 			)
 		);
