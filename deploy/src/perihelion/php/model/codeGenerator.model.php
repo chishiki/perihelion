@@ -439,7 +439,7 @@ final class CodeGenerator {
 
 		$view .= "\t\treturn \$form;\n\n";
 
-		$view .= "\t}\n\n";
+		$view .= "\t}";
 
 		return $view;
 
@@ -462,7 +462,6 @@ final class CodeGenerator {
 			$list .= ucfirst($this->moduleName) . $this->className . "ListParameters \$arg";
 		$list .= ") {\n\n";
 
-
 			$list .= "\t\t\$list = '\n\n";
 
 				$list .= "\t\t\t<div class=\"row mb-3\">\n";
@@ -473,7 +472,6 @@ final class CodeGenerator {
 						$list .= "\t\t\t\t\t<a href=\"/' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/create/\" class=\"btn btn-block btn-outline-success btn-sm\"><span class=\"fas fa-plus\"></span> ' . Lang::getLang('create') . '</a>\n";
 					$list .= "\t\t\t\t</div>\n";
 				$list .= "\t\t\t</div>\n\n";
-
 
 				$list .= "\t\t\t<div class=\"table-container mb-3\">\n";
 					$list .= "\t\t\t\t<div class=\"table-responsive\">\n";
@@ -498,14 +496,93 @@ final class CodeGenerator {
 
 			$list .= "\t\t';\n\n";
 
-			$list .= "\t\t\$card = new CardView('" . $this->moduleName . "_" . $this->classNameUnderscore . "_admin_list',array('container'),'',array('col-12'),Lang::getLang('" . $this->moduleName . $this->className . "List'), \$list);\n\n";
+			$list .= "\t\t\$card = new CardView('" . $this->moduleName . "_" . $this->classNameUnderscore . "_admin_list',array('container'),'',array('col-12'),Lang::getLang('" . $this->moduleName . $this->className . "List'), \$list);\n";
 			$list .= "\t\treturn \$card->card();\n\n";
 
 		$list .= "\t}";
 
 		return $list;
 
+	}
 
+	private function generateViewListRows() {
+
+		$keys = array();
+		$keyCols = array();
+		$fieldCols = array();
+
+		foreach ($this->fieldArray['keys'] AS $keyName => $key) {
+			$keys[] = $keyName;
+			if ($key['list']) { $keyCols[] = $keyName; }
+		}
+
+		foreach ($this->fieldArray['fields'] AS $fieldName => $field) {
+			if ($field['list']) { $fieldCols[] = $fieldName; }
+		}
+
+		$rows = "\tpublic function " . $this->moduleName . $this->className . "ListRows(";
+			$rows .= ucfirst($this->moduleName) . $this->className . "ListParameters \$arg";
+		$rows .= ") {\n\n";
+
+			$rows .= "\t\t\$list = new " . ucfirst($this->moduleName) . $this->className . "List(\$arg);\n";
+			$rows .= "\t\t\$results = \$list->results();\n\n";
+			$rows .= "\t\t\$rows = '';\n\n";
+
+				$rows .= "\t\tforeach (\$results AS \$r) {\n\n";
+					$rows .= "\t\t\t\$rows .= '\n\n";
+
+						$rows .= "\t\t\t\t<tr ";
+							if (!empty($keys)) {
+								$rows .= "id=\"" . $this->moduleName . "_" . $this->classNameUnderscore . "_key_' . \$r['";
+									$rows .= implode("'] . '_' . \$r['", $keys);
+								$rows .= "'] . '\" ";
+							}
+							$rows .= "class=\"" . $this->moduleName . "-" . $this->classNameHyphens . "-list-row\"";
+							if (!empty($keys)) {
+								foreach ($keys AS $keyName) {
+									$rows .= " data-row-" . StringUtilities::camelToHyphen($keyName) . "=\"' . \$r['" . $keyName . "'] . '\"";
+								}
+							}
+						$rows .= ">\n";
+
+							foreach ($keyCols AS $keyName) {
+								$rows .= "\t\t\t\t\t<th scope=\"row\" class=\"text-center " . $this->moduleName . "-" . $this->classNameHyphens . "-list-cell\" data-cell-" . StringUtilities::camelToHyphen($keyName) . "=\"' . \$r['" . $keyName . "'] . '\">' .\$r['" . $keyName . "'] . '</th>\n";
+							}
+
+							foreach ($fieldCols AS $fieldName) {
+								$rows .= "\t\t\t\t\t<td class=\"text-center " . $this->moduleName . "-" . $this->classNameHyphens . "-list-cell\" data-cell-" . StringUtilities::camelToHyphen($fieldName) . "=\"' . \$r['" . $fieldName . "'] . '\">' .\$r['" . $fieldName . "'] . '</td>\n";
+							}
+
+							$rows .= "\t\t\t\t\t<td class=\"text-center text-nowrap\">\n";
+
+								$rows .= "\t\t\t\t\t\t<a href\"/' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/update/' . \$r['";
+									if (!empty($keys)) { $rows .= implode("'] . '/' . \$r['", $keys); }
+								$rows .= "'] . '/\" class=\"btn btn-sm btn-outline-primary\">\n";
+									$rows .= "\t\t\t\t\t\t\t<span class=\"far fa-edit\"></span>\n";
+									$rows .= "\t\t\t\t\t\t\t' . Lang::getLang('update') . '\n";
+								$rows .= "\t\t\t\t\t\t</a>\n";
+
+								$rows .= "\t\t\t\t\t\t<a href\"/' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/confirm-delete/' . \$r['";
+									if (!empty($keys)) { $rows .= implode("'] . '/' . \$r['", $keys); }
+								$rows .= "'] . '/\" class=\"btn btn-sm btn-outline-danger\">\n";
+									$rows .= "\t\t\t\t\t\t\t<span class=\"far fa-trash-alt\"></span>\n";
+									$rows .= "\t\t\t\t\t\t\t' . Lang::getLang('delete') . '\n";
+								$rows .= "\t\t\t\t\t\t</a>\n";
+
+							$rows .= "\t\t\t\t\t</td>\n";
+
+						$rows .= "\t\t\t\t</tr>\n\n";
+					$rows .= "\t\t\t';\n\n";
+				$rows .= "\t\t}\n\n";
+
+
+
+
+			$rows .= "\t\treturn \$rows;\n\n";
+
+		$rows .= "\t}\n\n";
+
+		return $rows;
 
 	}
 
@@ -518,6 +595,7 @@ final class CodeGenerator {
 		$functionArray = array();
 		$functionArray[] = $this->generateViewForm();
 		$functionArray[] = $this->generateViewList();
+		$functionArray[] = $this->generateViewListRows();
 		// $functionArray[] = $this->generateViewFilters();
 
 		$functions = implode("\n\n", $functionArray);
