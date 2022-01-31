@@ -26,7 +26,9 @@ final class CodeGenerator {
 
 	}
 
-	public function generateSchema() {
+	/* ======= SCHEMA ======= */
+
+	private function generateSchema() {
 
 		$schema = "CREATE TABLE `" . $this->moduleName . "_"  . $this->className . "` \n";
 
@@ -56,7 +58,9 @@ final class CodeGenerator {
 
 	}
 
-	public function generateModelClass() {
+	/* ======= MODEL ======= */
+
+	private function generateModelClass() {
 
 		$model = "final class " . $this->className . ($this->extendsORM?" extends ORM":"") . " {\n\n";
 
@@ -169,7 +173,7 @@ final class CodeGenerator {
 
 	}
 
-	public function generateListClass() {
+	private function generateListClass() {
 
 		$class = "final class " . ucfirst($this->moduleName) . $this->className . "List {\n\n";
 
@@ -239,7 +243,7 @@ final class CodeGenerator {
 		
 	}
 
-	public function generateListArgumentClass() {
+	private function generateListArgumentClass() {
 
 		$class = "final class " . ucfirst($this->moduleName) . $this->className . "ListParameters {\n\n";
 
@@ -320,7 +324,9 @@ final class CodeGenerator {
 
 	}
 
-	private function generateView($functions) {
+	/* ======= VIEW ======= */
+
+	private function generateViewClass($functions) {
 
 		$view = "final class " . ucfirst($this->moduleName) . $this->className . "View {\n\n";
 
@@ -348,14 +354,14 @@ final class CodeGenerator {
 
 	}
 
-	public function generateViewForm() {
+	private function generateViewForm() {
 
 		$keys = array();
 		foreach ($this->fieldArray['keys'] AS $keyName => $key) { $keys[] = $keyName; }
 
 		$instance = lcfirst($this->className);
 
-		$view = "\tpublic function " . ucfirst($this->moduleName) . $this->className . "Form(\$type, ";
+		$view = "\tpublic function " . $this->moduleName . $this->className . "Form(\$type, ";
 			$params = array();
 			foreach ($keys AS $keyName) { $params[] = "\$" . $keyName . " = null"; }
 			$view .= implode(", ", $params);
@@ -439,9 +445,71 @@ final class CodeGenerator {
 
 	}
 
-	public function generateViewList() { }
+	private function generateViewList() {
 
-	public function generateViewFilters() { }
+		$cols = array();
+		$filters = array();
+		foreach ($this->fieldArray['keys'] AS $keyName => $key) {
+			if ($key['list']) { $cols[] = $keyName; }
+			if ($key['filter']) { $filters[] = $keyName; }
+		}
+		foreach ($this->fieldArray['fields'] AS $fieldName => $field) {
+			if ($field['list']) { $cols[] = $fieldName; }
+			if ($field['filter']) { $filters[] = $fieldName; }
+		}
+
+		$list = "\tpublic function " . $this->moduleName . $this->className . "List(";
+			$list .= ucfirst($this->moduleName) . $this->className . "ListParameters \$arg";
+		$list .= ") {\n\n";
+
+
+			$list .= "\t\t\$list = '\n\n";
+
+				$list .= "\t\t\t<div class=\"row mb-3\">\n";
+					$list .= "\t\t\t\t<div class=\"col-12 col-md-8 col-lg-6\">\n";
+						$list .= "\t\t\t\t\t' . PaginationView::paginate(\$arg->numberOfPages,\$arg->currentPage,'/' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/') . '\n";
+					$list .= "\t\t\t\t</div>\n";
+					$list .= "\t\t\t\t<div class\"col-12 col-md-4 col-lg-2 offset-lg-4\">\n";
+						$list .= "\t\t\t\t\t<a href=\"/' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/create/\" class=\"btn btn-block btn-outline-success btn-sm\"><span class=\"fas fa-plus\"></span> ' . Lang::getLang('create') . '</a>\n";
+					$list .= "\t\t\t\t</div>\n";
+				$list .= "\t\t\t</div>\n\n";
+
+
+				$list .= "\t\t\t<div class=\"table-container mb-3\">\n";
+					$list .= "\t\t\t\t<div class=\"table-responsive\">\n";
+						$list .= "\t\t\t\t\t<table class=\"table table-bordered table-striped table-sm\">\n";
+							$list .= "\t\t\t\t\t\t<thead class\"thead-light\">\n";
+								$list .= "\t\t\t\t\t\t\t<tr>\n";
+									foreach ($cols AS $colName) {
+										$list .= "\t\t\t\t\t\t\t\t<th scope=\"col\" class=\"text-center\">' . Lang::getLang('" . $this->moduleName . $this->className . ucfirst($colName) . "') . '</th>\n";
+									}
+								$list .= "\t\t\t\t\t\t\t</tr>\n";
+							$list .= "\t\t\t\t\t\t</thead>\n";
+							$list .= "\t\t\t\t\t\t<tbody>' . \$this->" . $this->moduleName . $this->className . "ListRows(\$arg) . '</tbody>\n";
+						$list .= "\t\t\t\t\t</table>\n";
+					$list .= "\t\t\t\t</div>\n";
+				$list .= "\t\t\t</div>\n\n";
+
+				$list .= "\t\t\t<div class=\"row\">\n";
+					$list .= "\t\t\t\t<div class=\"col-12 col-md-8 col-lg-6\">\n";
+						$list .= "\t\t\t\t\t' . PaginationView::paginate(\$arg->numberOfPages,\$arg->currentPage,'/' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/') . '\n";
+					$list .= "\t\t\t\t</div>\n";
+				$list .= "\t\t\t</div>\n\n";
+
+			$list .= "\t\t';\n\n";
+
+			$list .= "\t\t\$card = new CardView('" . $this->moduleName . "_" . $this->classNameUnderscore . "_admin_list',array('container'),'',array('col-12'),Lang::getLang('" . $this->moduleName . $this->className . "List'), \$list);\n\n";
+			$list .= "\t\treturn \$card->card();\n\n";
+
+		$list .= "\t}";
+
+		return $list;
+
+
+
+	}
+
+	private function generateViewFilters() { }
 
 	public function compileViewFile() : string {
 
@@ -449,18 +517,16 @@ final class CodeGenerator {
 
 		$functionArray = array();
 		$functionArray[] = $this->generateViewForm();
-		// $functionArray[] = $this->generateViewList();
+		$functionArray[] = $this->generateViewList();
 		// $functionArray[] = $this->generateViewFilters();
 
 		$functions = implode("\n\n", $functionArray);
-		$view = $this->generateView($functions);
+		$view = $this->generateViewClass($functions);
 		$file = "<?php\n\n" . $schema . "\n\n" . $view . "\n\n?>";
 
 		return htmlentities($file);
 
 	}
-
-	public function compileControllerFile() {}
 
 	private function formGroup($instance, $fieldName, $fieldType, $cols = array('col-12','col-sm-6','col-md-4','col-lg-3','col-xl-2')) {
 
@@ -478,6 +544,12 @@ final class CodeGenerator {
 		return $formGroup;
 
 	}
+
+	/* ======= CONTROLLERS ======= */
+
+	public function compileControllerFile() {}
+
+	/* ======= UTILITIES ======= */
 
 	private function mysqlTypeHtmlTypeDecoder($fieldType) {
 
