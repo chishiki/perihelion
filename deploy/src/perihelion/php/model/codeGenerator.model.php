@@ -367,30 +367,34 @@ final class CodeGenerator {
 			$view .= implode(", ", $params);
 		$view .= ") {\n\n";
 
+			$view .= "\t\t\$hidden = '';\n";
+			$view .= "\t\tif (\$type == 'update' && \$" . implode(" && $",$keys) . ") {\n";
+				foreach ($keys AS $keyName) {
+					$view .= "\t\t\t\$hidden .= '<input type\"hidden\" name=\"" . $keyName . "\" value=\"' . \$" . $keyName . " . '\">';\n";
+				}
+			$view .= "\t\t}\n\n";
+
 			$view .= "\t\t\$" . $instance . " = new " . $this->className . "($" . implode(", $", $keys) . ");\n";
 			$view .= "\t\tif (!empty(\$this->input)) {\n";
 				$view .= "\t\t\tforeach(\$this->input AS \$key => \$value) { if(isset(\$" . $instance . "->\$key)) { \$" . $instance . "->\$key = \$value; } }\n";
 			$view .= "\t\t}\n\n";
 
-			$view .= "\t\t\$form = '<form id=\"" . $this->classNameUnderscore . "_' . \$type . '_form\" method=\"post\" action=\"' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/' . \$type . '/'  . ";
-			$view .= "($" . implode("&&$",$keys) . "?$" . implode(".'/'.$",$keys) . ".'/':'') . '\">';\n\n";
+			$view .= "\t\t\$form = '\n\n";
+				$view .= "\t\t\t<form id=\"" . $this->classNameUnderscore . "_' . \$type . '_form\" method=\"post\" action=\"' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/' . \$type . '/'  . ";
+			$view .= "($" . implode("&&$",$keys) . "?$" . implode(".'/'.$",$keys) . ".'/':'') . '\">\n\n";
 
-			$view .= "\t\t\tif (\$" . implode(" && $",$keys) . ") {\n";
-				foreach ($keys AS $keyName) {
-					$view .= "\t\t\t\t\$form .= '<input type\"hidden\" name=\"" . $keyName . "\" value=\"' . \$" . $keyName . " . '\">';\n";
-				}
-			$view .= "\t\t\t}\n\n";
+			$view .= "\t\t\t' . \$hidden . '\n\n";
 
 			$formKeys = array();
 			foreach ($this->fieldArray['keys'] AS $keyName => $key) {
 				if ($key['form'] == true) { $formKeys[$keyName] = $key; }
 			}
 			if (!empty($formKeys)) {
-				$view .= "\t\t\t\$form .= '<div class=\"form-row\">';\n\n";
+				$view .= "\t\t\t<div class=\"form-row\">\n\n";
 					foreach ($formKeys AS $keyName => $key) {
 						$view .= $this->formGroup($instance, $keyName, $key['type'], );
 					}
-				$view .= "\t\t\t\$form .= '</div>';\n\n";
+				$view .= "\t\t\t</div>\n\n";
 			}
 
 			$formFields = array();
@@ -405,37 +409,39 @@ final class CodeGenerator {
 				}
 			}
 			if (!empty($formFields)) {
-				$view .= "\t\t\t\$form .= '<div class=\"form-row\">';\n\n";
+				$view .= "\t\t\t<div class=\"form-row\">\n\n";
 					foreach ($formFields AS $fieldName => $field) {
 						$view .= $this->formGroup($instance, $fieldName, $field['type']);
 					}
-				$view .= "\t\t\t\$form .= '</div>';\n\n";
+				$view .= "\t\t\t</div>\n\n";
 			}
 			if (!empty($formTextareas)) {
 				foreach ($formTextareas AS $fieldName => $textarea) {
-					$view .= "\t\t\t\$form .= '<div class=\"form-row\">';\n\n";
+					$view .= "\t\t\t<div class=\"form-row\">\n\n";
 						$view .= $this->formGroup($instance, $fieldName, $textarea['type'], array('col-12'));
-					$view .= "\t\t\t\$form .= '</div>';\n\n";
+					$view .= "\t\t\t</div>\n\n";
 				}
 			}
 
-			$view .= "\t\t\t\$form .= '<div class=\"form-row\">';\n\n";
+			$view .= "\t\t\t<div class=\"form-row\">\n\n";
 
-				$view .= "\t\t\t\t\$form .= '<div class=\"form-group col-12 col-sm-4 col-md-3\">';\n";
-					$view .= "\t\t\t\t\t\$form .= '<a href\"/' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/\" class=\"btn btn-block btn-outline-secondary\" role=\"button\">' . Lang::getLang('returnToList') . '</a>';\n";
-				$view .= "\t\t\t\t\$form .= '</div>';\n\n";
+				$view .= "\t\t\t\t<div class=\"form-group col-12 col-sm-4 col-md-3\">\n";
+					$view .= "\t\t\t\t\t<a href\"/' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/\" class=\"btn btn-block btn-outline-secondary\" role=\"button\">' . Lang::getLang('returnToList') . '</a>\n";
+				$view .= "\t\t\t\t</div>\n\n";
 
-				$view .= "\t\t\t\t\$form .= '<div class=\"form-group col-12 col-sm-4 col-md-3 offset-md-3\">';\n";
-					$view .= "\t\t\t\t\t\$form .= '<button type=\"submit\" name=\"" . $this->classNameHyphens . "-' . \$type . '\" class=\"btn btn-block btn-outline-'. (\$type=='create'?'success':'primary') . '\">' . Lang::getLang(\$type) . '</button>';\n";
-				$view .= "\t\t\t\t\$form .= '</div>';\n\n";
+				$view .= "\t\t\t\t<div class=\"form-group col-12 col-sm-4 col-md-3 offset-md-3\">\n";
+					$view .= "\t\t\t\t\t<button type=\"submit\" name=\"" . $this->classNameHyphens . "-' . \$type . '\" class=\"btn btn-block btn-outline-'. (\$type=='create'?'success':'primary') . '\">' . Lang::getLang(\$type) . '</button>\n";
+				$view .= "\t\t\t\t</div>\n\n";
 
-				$view .= "\t\t\t\t\$form .= '<div class=\"form-group col-12 col-sm-4 col-md-3\">';\n";
-					$view .= "\t\t\t\t\t\$form .= '<a href\"/' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/\" class=\"btn btn-block btn-outline-secondary\" role=\"button\">' . Lang::getLang('cancel') . '</a>';\n";
-				$view .= "\t\t\t\t\$form .= '</div>';\n\n";
+				$view .= "\t\t\t\t<div class=\"form-group col-12 col-sm-4 col-md-3\">\n";
+					$view .= "\t\t\t\t\t<a href\"/' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/\" class=\"btn btn-block btn-outline-secondary\" role=\"button\">' . Lang::getLang('cancel') . '</a>\n";
+				$view .= "\t\t\t\t</div>\n\n";
 
-			$view .= "\t\t\t\$form .= '</div>';\n\n";
+			$view .= "\t\t\t</div>\n\n";
 
-		$view .= "\t\t\$form .= '</form>';\n\n";
+		$view .= "\t\t\t</form>\n\n";
+
+		$view .= "\t\t';\n\n";
 
 		$view .= "\t\treturn \$form;\n\n";
 
@@ -610,14 +616,14 @@ final class CodeGenerator {
 
 		$htmlFieldType = $this->mysqlTypeHtmlTypeDecoder($fieldType);
 
-		$formGroup = "\t\t\t\t\$form .= '<div class=\"form-group " . implode(" ", $cols) . "\">';\n";
-			$formGroup .= "\t\t\t\t\t\$form .= '<label for=\"" . StringUtilities::camelToUnderscore($fieldName) . "\">' . Lang::getLang('" . $fieldName . "') . '</label>';\n";
+		$formGroup = "\t\t\t\t<div class=\"form-group " . implode(" ", $cols) . "\">\n";
+			$formGroup .= "\t\t\t\t\t<label for=\"" . StringUtilities::camelToUnderscore($fieldName) . "\">' . Lang::getLang('" . $fieldName . "') . '</label>\n";
 			if ($fieldType == 'text') {
-				$formGroup .= "\t\t\t\t\t\$form .= '<textarea id=\"" . StringUtilities::camelToUnderscore($fieldName) . "\" class=\"form-control\" name=\"" . $fieldName . "\">' . \$" . $instance . "->" . $fieldName . " . '</textarea>';\n";
+				$formGroup .= "\t\t\t\t\t<textarea id=\"" . StringUtilities::camelToUnderscore($fieldName) . "\" class=\"form-control\" name=\"" . $fieldName . "\">' . \$" . $instance . "->" . $fieldName . " . '</textarea>\n";
 			} else {
-				$formGroup .= "\t\t\t\t\t\$form .= '<input type=\"" . $htmlFieldType . "\" id=\"" . StringUtilities::camelToUnderscore($fieldName) . "\" class=\"form-control\" name=\"" . $fieldName . "\" value=\"' . \$" . $instance . "->" . $fieldName . " . '\">';\n";
+				$formGroup .= "\t\t\t\t\t<input type=\"" . $htmlFieldType . "\" id=\"" . StringUtilities::camelToUnderscore($fieldName) . "\" class=\"form-control\" name=\"" . $fieldName . "\" value=\"' . \$" . $instance . "->" . $fieldName . " . '\">\n";
 			}
-		$formGroup .= "\t\t\t\t\$form .= '</div>';\n\n";
+		$formGroup .= "\t\t\t\t</div>\n\n";
 
 		return $formGroup;
 

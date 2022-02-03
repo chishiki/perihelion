@@ -239,7 +239,7 @@ class PageView {
 				$devData .= '<div class="card mb-3"><div class="card-header">' . $key . '</div><div class="card-body"><pre>' . print_r($value, true) . '</pre></div></div>';
 			}
 
-			$card = new CardView('dev_session_data',array('container-fluid my-3'),null,array('col-12'),Lang::getLang('devData'),$devData,true);
+			$card = new CardView('dev_session_data',array('container-fluid my-3'),null,array('col-12'),Lang::getLang('devData'),$devData,true,true);
 			$footer .= $card->card();
 		}
 		
