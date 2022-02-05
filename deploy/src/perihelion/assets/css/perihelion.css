@@ -78,6 +78,10 @@ div.perihelion-footer p {
 	height:5rem;
 }
 
+pre.perihelion-code {
+	font-size:10px;
+}
+
 /* === END SPINNER === */
 
 /* >= 576px (sm) */

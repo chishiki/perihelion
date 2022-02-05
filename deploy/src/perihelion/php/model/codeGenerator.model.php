@@ -8,10 +8,10 @@ final class CodeGenerator {
 	private string $scope;
 	private array $fieldArray;
 
-	private string $tableName;
-	private String $classNameHyphens;
-	private String $classNameUnderscore;
-	private array $filters;
+	public string $tableName;
+	public String $classNameHyphens;
+	public String $classNameUnderscore;
+	public array $filters;
 
 	public function __construct(CodeGeneratorArguments $arg) {
 
@@ -444,7 +444,7 @@ final class CodeGenerator {
 				$view .= "\t\t\t\t</div>\n\n";
 
 				$view .= "\t\t\t\t<div class=\"form-group col-12 col-sm-4 col-lg-3 offset-lg-3\">\n";
-					$view .= "\t\t\t\t\t<button type=\"submit\" name=\"" . $this->classNameHyphens . "-' . \$type . '\" class=\"btn btn-block btn-outline-'. (\$type=='create'?'success':'primary') . '\">\n";
+					$view .= "\t\t\t\t\t<button type=\"submit\" name=\"" . $this->moduleName . "-" . $this->classNameHyphens . "-' . \$type . '\" class=\"btn btn-block btn-outline-'. (\$type=='create'?'success':'primary') . '\">\n";
 						$view .= "\t\t\t\t\t\t<span class=\"far fa-save\"></span>\n";
 						$view .= "\t\t\t\t\t\t' . Lang::getLang(\$type) . '\n";
 					$view .= "\t\t\t\t\t</button>\n";
@@ -489,6 +489,15 @@ final class CodeGenerator {
 			$list .= ucfirst($this->moduleName) . $this->className . "ListParameters \$arg";
 		$list .= ") {\n\n";
 
+			if (!empty($this->filters)) {
+				foreach ($this->filters as $filterKey) {
+					$list .= "\t\t\$selected" . ucfirst($filterKey) . " = null;\n";
+					$list .= "\t\tif (isset(\$_SESSION['building']['room']['filters']['$filterKey'])) {\n";
+						$list .= "\t\t\t\$selected" . ucfirst($filterKey) . " = \$_SESSION['building']['room']['filters']['$filterKey'];\n";
+					$list .= "\t\t}\n";
+				}
+			}
+
 			$list .= "\t\t\$list = '\n\n";
 
 				if (!empty($this->filters)) {
@@ -498,7 +507,10 @@ final class CodeGenerator {
 								$list .= $this->generateViewFilterDropdown($filterKey);
 							}
 							$list .= "\t\t\t\t\t<div class=\"form-group col-12 col-sm-6 col-md-3\">\n";
-								$list .= "\t\t\t\t\t\t<button type=\"submit\" class=\"btn btn-outline-primary btn-block\">' . Lang::getLang('filter') . '</button>\n";
+								$list .= "\t\t\t\t\t\t<button type=\"submit\" name=\"filter\" class=\"btn btn-outline-primary btn-block\">' . Lang::getLang('filter') . '</button>\n";
+							$list .= "\t\t\t\t\t</div>\n";
+							$list .= "\t\t\t\t\t<div class=\"form-group col-12 col-sm-6 col-md-3\">\n";
+								$list .= "\t\t\t\t\t\t<button type=\"submit\" name=\"filter-reset\" class=\"btn btn-outline-secondary btn-block\">' . Lang::getLang('reset') . '</button>\n";
 							$list .= "\t\t\t\t\t</div>\n";
 						$list .= "\t\t\t\t</div>\n";
 					$list .= "\t\t\t</form>\n\n";
@@ -519,9 +531,9 @@ final class CodeGenerator {
 							$list .= "\t\t\t\t\t\t<thead class\"thead-light\">\n";
 								$list .= "\t\t\t\t\t\t\t<tr>\n";
 									foreach ($cols AS $colName) {
-										$list .= "\t\t\t\t\t\t\t\t<th scope=\"col\" class=\"text-center\">' . Lang::getLang('" . $this->moduleName . $this->className . ucfirst($colName) . "') . '</th>\n";
+										$list .= "\t\t\t\t\t\t\t\t<th scope=\"col\" class=\"text-center text-nowrap\">' . Lang::getLang('" . $this->moduleName . $this->className . ucfirst($colName) . "') . '</th>\n";
 									}
-									$list .= "\t\t\t\t\t\t\t\t<th scope=\"col\" class=\"text-center\">' . Lang::getLang('action') . '</th>\n";
+									$list .= "\t\t\t\t\t\t\t\t<th scope=\"col\" class=\"text-center text-nowrap\">' . Lang::getLang('action') . '</th>\n";
 								$list .= "\t\t\t\t\t\t\t</tr>\n";
 							$list .= "\t\t\t\t\t\t</thead>\n";
 							$list .= "\t\t\t\t\t\t<tbody>' . \$this->" . $this->moduleName . $this->className . "ListRows(\$arg) . '</tbody>\n";
@@ -630,7 +642,7 @@ final class CodeGenerator {
 	private function generateViewFilterFunction() : string {
 
 		// filter
-		$ff = "\tpublic function " . $this->moduleName . $this->className . "Filter(\$filterKey) {\n\n";
+		$ff = "\tpublic function " . $this->moduleName . $this->className . "Filter(\$filterKey, \$selectedFilter = null) {\n\n";
 
 			$ff .= "\t\t\$arg = new " . ucfirst($this->moduleName) . $this->className . "ListParameters();\n";
 			$ff .= "\t\t\$arg->resultSet = array();\n";
@@ -638,10 +650,10 @@ final class CodeGenerator {
 			$ff .= "\t\t\$valueList = new " . ucfirst($this->moduleName) . $this->className . "List(\$arg);\n";
 			$ff .= "\t\t\$values = \$valueList->results();\n\n";
 
-			$ff .= "\t\t\$filter = '<select name=\"\$filterKey\" class=\"form-control\">';\n";
+			$ff .= "\t\t\$filter = '<select name=\"filters[' . \$filterKey . ']\" class=\"form-control\">';\n";
 				$ff .= "\t\t\t\$filter .= '<option value=\"\">' . Lang::getLang(\$filterKey) . '</option>';\n";
 				$ff .= "\t\t\tforeach (\$values AS \$value) {\n";
-					$ff .= "\t\t\t\t\$filter .= '<option value=\"' . \$value[\$filterKey] . '\">' . \$value[\$filterKey] . '</option>';\n";
+					$ff .= "\t\t\t\t\$filter .= '<option value=\"' . \$value[\$filterKey] . '\"' . (\$value[\$filterKey]==\$selectedFilter?' selected':'') . '>' . \$value[\$filterKey] . '</option>';\n";
 				$ff .= "\t\t\t}\n";
 			$ff .= "\t\t\$filter .= '</select>';\n\n";
 
@@ -658,7 +670,7 @@ final class CodeGenerator {
 		// $fd = "\t\t\t" . $this->moduleName . $this->className . "Filter(\$filterKey)";
 
 		$fd = "\t\t\t\t\t<div class=\"form-group col-12 col-sm-6 col-md-3\">\n";
-			$fd .= "\t\t\t\t\t\t' . \$this->" . $this->moduleName . $this->className . "Filter('$filterKey') . '\n";
+			$fd .= "\t\t\t\t\t\t' . \$this->" . $this->moduleName . $this->className . "Filter('$filterKey', \$selected" . ucfirst($filterKey) . ") . '\n";
 		$fd .= "\t\t\t\t\t</div>\n";
 
 		return $fd;
@@ -751,6 +763,9 @@ final class CodeGenerator {
 				break;
 			case 'current-timestamp':
 				$value = 'CURRENT_TIMESTAMP';
+				break;
+			case 'uuid':
+				$value = '\'\'';
 				break;
 			default:
 				$value = 'null';

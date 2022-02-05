@@ -19,27 +19,61 @@ final class CodeGeneratorView {
 
 	}
 
-	public function codeGeneratorResults($arg) {
+	public function codeGeneratorResults(CodeGeneratorArguments $arg) : string {
 
 		$codeGenerator = new CodeGenerator($arg);
 
-		$body = '<button type="button" class="btn btn-outline-secondary btn-sm clippy float-right" data-clippable-id="model_code"><span class="far fa-copy"></span></button>';
-		$body .= '<pre id="model_code" class="clippable">' . $codeGenerator->compileModelFile() . '</pre>';
-		$modelFileCard = new CardView('compile_model_file', array('container-fluid','mb-3'), '', array('col-12'), 'MODEL FILE', $body, true, true);
+		$cgResults = '';
 
-		$body = '<button type="button" class="btn btn-outline-secondary btn-sm clippy float-right" data-clippable-id="view_code"><span class="far fa-copy"></span></button>';
-		$body .= '<pre id="view_code" class="clippable">' . $codeGenerator->compileViewFile() . '</pre>';
-		$viewFileCard = new CardView('compile_view_file', array('container-fluid','mb-3'), '', array('col-12'), 'VIEW FILE', $body, true, false);
+		if (!empty($this->input)) {
 
-		$body = '<button type="button" class="btn btn-outline-secondary btn-sm clippy float-right" data-clippable-id="controller_code"><span class="far fa-copy"></span></button>';
-		$body .= '<pre id="controller_code" class="clippable">' . $codeGenerator->compileViewFile() . '</pre>';
-		$controllerFileCard = new CardView('compile_controller_file', array('container-fluid','mb-3'), '', array('col-12'), 'CONTROLLER FILES', $body, true, true);
+			$body = '<button type="button" class="btn btn-outline-secondary btn-sm clippy float-right" data-clippable-id="model_code"><span class="far fa-copy"></span></button>';
+			$body .= '<pre id="model_code" class="clippable text-monospace perihelion-code">' . $codeGenerator->compileModelFile() . '</pre>';
+			$modelFileCard = new CardView(
+				'compile_model_file',
+				array('container-fluid', 'mb-3'),
+				'',
+				array('col-12'),
+				'/perihelion/deploy/src/satellites/' . $arg->moduleName . '/php/model/' . lcfirst($arg->className) . '.model.php',
+				$body,
+				true,
+				true
+			);
+			$cgResults .= $modelFileCard->card();
 
-		return $modelFileCard->card() . $viewFileCard->card(); /* . $controllerFileCard->card() */
+			$body = '<button type="button" class="btn btn-outline-secondary btn-sm clippy float-right" data-clippable-id="view_code"><span class="far fa-copy"></span></button>';
+			$body .= '<pre id="view_code" class="clippable text-monospace perihelion-code">' . $codeGenerator->compileViewFile() . '</pre>';
+			$viewFileCard = new CardView(
+				'compile_view_file',
+				array('container-fluid', 'mb-3'),
+				'',
+				array('col-12'),
+				'/perihelion/deploy/src/satellites/' . $arg->moduleName . '/php/view/' . lcfirst($arg->className) . '.view.php',
+				$body,
+				true,
+				true
+			);
+			$cgResults .= $viewFileCard->card();
+
+			/*
+			$body = '<button type="button" class="btn btn-outline-secondary btn-sm clippy float-right" data-clippable-id="state_controller_code"><span class="far fa-copy"></span></button>';
+			$body .= '<pre id="state_controller_code" class="clippable text-monospace perihelion-code">' . $codeGenerator->compileStateControllerFile() . '</pre>';
+			$stateControllerFileCard = new CardView('compile_state_controller_file', array('container-fluid', 'mb-3'), '', array('col-12'), '/perihelion/deploy/src/satellites/' . $arg->moduleName . '/php/controller/admin.' . lcfirst($arg->className) . '.state.controller.php', $body, true, true);
+			$cgResults .= $stateControllerFileCard->card();
+
+			$body = '<button type="button" class="btn btn-outline-secondary btn-sm clippy float-right" data-clippable-id="view_controller_code"><span class="far fa-copy"></span></button>';
+			$body .= '<pre id="view_controller_code" class="clippable text-monospace perihelion-code">' . $codeGenerator->compileViewControllerFile() . '</pre>';
+			$viewControllerFileCard = new CardView('compile_view_controller_file', array('container-fluid', 'mb-3'), '', array('col-12'), '/perihelion/deploy/src/satellites/' . $arg->moduleName . '/php/controller/admin.' . lcfirst($arg->className) . '.view.controller.php', $body, true, true);
+			$cgResults .= $viewControllerFileCard->card();
+			*/
+
+		}
+
+		return $cgResults;
 
 	}
 
-	public function codeGeneratorForm(CodeGeneratorArguments $arg) {
+	public function codeGeneratorForm(CodeGeneratorArguments $arg) : string {
 
 		$keyRows = '';
 		foreach ($arg->fieldArray['keys'] AS $keyName => $key) {
@@ -112,7 +146,8 @@ final class CodeGeneratorView {
 						<tbody>' . $keyRows . '</tbody>
 					</table>
 				</div>
-				<button type="button" id="btn_code_generator_add_key_row" class="btn btn-sm btn-outline-success">ADD KEY</button>
+				<!-- TODO: code generator and ORM do not yet fully support multiple keys -->
+				<button type="button" id="btn_code_generator_add_key_row" class="btn btn-sm btn-outline-success disabled" disabled>ADD KEY</button>
 				<hr />
 				FIELDS
 				<div id="code_generator_form_field_rows" class="table-responsive">
@@ -164,7 +199,7 @@ final class CodeGeneratorView {
 		$form = false,
 		$list = true,
 		$filter = false
-	) {
+	) : string {
 
 		if (is_null($keyName)) { $keyName = 'temp_key_name_' . Utilities::generateUniqueKey(); }
 
@@ -221,7 +256,7 @@ final class CodeGeneratorView {
 		$form = true,
 		$list = true,
 		$filter = false
-	) {
+	) : string {
 
 		if (is_null($fieldName)) { $fieldName = 'temp_field_name_' . Utilities::generateUniqueKey(); }
 
@@ -265,7 +300,7 @@ final class CodeGeneratorView {
 
 	}
 
-	private function typeDropdown($fieldName, $type) {
+	private function typeDropdown($fieldName, $type) : string {
 
 		return '
 		
@@ -282,7 +317,7 @@ final class CodeGeneratorView {
 
 	}
 
-	private function defaultValueDropdown($fieldName, $defaultValue) {
+	private function defaultValueDropdown($fieldName, $defaultValue) : string {
 
 		return '
 		
@@ -291,6 +326,7 @@ final class CodeGeneratorView {
 				<option value="null"' . ($defaultValue=='null'?' selected':'') . '>null</option>
 				<option value="empty-string"' . ($defaultValue=='empty-string'?' selected':'') . '>\'\'</option>
 				<option value="current-timestamp"' . ($defaultValue=='current-timestamp'?' selected':'') . '>CURRENT_TIMESTAMP</option>
+				<option value="uuid"' . ($defaultValue=='uuid'?' selected':'') . '>UUID</option>
 			</select>
 		
 		';
