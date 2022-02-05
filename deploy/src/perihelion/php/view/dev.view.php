@@ -177,7 +177,7 @@ final class CodeGeneratorView {
 					' . $this->typeDropdown('keys[' . $keyName . '][type]', $type) . '
 				</td>
 				<td class="text-center">
-					<select name="keys[' . $keyName . '][default]" class="form-control form-control-sm">
+					<select name="keys[' . $keyName . '][default]" class="form-control form-control-sm" readonly>
 						<option value="NOT NULL"' . ($default=='NOT NULL'?' selected':'') . '>NOT NULL</option>
 						<option value="NULL"' . ($default=='NULL'?' selected':'') . '>NULL</option>
 					</select>
@@ -186,7 +186,7 @@ final class CodeGeneratorView {
 					' . $this->defaultValueDropdown('keys[' . $keyName . '][default-value]', $defaultValue) . '
 				</td>
 				<td class="text-center">
-					<input type="checkbox" name="keys[' . $keyName . '][nullable]" value="true"' . ($nullable?' checked':'') . '>
+					<input type="checkbox" name="keys[' . $keyName . '][nullable]" value="true"' . ($nullable?' checked':'') . ' disabled>
 				</td>
 				<td class="text-center">
 					<input type="checkbox" name="keys[' . $keyName . '][primary]" value="true"' . ($primary?' checked':'') . '>

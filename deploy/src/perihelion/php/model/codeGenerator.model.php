@@ -11,6 +11,7 @@ final class CodeGenerator {
 	private string $tableName;
 	private String $classNameHyphens;
 	private String $classNameUnderscore;
+	private array $filters;
 
 	public function __construct(CodeGeneratorArguments $arg) {
 
@@ -24,13 +25,21 @@ final class CodeGenerator {
 		$this->classNameHyphens = StringUtilities::camelToHyphen($this->className);
 		$this->classNameUnderscore = StringUtilities::camelToUnderscore($this->className);
 
+		$this->filters = array();
+		foreach ($this->fieldArray['keys'] AS $keyName => $key) {
+			if ($key['filter']) { $this->filters[] = $keyName; }
+		}
+		foreach ($this->fieldArray['fields'] AS $fieldName => $field) {
+			if ($field['filter']) { $this->filters[] = $fieldName; }
+		}
+
 	}
 
 	/* ======= SCHEMA ======= */
 
-	private function generateSchema() {
+	private function generateSchema() : string {
 
-		$schema = "CREATE TABLE `" . $this->moduleName . "_"  . $this->className . "` \n";
+		$schema = "CREATE TABLE `" . $this->moduleName . "_"  . $this->className . "` (\n";
 
 			$primaryKeys = array();
 			foreach ($this->fieldArray['keys'] AS $keyName => $key) {
@@ -49,7 +58,7 @@ final class CodeGenerator {
 			}
 
 			if (!empty($primaryKeys)) {
-				$schema .= "  PRIMARY KEY (`" . implode("", $primaryKeys) . "`)\n";
+				$schema .= "  PRIMARY KEY (`" . implode("`, `", $primaryKeys) . "`)\n";
 			}
 
 		$schema .= ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
@@ -60,13 +69,13 @@ final class CodeGenerator {
 
 	/* ======= MODEL ======= */
 
-	private function generateModelClass() {
+	private function generateModelClass() : string {
 
 		$model = "final class " . $this->className . ($this->extendsORM?" extends ORM":"") . " {\n\n";
 
 			$primaryKeys = array();
 			foreach ($this->fieldArray['keys'] AS $keyName => $key) {
-				$model .= "\tpublic " . ($key['type']=="int"?"int":"string") . " $" . $keyName . ";\n";
+				$model .= "\tpublic " . ($key['type']=="int"?"?int":"?string") . " $" . $keyName . ";\n";
 				if ($key['primary']) { $primaryKeys[] = $keyName; }
 			}
 
@@ -95,7 +104,7 @@ final class CodeGenerator {
 				$model .= "\t\t\$dt = new DateTime();\n\n";
 
 				foreach ($this->fieldArray['keys'] AS $keyName => $key) {
-					$model .= "\t\t\$this->" . $keyName . " = " . $this->defaultValueDecoder($field['default-value']) . ";\n";
+					$model .= "\t\t\$this->" . $keyName . " = null;\n";
 				}
 
 				$model .= "\t\t\$this->siteID = \$_SESSION['siteID'];\n";
@@ -114,7 +123,7 @@ final class CodeGenerator {
 					if (!empty($primaryKeys)) {
 						$parameters = array();
 						foreach ($primaryKeys AS $primaryKey) {
-							$parameters[] = "$" . $primaryKey;
+							$parameters[] = "!is_null($" . $primaryKey . ")";
 						}
 						$model .= implode(" && ", $parameters);
 					}
@@ -135,7 +144,9 @@ final class CodeGenerator {
 
 					$model .= "\t\t\t\$query = 'SELECT * FROM " . $this->tableName . " WHERE ' . implode(' AND ', \$whereClause) . ' LIMIT 1';\n";
 					$model .= "\t\t\t\$statement = \$nucleus->database->prepare(\$query);\n";
-					$model .= "\t\t\t\$statement->bindParam(':siteID', \$_SESSION['siteID'], PDO::PARAM_INT);\n";
+					if ($this->scope == 'site') {
+						$model .= "\t\t\t\$statement->bindParam(':siteID', \$_SESSION['siteID'], PDO::PARAM_INT);\n";
+					}
 					if (!empty($primaryKeys)) {
 						foreach ($primaryKeys AS $primaryKey) {
 							$model .= "\t\t\t\$statement->bindParam(':" . $primaryKey . "', $" . $primaryKey . ", PDO::PARAM_INT);\n";
@@ -173,7 +184,7 @@ final class CodeGenerator {
 
 	}
 
-	private function generateListClass() {
+	private function generateListClass() : string {
 
 		$class = "final class " . ucfirst($this->moduleName) . $this->className . "List {\n\n";
 
@@ -207,7 +218,7 @@ final class CodeGenerator {
 				$class .= "\t\tif (!empty(\$orderBys)) { \$orderBy = ' ORDER BY ' . implode(', ', \$orderBys); }\n\n";
 
 				$class .= "\t\t// BUILD QUERY\n";
-				$class .= "\t\t\$query = 'SELECT ' . \$selector . ' FROM building_Residence' . \$where . \$orderBy;\n";
+				$class .= "\t\t\$query = 'SELECT ' . \$selector . ' FROM " . $this->tableName . "' . \$where . \$orderBy;\n";
 				$class .= "\t\tif (\$arg->limit) { \$query .= ' LIMIT ' . (\$arg->offset?\$arg->offset.', ':'') . \$arg->limit; }\n\n";
 
 				$class .= "\t\t// PREPARE QUERY, BIND PARAMS, EXECUTE QUERY\n";
@@ -243,7 +254,7 @@ final class CodeGenerator {
 		
 	}
 
-	private function generateListArgumentClass() {
+	private function generateListArgumentClass() : string {
 
 		$class = "final class " . ucfirst($this->moduleName) . $this->className . "ListParameters {\n\n";
 
@@ -310,7 +321,7 @@ final class CodeGenerator {
 
 	}
 
-	public function compileModelFile() {
+	public function compileModelFile() : string {
 
 		$fileComponent = array();
 		$fileComponent[] = "/*\n\n".$this->generateSchema()."\n\n*/";
@@ -326,7 +337,7 @@ final class CodeGenerator {
 
 	/* ======= VIEW ======= */
 
-	private function generateViewClass($functions) {
+	private function generateViewClass($functions) : string {
 
 		$view = "final class " . ucfirst($this->moduleName) . $this->className . "View {\n\n";
 
@@ -348,13 +359,13 @@ final class CodeGenerator {
 
 			$view .= $functions;
 
-		$view .= "}\n\n";
+		$view .= "\n\n}";
 
 		return $view;
 
 	}
 
-	private function generateViewForm() {
+	private function generateViewForm() : string {
 
 		$keys = array();
 		foreach ($this->fieldArray['keys'] AS $keyName => $key) { $keys[] = $keyName; }
@@ -370,7 +381,7 @@ final class CodeGenerator {
 			$view .= "\t\t\$hidden = '';\n";
 			$view .= "\t\tif (\$type == 'update' && \$" . implode(" && $",$keys) . ") {\n";
 				foreach ($keys AS $keyName) {
-					$view .= "\t\t\t\$hidden .= '<input type\"hidden\" name=\"" . $keyName . "\" value=\"' . \$" . $keyName . " . '\">';\n";
+					$view .= "\t\t\t\$hidden .= '<input type=\"hidden\" name=\"" . $keyName . "\" value=\"' . \$" . $keyName . " . '\">';\n";
 				}
 			$view .= "\t\t}\n\n";
 
@@ -451,7 +462,7 @@ final class CodeGenerator {
 
 	}
 
-	private function generateViewList() {
+	private function generateViewList(): string {
 
 		$cols = array();
 		$filters = array();
@@ -469,6 +480,19 @@ final class CodeGenerator {
 		$list .= ") {\n\n";
 
 			$list .= "\t\t\$list = '\n\n";
+
+				if (!empty($this->filters)) {
+					$list .= "\t\t\t<form>\n";
+						$list .= "\t\t\t\t<div class=\"form-row\">\n";
+							foreach($this->filters AS $filterKey) {
+								$list .= $this->generateViewFilterDropdown($filterKey);
+							}
+							$list .= "\t\t\t\t\t<div class=\"form-group col-12 col-sm-6 col-md-3\">\n";
+								$list .= "\t\t\t\t\t\t<button type=\"submit\" class=\"btn btn-outline-primary btn-block\">\n";
+							$list .= "\t\t\t\t\t</div>\n";
+						$list .= "\t\t\t\t</div>\n";
+					$list .= "\t\t\t</form>\n\n";
+				}
 
 				$list .= "\t\t\t<div class=\"row mb-3\">\n";
 					$list .= "\t\t\t\t<div class=\"col-12 col-md-8 col-lg-6\">\n";
@@ -511,7 +535,7 @@ final class CodeGenerator {
 
 	}
 
-	private function generateViewListRows() {
+	private function generateViewListRows() : string {
 
 		$keys = array();
 		$keyCols = array();
@@ -586,13 +610,49 @@ final class CodeGenerator {
 
 			$rows .= "\t\treturn \$rows;\n\n";
 
-		$rows .= "\t}\n\n";
+		$rows .= "\t}";
 
 		return $rows;
 
 	}
 
-	private function generateViewFilters() { }
+	private function generateViewFilterFunction() : string {
+
+		// filter
+		$ff = "\tpublic function " . $this->moduleName . $this->className . "Filter(\$filterKey) {\n\n";
+
+			$ff .= "\t\t\$arg = new " . ucfirst($this->moduleName) . $this->className . "ListParameters();\n";
+			$ff .= "\t\t\$arg->resultSet = array();\n";
+			$ff .= "\t\t\$arg->resultSet[] = array('field' => '" . $this->tableName . ".'.\$filterKey, 'alias' => \$filterKey);\n";
+			$ff .= "\t\t\$valueList = new " . ucfirst($this->moduleName) . $this->className . "List(\$arg);\n";
+			$ff .= "\t\t\$values = \$valueList->results();\n\n";
+
+			$ff .= "\t\t\$filter = '<select name=\"\$filterKey\" class=\"form-control\">';\n";
+				$ff .= "\t\t\t\$filter .= '<option value=\"\">' . Lang::getLang(\$filterKey) . '</option>';\n";
+				$ff .= "\t\t\tforeach (\$values AS \$value) {\n";
+					$ff .= "\t\t\t\t\$filter .= '<option value=\"' . \$value[\$filterKey] . '\">' . \$value[\$filterKey] . '</option>';\n";
+				$ff .= "\t\t\t}\n";
+			$ff .= "\t\t\$filter .= '</select>';\n\n";
+
+			$ff .= "\t\treturn \$filter;\n\n";
+
+		$ff .= "\t}";
+
+		return $ff;
+
+	}
+
+	private function generateViewFilterDropdown($filterKey) : string {
+
+		// $fd = "\t\t\t" . $this->moduleName . $this->className . "Filter(\$filterKey)";
+
+		$fd = "\t\t\t\t\t<div class=\"form-group col-12 col-sm-6 col-md-3\">\n";
+			$fd .= "\t\t\t\t\t\t' . \$this->" . $this->moduleName . $this->className . "Filter('$filterKey') . '\n";
+		$fd .= "\t\t\t\t\t</div>\n";
+
+		return $fd;
+		
+	}
 
 	public function compileViewFile() : string {
 
@@ -602,7 +662,7 @@ final class CodeGenerator {
 		$functionArray[] = $this->generateViewForm();
 		$functionArray[] = $this->generateViewList();
 		$functionArray[] = $this->generateViewListRows();
-		// $functionArray[] = $this->generateViewFilters();
+		$functionArray[] = $this->generateViewFilterFunction();
 
 		$functions = implode("\n\n", $functionArray);
 		$view = $this->generateViewClass($functions);
@@ -612,7 +672,7 @@ final class CodeGenerator {
 
 	}
 
-	private function formGroup($instance, $fieldName, $fieldType, $cols = array('col-12','col-sm-6','col-md-4','col-lg-3','col-xl-2')) {
+	private function formGroup($instance, $fieldName, $fieldType, $cols = array('col-12','col-sm-6','col-md-4','col-lg-3','col-xl-2')) : string {
 
 		$htmlFieldType = $this->mysqlTypeHtmlTypeDecoder($fieldType);
 
@@ -635,7 +695,7 @@ final class CodeGenerator {
 
 	/* ======= UTILITIES ======= */
 
-	private function mysqlTypeHtmlTypeDecoder($fieldType) {
+	private function mysqlTypeHtmlTypeDecoder($fieldType) : string {
 
 		switch($fieldType) {
 
@@ -665,12 +725,12 @@ final class CodeGenerator {
 
 	}
 
-	private function defaultValueDecoder($defaultValue) {
+	private function defaultValueDecoder($defaultValue) : string {
 
 		switch($defaultValue) {
 
 			case 'zero':
-				$value = 0;
+				$value = '0';
 				break;
 			case 'null':
 				$value = 'null';
@@ -696,6 +756,7 @@ final class CodeGeneratorArguments {
 	public string $moduleName;
 	public string $className;
 	public bool $extendsORM;
+	public string $scope;
 	public array $fieldArray;
 
 	public function __construct() {
