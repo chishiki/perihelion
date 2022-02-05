@@ -436,16 +436,25 @@ final class CodeGenerator {
 
 			$view .= "\t\t\t<div class=\"form-row\">\n\n";
 
-				$view .= "\t\t\t\t<div class=\"form-group col-12 col-sm-4 col-md-3\">\n";
-					$view .= "\t\t\t\t\t<a href\"/' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/\" class=\"btn btn-block btn-outline-secondary\" role=\"button\">' . Lang::getLang('returnToList') . '</a>\n";
+				$view .= "\t\t\t\t<div class=\"form-group col-12 col-sm-4 col-lg-3\">\n";
+					$view .= "\t\t\t\t\t<a href=\"/' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/\" class=\"btn btn-block btn-outline-secondary\" role=\"button\">\n";
+						$view .= "\t\t\t\t\t\t<span class=\"fas fa-arrow-left\"></span>\n";
+						$view .= "\t\t\t\t\t\t' . Lang::getLang('returnToList') . '\n";
+					$view .= "\t\t\t\t\t</a>\n";
 				$view .= "\t\t\t\t</div>\n\n";
 
-				$view .= "\t\t\t\t<div class=\"form-group col-12 col-sm-4 col-md-3 offset-md-3\">\n";
-					$view .= "\t\t\t\t\t<button type=\"submit\" name=\"" . $this->classNameHyphens . "-' . \$type . '\" class=\"btn btn-block btn-outline-'. (\$type=='create'?'success':'primary') . '\">' . Lang::getLang(\$type) . '</button>\n";
+				$view .= "\t\t\t\t<div class=\"form-group col-12 col-sm-4 col-lg-3 offset-lg-3\">\n";
+					$view .= "\t\t\t\t\t<button type=\"submit\" name=\"" . $this->classNameHyphens . "-' . \$type . '\" class=\"btn btn-block btn-outline-'. (\$type=='create'?'success':'primary') . '\">\n";
+						$view .= "\t\t\t\t\t\t<span class=\"far fa-save\"></span>\n";
+						$view .= "\t\t\t\t\t\t' . Lang::getLang(\$type) . '\n";
+					$view .= "\t\t\t\t\t</button>\n";
 				$view .= "\t\t\t\t</div>\n\n";
 
-				$view .= "\t\t\t\t<div class=\"form-group col-12 col-sm-4 col-md-3\">\n";
-					$view .= "\t\t\t\t\t<a href\"/' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/\" class=\"btn btn-block btn-outline-secondary\" role=\"button\">' . Lang::getLang('cancel') . '</a>\n";
+				$view .= "\t\t\t\t<div class=\"form-group col-12 col-sm-4 col-lg-3\">\n";
+					$view .= "\t\t\t\t\t<a href=\"/' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/\" class=\"btn btn-block btn-outline-secondary\" role=\"button\">\n";
+						$view .= "\t\t\t\t\t\t<span class=\"fas fa-times\"></span>\n";
+						$view .= "\t\t\t\t\t\t' . Lang::getLang('cancel') . '\n";
+					$view .= "\t\t\t\t\t</a>\n";
 				$view .= "\t\t\t\t</div>\n\n";
 
 			$view .= "\t\t\t</div>\n\n";
@@ -454,7 +463,8 @@ final class CodeGenerator {
 
 		$view .= "\t\t';\n\n";
 
-		$view .= "\t\treturn \$form;\n\n";
+		$view .= "\t\t\$card = new CardView('" . $this->moduleName . "_" . $this->classNameUnderscore . "_form',array('container-fluid'),'',array('col-12'),Lang::getLang('" . $this->moduleName . $this->className . "' . ucfirst(\$type)), \$form);\n";
+		$view .= "\t\treturn \$card->card();\n\n";
 
 		$view .= "\t}";
 
@@ -482,23 +492,23 @@ final class CodeGenerator {
 			$list .= "\t\t\$list = '\n\n";
 
 				if (!empty($this->filters)) {
-					$list .= "\t\t\t<form>\n";
+					$list .= "\t\t\t<form id=\"" . $this->moduleName . "_" . $this->classNameUnderscore . "_filter_form\" method=\"post\">\n";
 						$list .= "\t\t\t\t<div class=\"form-row\">\n";
 							foreach($this->filters AS $filterKey) {
 								$list .= $this->generateViewFilterDropdown($filterKey);
 							}
 							$list .= "\t\t\t\t\t<div class=\"form-group col-12 col-sm-6 col-md-3\">\n";
-								$list .= "\t\t\t\t\t\t<button type=\"submit\" class=\"btn btn-outline-primary btn-block\">\n";
+								$list .= "\t\t\t\t\t\t<button type=\"submit\" class=\"btn btn-outline-primary btn-block\">' . Lang::getLang('filter') . '</button>\n";
 							$list .= "\t\t\t\t\t</div>\n";
 						$list .= "\t\t\t\t</div>\n";
 					$list .= "\t\t\t</form>\n\n";
 				}
 
 				$list .= "\t\t\t<div class=\"row mb-3\">\n";
-					$list .= "\t\t\t\t<div class=\"col-12 col-md-8 col-lg-6\">\n";
+					$list .= "\t\t\t\t<div class=\"col-12 col-md-8 col-lg-10\">\n";
 						$list .= "\t\t\t\t\t' . PaginationView::paginate(\$arg->numberOfPages,\$arg->currentPage,'/' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/') . '\n";
 					$list .= "\t\t\t\t</div>\n";
-					$list .= "\t\t\t\t<div class\"col-12 col-md-4 col-lg-2 offset-lg-4\">\n";
+					$list .= "\t\t\t\t<div class=\"col-12 col-md-4 col-lg-2\">\n";
 						$list .= "\t\t\t\t\t<a href=\"/' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/create/\" class=\"btn btn-block btn-outline-success btn-sm\"><span class=\"fas fa-plus\"></span> ' . Lang::getLang('create') . '</a>\n";
 					$list .= "\t\t\t\t</div>\n";
 				$list .= "\t\t\t</div>\n\n";
@@ -511,6 +521,7 @@ final class CodeGenerator {
 									foreach ($cols AS $colName) {
 										$list .= "\t\t\t\t\t\t\t\t<th scope=\"col\" class=\"text-center\">' . Lang::getLang('" . $this->moduleName . $this->className . ucfirst($colName) . "') . '</th>\n";
 									}
+									$list .= "\t\t\t\t\t\t\t\t<th scope=\"col\" class=\"text-center\">' . Lang::getLang('action') . '</th>\n";
 								$list .= "\t\t\t\t\t\t\t</tr>\n";
 							$list .= "\t\t\t\t\t\t</thead>\n";
 							$list .= "\t\t\t\t\t\t<tbody>' . \$this->" . $this->moduleName . $this->className . "ListRows(\$arg) . '</tbody>\n";
@@ -526,7 +537,7 @@ final class CodeGenerator {
 
 			$list .= "\t\t';\n\n";
 
-			$list .= "\t\t\$card = new CardView('" . $this->moduleName . "_" . $this->classNameUnderscore . "_admin_list',array('container'),'',array('col-12'),Lang::getLang('" . $this->moduleName . $this->className . "List'), \$list);\n";
+			$list .= "\t\t\$card = new CardView('" . $this->moduleName . "_" . $this->classNameUnderscore . "_list',array('container-fluid'),'',array('col-12'),Lang::getLang('" . $this->moduleName . $this->className . "List'), \$list);\n";
 			$list .= "\t\treturn \$card->card();\n\n";
 
 		$list .= "\t}";
@@ -585,14 +596,14 @@ final class CodeGenerator {
 
 							$rows .= "\t\t\t\t\t<td class=\"text-center text-nowrap\">\n";
 
-								$rows .= "\t\t\t\t\t\t<a href\"/' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/update/' . \$r['";
+								$rows .= "\t\t\t\t\t\t<a href=\"/' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/update/' . \$r['";
 									if (!empty($keys)) { $rows .= implode("'] . '/' . \$r['", $keys); }
 								$rows .= "'] . '/\" class=\"btn btn-sm btn-outline-primary\">\n";
 									$rows .= "\t\t\t\t\t\t\t<span class=\"far fa-edit\"></span>\n";
 									$rows .= "\t\t\t\t\t\t\t' . Lang::getLang('update') . '\n";
 								$rows .= "\t\t\t\t\t\t</a>\n";
 
-								$rows .= "\t\t\t\t\t\t<a href\"/' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/confirm-delete/' . \$r['";
+								$rows .= "\t\t\t\t\t\t<a href=\"/' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/confirm-delete/' . \$r['";
 									if (!empty($keys)) { $rows .= implode("'] . '/' . \$r['", $keys); }
 								$rows .= "'] . '/\" class=\"btn btn-sm btn-outline-danger\">\n";
 									$rows .= "\t\t\t\t\t\t\t<span class=\"far fa-trash-alt\"></span>\n";
