@@ -391,7 +391,7 @@ final class CodeGenerator {
 			$view .= "\t\t}\n\n";
 
 			$view .= "\t\t\$form = '\n\n";
-				$view .= "\t\t\t<form id=\"" . $this->classNameUnderscore . "_' . \$type . '_form\" method=\"post\" action=\"' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/' . \$type . '/'  . ";
+				$view .= "\t\t\t<form id=\"" . $this->classNameUnderscore . "_' . \$type . '_form\" method=\"post\" action=\"/' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/' . \$type . '/'  . ";
 			$view .= "($" . implode("&&$",$keys) . "?$" . implode(".'/'.$",$keys) . ".'/':'') . '\">\n\n";
 
 			$view .= "\t\t\t' . \$hidden . '\n\n";
@@ -712,9 +712,146 @@ final class CodeGenerator {
 
 	}
 
-	/* ======= CONTROLLERS ======= */
+	/* ======= STATE CONTROLLER ======= */
 
-	public function compileControllerFile() {}
+	private function generateStateControllerClass() : string {
+
+		$keys = array();
+		foreach ($this->fieldArray['keys'] AS $keyName => $key) { $keys[] = $keyName; }
+
+		$view = "final class Admin" . $this->className . "StateController {\n\n";
+
+			$view .= "\tprivate array \$loc;\n";
+			$view .= "\tprivate array \$input;\n";
+			$view .= "\tprivate array \$modules;\n";
+			$view .= "\tprivate array \$errors;\n";
+			$view .= "\tprivate array \$messages;\n\n";
+
+			$view .= "\tpublic function __construct(\$loc = array(), \$input = array(), \$modules = array()) {\n\n";
+
+				$view .= "\t\t\$this->loc = \$loc;\n";
+				$view .= "\t\t\$this->input = \$input;\n";
+				$view .= "\t\t\$this->modules = \$modules;\n";
+				$view .= "\t\t\$this->errors = \$errors;\n";
+				$view .= "\t\t\$this->messages = \$messages;\n\n";
+
+			$view .= "\t}\n\n";
+
+			$view .= "\tpublic function setState() {\n\n";
+
+				$view .= "\t\t\$loc = \$this->loc;\n";
+				$view .= "\t\t\$input = \$this->input;\n";
+				$view .= "\t\t\$modules = \$this->modules;\n\n";
+
+				$view .= "\t\tif (\$loc[2] == '" . $this->classNameHyphens . "') {\n\n";
+
+					$view .= "\t\t\t// /" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/create/\n";
+					$view .= "\t\t\tif (\$loc[3] == 'create' && isset(\$input['" . $this->moduleName . "-" . $this->classNameHyphens . "-create'])) {\n\n";
+
+
+						$view .= "\t\t\t\t// \$this->errors = \$this->validateBuildingRoomCreate(\$input);\n\n";
+
+						$view .= "\t\t\t\tif (empty(\$this->errors)) {\n\n";
+
+							$view .= "\t\t\t\t\t\$" . lcfirst($this->className) . " = new " . $this->className  . "();\n";
+							$view .= "\t\t\t\t\tforeach (\$input AS \$property => \$value) { if (property_exists(\$" . lcfirst($this->className) . ", \$property)) { \$" . lcfirst($this->className) . "->\$property = \$value; } }\n";
+							$view .= "\t\t\t\t\t" . $this->className  . "::insert(\$" . lcfirst($this->className) . ", true, 'building_');\n";
+							$view .= "\t\t\t\t\t\$successURL = '/' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/';\n";
+							$view .= "\t\t\t\t\theader(\"Location: \$successURL\");\n\n";
+
+						$view .= "\t\t\t\t}\n\n";
+
+					$view .= "\t\t\t}\n\n";
+
+					$view .= "\t\t\t// /" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/update/" . implode('/',$keys) . "/\n";
+					$view .= "\t\t\tif (\$loc[3] == 'update' && is_numeric(\$loc[4]) && isset(\$input['" . $this->moduleName . "-" . $this->classNameHyphens . "-update'])) {\n\n";
+
+						$view .= "\t\t\t\t// \$this->errors = \$this->validateBuildingRoomUpdate(\$input);\n\n";
+
+						$view .= "\t\t\t\tif (empty(\$this->errors)) {\n\n";
+
+							$view .= "\t\t\t\t\t\$" . lcfirst($this->className) . " = new " . $this->className  . "(\$loc[4]);\n";
+							$view .= "\t\t\t\t\t\$room->updated = date('Y-m-d H:i:s');\n";
+							$view .= "\t\t\t\t\tforeach (\$input AS \$property => \$value) { if (property_exists(\$" . lcfirst($this->className) . ", \$property)) { \$" . lcfirst($this->className) . "->\$property = \$value; } }\n";
+							$updateConditions = array();
+							$u = 4;
+							foreach ($keys AS $keyName) {
+								$updateConditions[] = "'" . $keyName . "' => \$loc[" . $u . "]";
+								$u++;
+							}
+							$view .= "\t\t\t\t\t\$conditions = array(" . (implode(', ', $updateConditions)) . ");\n";
+							$view .= "\t\t\t\t\tRoom::update(\$" . lcfirst($this->className) . ", \$conditions, true, false, '" . $this->moduleName . "_');\n\n";
+
+						$view .= "\t\t\t\t}\n\n";
+
+					$view .= "\t\t\t}\n\n";
+
+					$view .= "\t\t\t// /" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/delete/" . implode('/',$keys) . "/\n";
+					$view .= "\t\t\tif (\$loc[3] == 'delete' && is_numeric(\$loc[4]) && isset(\$input['" . $this->moduleName . "-" . $this->classNameHyphens . "-delete'])) {\n\n";
+
+						$view .= "\t\t\t\t// \$this->errors = \$this->validateBuildingRoomDelete(\$input);\n\n";
+
+						$view .= "\t\t\t\tif (empty(\$this->errors)) {\n\n";
+
+							$view .= "\t\t\t\t\t\$" . lcfirst($this->className) . " = new " . $this->className  . "(\$loc[4]);\n";
+							$view .= "\t\t\t\t\t\$room->markAsDeleted();\n";
+							$view .= "\t\t\t\t\t\$successURL = '/' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/';\n";
+							$view .= "\t\t\t\t\theader(\"Location: \$successURL\");\n\n";
+
+						$view .= "\t\t\t\t}\n\n";
+
+					$view .= "\t\t\t}\n\n";
+
+					/*
+					if (!isset($_SESSION['building']['room']['filters']) || isset($input['filter-reset'])) {
+						$_SESSION['building']['room']['filters'] = array();
+					}
+					if (isset($input['filters']) && isset($input['filter'])) {
+						foreach ($input['filters'] AS $filterKey => $filterValue) {
+							$_SESSION['building']['room']['filters'][$filterKey] = $filterValue;
+						}
+					}
+					*/
+
+				$view .= "\t\t}\n\n";
+
+			$view .= "\t}\n\n";
+
+			/*
+				private function validateBuildingRoomCreate($input) { }
+
+				private function validateBuildingRoomUpdate($input) { }
+
+				private function validateBuildingRoomDelete($input) { }
+
+				public function getErrors() {
+					return $this->errors;
+				}
+
+				public function getMessages() {
+					return $this->messages;
+				}
+
+			*/
+
+		$view .= "}";
+
+		return $view;
+
+	}
+
+	public function compileStateControllerFile() {
+
+		$schema = "/*\n\n".$this->generateSchema()."\n\n*/";
+		$controller = $this->generateStateControllerClass();
+		$file = "<?php\n\n" . $schema . "\n\n" . $controller . "\n\n?>";
+		return htmlentities($file);
+
+	}
+
+	/* ======= VIEW CONTROLLER ======= */
+
+	public function compileViewControllerFile() {}
 
 	/* ======= UTILITIES ======= */
 

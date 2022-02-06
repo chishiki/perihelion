@@ -34,7 +34,7 @@ final class CodeGeneratorView {
 				array('container-fluid', 'mb-3'),
 				'',
 				array('col-12'),
-				'/perihelion/deploy/src/satellites/' . $arg->moduleName . '/php/model/' . lcfirst($arg->className) . '.model.php',
+				lcfirst($arg->className) . '.model.php',
 				$body,
 				true,
 				true
@@ -48,22 +48,32 @@ final class CodeGeneratorView {
 				array('container-fluid', 'mb-3'),
 				'',
 				array('col-12'),
-				'/perihelion/deploy/src/satellites/' . $arg->moduleName . '/php/view/' . lcfirst($arg->className) . '.view.php',
+				lcfirst($arg->className) . '.view.php',
 				$body,
 				true,
 				true
 			);
 			$cgResults .= $viewFileCard->card();
 
-			/*
+
 			$body = '<button type="button" class="btn btn-outline-secondary btn-sm clippy float-right" data-clippable-id="state_controller_code"><span class="far fa-copy"></span></button>';
 			$body .= '<pre id="state_controller_code" class="clippable text-monospace perihelion-code">' . $codeGenerator->compileStateControllerFile() . '</pre>';
-			$stateControllerFileCard = new CardView('compile_state_controller_file', array('container-fluid', 'mb-3'), '', array('col-12'), '/perihelion/deploy/src/satellites/' . $arg->moduleName . '/php/controller/admin.' . lcfirst($arg->className) . '.state.controller.php', $body, true, true);
+			$stateControllerFileCard = new CardView(
+				'compile_state_controller_file',
+				array('container-fluid', 'mb-3'),
+				'',
+				array('col-12'),
+				'admin.' . lcfirst($arg->className) . '.state.controller.php',
+				$body,
+				true,
+				true
+			);
 			$cgResults .= $stateControllerFileCard->card();
 
+			/*
 			$body = '<button type="button" class="btn btn-outline-secondary btn-sm clippy float-right" data-clippable-id="view_controller_code"><span class="far fa-copy"></span></button>';
 			$body .= '<pre id="view_controller_code" class="clippable text-monospace perihelion-code">' . $codeGenerator->compileViewControllerFile() . '</pre>';
-			$viewControllerFileCard = new CardView('compile_view_controller_file', array('container-fluid', 'mb-3'), '', array('col-12'), '/perihelion/deploy/src/satellites/' . $arg->moduleName . '/php/controller/admin.' . lcfirst($arg->className) . '.view.controller.php', $body, true, true);
+			$viewControllerFileCard = new CardView('compile_view_controller_file', array('container-fluid', 'mb-3'), '', array('col-12'), '/src/satellites/' . $arg->moduleName . '/php/controller/admin.' . lcfirst($arg->className) . '.view.controller.php', $body, true, true);
 			$cgResults .= $viewControllerFileCard->card();
 			*/
 
