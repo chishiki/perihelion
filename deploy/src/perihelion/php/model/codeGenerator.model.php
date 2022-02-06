@@ -802,16 +802,14 @@ final class CodeGenerator {
 
 					$view .= "\t\t\t}\n\n";
 
-					/*
-					if (!isset($_SESSION['building']['room']['filters']) || isset($input['filter-reset'])) {
-						$_SESSION['building']['room']['filters'] = array();
-					}
-					if (isset($input['filters']) && isset($input['filter'])) {
-						foreach ($input['filters'] AS $filterKey => $filterValue) {
-							$_SESSION['building']['room']['filters'][$filterKey] = $filterValue;
-						}
-					}
-					*/
+					$view .= "\t\t\tif (!isset(\$_SESSION['" . $this->moduleName . "']['" . $this->classNameHyphens . "']['filters']) || isset(\$input['filter-reset'])) {\n";
+						$view .= "\t\t\t\t\$_SESSION['" . $this->moduleName . "']['" . $this->classNameHyphens . "']['filters'] = array();\n";
+					$view .= "\t\t\t}\n";
+					$view .= "\t\t\tif (isset(\$input['filters']) && isset(\$input['filter'])) {\n";
+						$view .= "\t\t\t\tforeach (\$input['filters'] AS \$filterKey => \$filterValue) {\n";
+							$view .= "\t\t\t\t\t\$_SESSION['" . $this->moduleName . "']['" . $this->classNameHyphens . "']['filters'][\$filterKey] = \$filterValue;\n";
+						$view .= "\t\t\t\t}\n";
+					$view .= "\t\t\t}\n\n";
 
 				$view .= "\t\t}\n\n";
 
