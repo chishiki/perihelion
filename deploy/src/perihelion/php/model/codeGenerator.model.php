@@ -938,7 +938,7 @@ final class CodeGenerator {
 			\$arg->limit = 25;
 			\$arg->offset = 0;
 
-			if (is_numeric(\$loc[3])) {
+			if (is_numeric(\$loc[3]) && \$loc[3] <= \$arg->numberOfPages) {
 				\$currentPage = \$loc[3];
 				\$arg->currentPage = \$currentPage;
 				\$arg->offset = 25 * (\$currentPage- 1);
