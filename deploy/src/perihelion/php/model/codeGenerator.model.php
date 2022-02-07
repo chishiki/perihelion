@@ -542,7 +542,7 @@ final class CodeGenerator {
 				$list .= "\t\t\t</div>\n\n";
 
 				$list .= "\t\t\t<div class=\"row\">\n";
-					$list .= "\t\t\t\t<div class=\"col-12 col-md-8 col-lg-6\">\n";
+					$list .= "\t\t\t\t<div class=\"col-12 col-md-8 col-lg-10\">\n";
 						$list .= "\t\t\t\t\t' . PaginationView::paginate(\$arg->numberOfPages,\$arg->currentPage,'/' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/') . '\n";
 					$list .= "\t\t\t\t</div>\n";
 				$list .= "\t\t\t</div>\n\n";
@@ -646,7 +646,9 @@ final class CodeGenerator {
 
 			$ff .= "\t\t\$arg = new " . ucfirst($this->moduleName) . $this->className . "ListParameters();\n";
 			$ff .= "\t\t\$arg->resultSet = array();\n";
-			$ff .= "\t\t\$arg->resultSet[] = array('field' => '" . $this->tableName . ".'.\$filterKey, 'alias' => \$filterKey);\n";
+			$ff .= "\t\t\$arg->resultSet[] = array('field' => 'DISTINCT(" . $this->tableName . ".'.\$filterKey.')', 'alias' => \$filterKey);\n";
+			$ff .= "\t\t\$arg->orderBy = array();\n";
+			$ff .= "\t\t\$arg->orderBy[] = array('field' => '" . $this->tableName . ".'.\$filterKey, 'sort' => 'ASC');\n";
 			$ff .= "\t\t\$valueList = new " . ucfirst($this->moduleName) . $this->className . "List(\$arg);\n";
 			$ff .= "\t\t\$values = \$valueList->results();\n\n";
 
@@ -732,8 +734,8 @@ final class CodeGenerator {
 				$view .= "\t\t\$this->loc = \$loc;\n";
 				$view .= "\t\t\$this->input = \$input;\n";
 				$view .= "\t\t\$this->modules = \$modules;\n";
-				$view .= "\t\t\$this->errors = \$errors;\n";
-				$view .= "\t\t\$this->messages = \$messages;\n\n";
+				$view .= "\t\t\$this->errors = array();\n";
+				$view .= "\t\t\$this->messages = array();\n\n";
 
 			$view .= "\t}\n\n";
 
@@ -763,10 +765,12 @@ final class CodeGenerator {
 
 					$view .= "\t\t\t}\n\n";
 
-					$view .= "\t\t\t// /" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/update/" . implode('/',$keys) . "/\n";
+					$view .= "\t\t\t// /" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/update/<" . implode('>/<',$keys) . ">/\n";
 					$view .= "\t\t\tif (\$loc[3] == 'update' && is_numeric(\$loc[4]) && isset(\$input['" . $this->moduleName . "-" . $this->classNameHyphens . "-update'])) {\n\n";
 
-						$view .= "\t\t\t\t// \$this->errors = \$this->validateBuildingRoomUpdate(\$input);\n\n";
+						$view .= "\t\t\t\t// \$this->errors = \$this->validateBuildingRoomUpdate(";
+							foreach ($keys AS $keyName) { $view .= "\$" . $keyName . ", "; }
+						$view .= "\$input);\n\n";
 
 						$view .= "\t\t\t\tif (empty(\$this->errors)) {\n\n";
 
@@ -786,10 +790,12 @@ final class CodeGenerator {
 
 					$view .= "\t\t\t}\n\n";
 
-					$view .= "\t\t\t// /" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/delete/" . implode('/',$keys) . "/\n";
+					$view .= "\t\t\t// /" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/delete/<" . implode('>/<',$keys) . ">/\n";
 					$view .= "\t\t\tif (\$loc[3] == 'delete' && is_numeric(\$loc[4]) && isset(\$input['" . $this->moduleName . "-" . $this->classNameHyphens . "-delete'])) {\n\n";
 
-						$view .= "\t\t\t\t// \$this->errors = \$this->validateBuildingRoomDelete(\$input);\n\n";
+						$view .= "\t\t\t\t// \$this->errors = \$this->validateBuildingRoomDelete(";
+							foreach ($keys AS $keyName) { $view .= "\$" . $keyName . ", "; }
+						$view .= "\$input);\n\n";
 
 						$view .= "\t\t\t\tif (empty(\$this->errors)) {\n\n";
 
@@ -815,22 +821,29 @@ final class CodeGenerator {
 
 			$view .= "\t}\n\n";
 
-			/*
-				private function validateBuildingRoomCreate($input) { }
+			$view .= "\tprivate function validateBuildingRoomCreate(\$input) {\n";
+				$view .= "\t\t// if () { \$this->errors['errorKey'][] == Lang::getLang('errorDescription'); }\n";
+			$view .= "\t}\n\n";
 
-				private function validateBuildingRoomUpdate($input) { }
+			$view .= "\tprivate function validateBuildingRoomUpdate(";
+				foreach ($keys AS $keyName) { $view .= "\$" . $keyName . ", "; }
+			$view .= "\$input) {\n";
+				$view .= "\t\t// if () { \$this->errors['errorKey'][] == Lang::getLang('errorDescription'); }\n";
+			$view .= "\t}\n\n";
 
-				private function validateBuildingRoomDelete($input) { }
+			$view .= "\tprivate function validateBuildingRoomDelete(";
+				foreach ($keys AS $keyName) { $view .= "\$" . $keyName . ", "; }
+			$view .= "\$input) {\n";
+				$view .= "\t\t// if () { \$this->errors['errorKey'][] == Lang::getLang('errorDescription'); }\n";
+			$view .= "\t}\n\n";
 
-				public function getErrors() {
-					return $this->errors;
-				}
+			$view .= "\tpublic function getErrors() : array {\n";
+				$view .= "\t\treturn \$this->errors;\n";
+			$view .= "\t}\n\n";
 
-				public function getMessages() {
-					return $this->messages;
-				}
-
-			*/
+			$view .= "\tpublic function getMessages() : array {\n";
+				$view .= "\t\treturn \$this->messages;\n";
+			$view .= "\t}\n\n";
 
 		$view .= "}";
 
@@ -849,7 +862,109 @@ final class CodeGenerator {
 
 	/* ======= VIEW CONTROLLER ======= */
 
-	public function compileViewControllerFile() {}
+	private function generateViewControllerClass() : string {
+
+		$keys = array();
+		foreach ($this->fieldArray['keys'] AS $keyName => $key) { $keys[] = $keyName; }
+
+		$keyURL = "<" . implode(">/<", $keys) . ">";
+
+		$instanceParamComponents = array();
+		$locConditionComponents = array();
+		for ($i = 4; $i < count($keys) + 4; $i++) {
+			$instanceParamComponents[] = "\$loc[" . $i . "]";
+			$locConditionComponents[] = "is_numeric(\$loc[" . $i . "])";
+		}
+		$locConditions = implode(" && ", $locConditionComponents);
+		$instanceParameters = implode(", ", $instanceParamComponents);
+
+		$view = "final class Admin" . $this->className . "ViewController {\n\n";
+
+			$view .= "\tprivate array \$loc;\n";
+			$view .= "\tprivate array \$input;\n";
+			$view .= "\tprivate array \$modules;\n";
+			$view .= "\tprivate array \$errors;\n";
+			$view .= "\tprivate array \$messages;\n\n";
+
+			$view .= "\tpublic function __construct(\$loc = array(), \$input = array(), \$modules = array(), \$errors = array(), \$messages = array()) {\n\n";
+
+				$view .= "\t\t\$this->loc = \$loc;\n";
+				$view .= "\t\t\$this->input = \$input;\n";
+				$view .= "\t\t\$this->modules = \$modules;\n";
+				$view .= "\t\t\$this->errors = \$errors;\n";
+				$view .= "\t\t\$this->messages = \$messages;\n\n";
+
+			$view .= "\t}\n\n";
+
+			$view .= "\tpublic function getView() {\n\n";
+
+
+		$view .= "\t\t\$loc = \$this->loc;
+		\$input = \$this->input;
+		\$modules = \$this->modules;
+		\$errors = \$this->errors;
+		\$messages = \$this->messages;
+
+		if (\$loc[2] == '" . $this->classNameHyphens . "') {
+
+			\$view = new " . ucfirst($this->moduleName) . $this->className . "View(\$loc, \$input, \$modules, \$errors, \$messages);
+
+			// /" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/create/
+			if (\$loc[3] == 'create') {
+				return \$view->" . $this->moduleName . $this->className . "Form('create');
+			}
+
+			// /" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/update/" . $keyURL . "/
+			if (\$loc[3] == 'update' && " . $locConditions .") {
+				return \$view->" . $this->moduleName . $this->className . "Form('update', " . $instanceParameters . ");
+			}
+
+			// /" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/confirm-delete/" . $keyURL . "/
+			if (\$loc[3] == 'confirm-delete' && " . $locConditions .") {
+				return \$view->admin" . ucfirst($this->moduleName) . $this->className . "ConfirmDelete(" . $instanceParameters . ");
+			}
+
+			// /" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/
+			\$arg = new " . ucfirst($this->moduleName) . $this->className . "ListParameters();
+			if (isset(\$_SESSION['" . $this->moduleName . "']['" . $this->classNameHyphens . "']['filters'])) {
+				foreach (\$_SESSION['" . $this->moduleName . "']['" . $this->classNameHyphens . "']['filters'] AS \$filterKey => \$filterValue) {
+					if (property_exists(\$arg, \$filterKey) && !empty(\$filterValue)) { \$arg->\$filterKey = \$filterValue; }
+				}
+			}
+			\$list = new " . ucfirst($this->moduleName) . $this->className . "List(\$arg);
+
+			\$arg->currentPage = 1;
+			\$arg->numberOfPages = ceil(\$list->resultCount()/25);
+			\$arg->limit = 25;
+			\$arg->offset = 0;
+
+			if (is_numeric(\$loc[3])) {
+				\$currentPage = \$loc[3];
+				\$arg->currentPage = \$currentPage;
+				\$arg->offset = 25 * (\$currentPage- 1);
+			}
+
+			return \$view->" . $this->moduleName . $this->className . "List(\$arg);
+
+		}\n\n";
+
+
+			$view .= "\t}\n\n";
+
+		$view .= "}";
+
+		return $view;
+
+	}
+
+	public function compileViewControllerFile() {
+
+		$schema = "/*\n\n".$this->generateSchema()."\n\n*/";
+		$controller = $this->generateViewControllerClass();
+		$file = "<?php\n\n" . $schema . "\n\n" . $controller . "\n\n?>";
+		return htmlentities($file);
+
+	}
 
 	/* ======= UTILITIES ======= */
 
