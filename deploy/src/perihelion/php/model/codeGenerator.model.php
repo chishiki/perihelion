@@ -403,7 +403,7 @@ final class CodeGenerator {
 			if (!empty($formKeys)) {
 				$view .= "\t\t\t<div class=\"form-row\">\n\n";
 					foreach ($formKeys AS $keyName => $key) {
-						$view .= $this->formGroup($instance, $keyName, $key['type'], );
+						$view .= $this->formGroup($instance, $keyName, $key['type'], array('col-12','col-sm-6','col-md-4','col-lg-3','col-xl-2'));
 					}
 				$view .= "\t\t\t</div>\n\n";
 			}
@@ -422,7 +422,7 @@ final class CodeGenerator {
 			if (!empty($formFields)) {
 				$view .= "\t\t\t<div class=\"form-row\">\n\n";
 					foreach ($formFields AS $fieldName => $field) {
-						$view .= $this->formGroup($instance, $fieldName, $field['type']);
+						$view .= $this->formGroup($instance, $fieldName, $field['type'], array('col-12','col-sm-6','col-md-4','col-lg-3','col-xl-2'));
 					}
 				$view .= "\t\t\t</div>\n\n";
 			}
@@ -679,12 +679,115 @@ final class CodeGenerator {
 
 	}
 
+	private function generateViewConfirmDelete() : string {
+
+		$keys = array();
+		foreach ($this->fieldArray['keys'] AS $keyName => $key) { $keys[] = $keyName; }
+
+		$instance = lcfirst($this->className);
+
+		$view = "\tpublic function " . $this->moduleName . $this->className . "ConfirmDelete(";
+			$params = array();
+			foreach ($keys AS $keyName) { $params[] = "\$" . $keyName; }
+			$view .= implode(", ", $params);
+		$view .= ") {\n\n";
+
+			$view .= "\t\t\$" . $instance . " = new " . $this->className . "($" . implode(", $", $keys) . ");\n";
+			$view .= "\t\tif (!empty(\$this->input)) {\n";
+				$view .= "\t\t\tforeach(\$this->input AS \$key => \$value) { if(isset(\$" . $instance . "->\$key)) { \$" . $instance . "->\$key = \$value; } }\n";
+			$view .= "\t\t}\n\n";
+
+			$view .= "\t\t\$form = '\n\n";
+				$view .= "\t\t\t<form id=\"" . $this->classNameUnderscore . "_confirm_delete_form\" method=\"post\" action=\"/' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/delete/'.";
+			$view .= "$" . implode(".'/'.$",$keys) . ".'/\">\n\n";
+
+			foreach ($keys AS $keyName) {
+				$view .= "\t\t\t<input type=\"hidden\" name=\"" . $keyName . "\" value=\"' . \$" . $keyName . " . '\">\n\n";
+			}
+
+			$formKeys = array();
+			foreach ($this->fieldArray['keys'] AS $keyName => $key) {
+				if ($key['form'] == true) { $formKeys[$keyName] = $key; }
+			}
+			if (!empty($formKeys)) {
+				$view .= "\t\t\t<div class=\"form-row\">\n\n";
+					foreach ($formKeys AS $keyName => $key) {
+						$view .= $this->formGroup($instance, $keyName, $key['type'], array('col-12','col-sm-6','col-md-4','col-lg-3','col-xl-2'), true);
+					}
+				$view .= "\t\t\t</div>\n\n";
+			}
+
+			$formFields = array();
+			$formTextareas = array();
+			foreach ($this->fieldArray['fields'] AS $fieldName => $field) {
+				if ($field['form'] == true) {
+					if ($field['type'] == 'text') {
+						$formTextareas[$fieldName] = $field;
+					} else {
+						$formFields[$fieldName] = $field;
+					}
+				}
+			}
+			if (!empty($formFields)) {
+				$view .= "\t\t\t<div class=\"form-row\">\n\n";
+					foreach ($formFields AS $fieldName => $field) {
+						$view .= $this->formGroup($instance, $fieldName, $field['type'], array('col-12','col-sm-6','col-md-4','col-lg-3','col-xl-2'), true);
+					}
+				$view .= "\t\t\t</div>\n\n";
+			}
+			if (!empty($formTextareas)) {
+				foreach ($formTextareas AS $fieldName => $textarea) {
+					$view .= "\t\t\t<div class=\"form-row\">\n\n";
+						$view .= $this->formGroup($instance, $fieldName, $textarea['type'], array('col-12'), true);
+					$view .= "\t\t\t</div>\n\n";
+				}
+			}
+
+			$view .= "\t\t\t<div class=\"form-row\">\n\n";
+
+				$view .= "\t\t\t\t<div class=\"form-group col-12 col-sm-4 col-lg-3\">\n";
+					$view .= "\t\t\t\t\t<a href=\"/' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/\" class=\"btn btn-block btn-outline-secondary\" role=\"button\">\n";
+						$view .= "\t\t\t\t\t\t<span class=\"fas fa-arrow-left\"></span>\n";
+						$view .= "\t\t\t\t\t\t' . Lang::getLang('returnToList') . '\n";
+					$view .= "\t\t\t\t\t</a>\n";
+				$view .= "\t\t\t\t</div>\n\n";
+
+				$view .= "\t\t\t\t<div class=\"form-group col-12 col-sm-4 col-lg-3 offset-lg-3\">\n";
+					$view .= "\t\t\t\t\t<button type=\"submit\" name=\"" . $this->moduleName . "-" . $this->classNameHyphens . "-delete\" class=\"btn btn-block btn-outline-danger\">\n";
+						$view .= "\t\t\t\t\t\t<span class=\"far fa-trash-alt\"></span>\n";
+						$view .= "\t\t\t\t\t\t' . Lang::getLang('delete') . '\n";
+					$view .= "\t\t\t\t\t</button>\n";
+				$view .= "\t\t\t\t</div>\n\n";
+
+				$view .= "\t\t\t\t<div class=\"form-group col-12 col-sm-4 col-lg-3\">\n";
+					$view .= "\t\t\t\t\t<a href=\"/' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/\" class=\"btn btn-block btn-outline-secondary\" role=\"button\">\n";
+						$view .= "\t\t\t\t\t\t<span class=\"fas fa-times\"></span>\n";
+						$view .= "\t\t\t\t\t\t' . Lang::getLang('cancel') . '\n";
+					$view .= "\t\t\t\t\t</a>\n";
+				$view .= "\t\t\t\t</div>\n\n";
+
+			$view .= "\t\t\t</div>\n\n";
+
+		$view .= "\t\t\t</form>\n\n";
+
+		$view .= "\t\t';\n\n";
+
+		$view .= "\t\t\$card = new CardView('" . $this->moduleName . "_" . $this->classNameUnderscore . "_confirm_delete_form',array('container-fluid'),'',array('col-12'),Lang::getLang('" . $this->moduleName . $this->className . "ConfirmDelete'), \$form);\n";
+		$view .= "\t\treturn \$card->card();\n\n";
+
+		$view .= "\t}";
+
+		return $view;
+
+	}
+
 	public function compileViewFile() : string {
 
 		$schema = "/*\n\n".$this->generateSchema()."\n\n*/";
 
 		$functionArray = array();
 		$functionArray[] = $this->generateViewForm();
+		$functionArray[] = $this->generateViewConfirmDelete();
 		$functionArray[] = $this->generateViewList();
 		$functionArray[] = $this->generateViewListRows();
 		$functionArray[] = $this->generateViewFilterFunction();
@@ -697,16 +800,16 @@ final class CodeGenerator {
 
 	}
 
-	private function formGroup($instance, $fieldName, $fieldType, $cols = array('col-12','col-sm-6','col-md-4','col-lg-3','col-xl-2')) : string {
+	private function formGroup($instance, $fieldName, $fieldType, $cols = array('col-12','col-sm-6','col-md-4','col-lg-3','col-xl-2'), $disabled = false) : string {
 
 		$htmlFieldType = $this->mysqlTypeHtmlTypeDecoder($fieldType);
 
 		$formGroup = "\t\t\t\t<div class=\"form-group " . implode(" ", $cols) . "\">\n";
 			$formGroup .= "\t\t\t\t\t<label for=\"" . StringUtilities::camelToUnderscore($fieldName) . "\">' . Lang::getLang('" . $fieldName . "') . '</label>\n";
 			if ($fieldType == 'text') {
-				$formGroup .= "\t\t\t\t\t<textarea id=\"" . StringUtilities::camelToUnderscore($fieldName) . "\" class=\"form-control\" name=\"" . $fieldName . "\">' . \$" . $instance . "->" . $fieldName . " . '</textarea>\n";
+				$formGroup .= "\t\t\t\t\t<textarea id=\"" . StringUtilities::camelToUnderscore($fieldName) . "\" class=\"form-control\" name=\"" . $fieldName . "\"" . ($disabled?" disabled":"") . ">' . \$" . $instance . "->" . $fieldName . " . '</textarea>\n";
 			} else {
-				$formGroup .= "\t\t\t\t\t<input type=\"" . $htmlFieldType . "\" id=\"" . StringUtilities::camelToUnderscore($fieldName) . "\" class=\"form-control\" name=\"" . $fieldName . "\" value=\"' . \$" . $instance . "->" . $fieldName . " . '\">\n";
+				$formGroup .= "\t\t\t\t\t<input type=\"" . $htmlFieldType . "\" id=\"" . StringUtilities::camelToUnderscore($fieldName) . "\" class=\"form-control\" name=\"" . $fieldName . "\" value=\"' . \$" . $instance . "->" . $fieldName . " . '\"" . ($disabled?" disabled":"") . ">\n";
 			}
 		$formGroup .= "\t\t\t\t</div>\n\n";
 
@@ -922,7 +1025,7 @@ final class CodeGenerator {
 
 			// /" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/confirm-delete/" . $keyURL . "/
 			if (\$loc[3] == 'confirm-delete' && " . $locConditions .") {
-				return \$panko->breadcrumbs() . \$view->admin" . ucfirst($this->moduleName) . $this->className . "ConfirmDelete(" . $instanceParameters . ");
+				return \$panko->breadcrumbs() . \$view->" . $this->moduleName . $this->className . "ConfirmDelete(" . $instanceParameters . ");
 			}
 
 			// /" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/
