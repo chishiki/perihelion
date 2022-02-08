@@ -249,9 +249,9 @@ final class CodeGenerator {
 			$class .= "\t}\n\n";
 
 		$class .= "}";
-		
+
 		return  $class;
-		
+
 	}
 
 	private function generateListArgumentClass() : string {
@@ -676,7 +676,7 @@ final class CodeGenerator {
 		$fd .= "\t\t\t\t\t</div>\n";
 
 		return $fd;
-		
+
 	}
 
 	public function compileViewFile() : string {
@@ -908,20 +908,21 @@ final class CodeGenerator {
 		if (\$loc[2] == '" . $this->classNameHyphens . "') {
 
 			\$view = new " . ucfirst($this->moduleName) . $this->className . "View(\$loc, \$input, \$modules, \$errors, \$messages);
+			\$panko = new BreadcrumbsView(\$loc, array('highlight'), array(), array('" . $this->moduleName . "', 'admin'));
 
 			// /" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/create/
 			if (\$loc[3] == 'create') {
-				return \$view->" . $this->moduleName . $this->className . "Form('create');
+				return \$panko->breadcrumbs() . \$view->" . $this->moduleName . $this->className . "Form('create');
 			}
 
 			// /" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/update/" . $keyURL . "/
 			if (\$loc[3] == 'update' && " . $locConditions .") {
-				return \$view->" . $this->moduleName . $this->className . "Form('update', " . $instanceParameters . ");
+				return \$panko->breadcrumbs() . \$view->" . $this->moduleName . $this->className . "Form('update', " . $instanceParameters . ");
 			}
 
 			// /" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/confirm-delete/" . $keyURL . "/
 			if (\$loc[3] == 'confirm-delete' && " . $locConditions .") {
-				return \$view->admin" . ucfirst($this->moduleName) . $this->className . "ConfirmDelete(" . $instanceParameters . ");
+				return \$panko->breadcrumbs() . \$view->admin" . ucfirst($this->moduleName) . $this->className . "ConfirmDelete(" . $instanceParameters . ");
 			}
 
 			// /" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/
@@ -944,7 +945,7 @@ final class CodeGenerator {
 				\$arg->offset = 25 * (\$currentPage- 1);
 			}
 
-			return \$view->" . $this->moduleName . $this->className . "List(\$arg);
+			return \$panko->breadcrumbs() . \$view->" . $this->moduleName . $this->className . "List(\$arg);
 
 		}\n\n";
 
