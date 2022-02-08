@@ -227,6 +227,12 @@ final class StringUtilities {
 		return implode('-', $ret);
 	}
 
+	public static function hyphensToCamel($string, $capitalizeFirstCharacter = true) {
+		$str = str_replace('-', '', ucwords($string, '-'));
+		if (!$capitalizeFirstCharacter) { $str = lcfirst($str); }
+		return $str;
+	}
+
 }
 
 final class UUID {
