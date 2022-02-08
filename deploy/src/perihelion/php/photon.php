@@ -101,6 +101,7 @@ require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/view/address.view.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/view/admin.view.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/view/audit.view.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/view/auth.view.php');
+require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/view/breadcrumbs.view.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/view/calendar.view.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/view/carousel.view.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/view/card.view.php');
