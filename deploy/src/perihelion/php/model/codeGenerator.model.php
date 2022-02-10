@@ -391,7 +391,7 @@ final class CodeGenerator {
 			$view .= "\t\t}\n\n";
 
 			$view .= "\t\t\$form = '\n\n";
-				$view .= "\t\t\t<form id=\"" . $this->classNameUnderscore . "_' . \$type . '_form\" method=\"post\" action=\"/' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/' . \$type . '/'  . ";
+				$view .= "\t\t\t<form id=\"" . $this->classNameUnderscore . "_' . \$type . '_form\" method=\"post\" action=\"/' . Lang::prefix() . '" . $this->moduleName . "/" . $this->classNameHyphens . "/' . \$type . '/'  . ";
 			$view .= "($" . implode("&&$",$keys) . "?$" . implode(".'/'.$",$keys) . ".'/':'') . '\">\n\n";
 
 			$view .= "\t\t\t' . \$hidden . '\n\n";
@@ -437,7 +437,7 @@ final class CodeGenerator {
 			$view .= "\t\t\t<div class=\"form-row\">\n\n";
 
 				$view .= "\t\t\t\t<div class=\"form-group col-12 col-sm-4 col-lg-3\">\n";
-					$view .= "\t\t\t\t\t<a href=\"/' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/\" class=\"btn btn-block btn-outline-secondary\" role=\"button\">\n";
+					$view .= "\t\t\t\t\t<a href=\"/' . Lang::prefix() . '" . $this->moduleName . "/" . $this->classNameHyphens . "/\" class=\"btn btn-block btn-outline-secondary\" role=\"button\">\n";
 						$view .= "\t\t\t\t\t\t<span class=\"fas fa-arrow-left\"></span>\n";
 						$view .= "\t\t\t\t\t\t' . Lang::getLang('returnToList') . '\n";
 					$view .= "\t\t\t\t\t</a>\n";
@@ -451,7 +451,7 @@ final class CodeGenerator {
 				$view .= "\t\t\t\t</div>\n\n";
 
 				$view .= "\t\t\t\t<div class=\"form-group col-12 col-sm-4 col-lg-3\">\n";
-					$view .= "\t\t\t\t\t<a href=\"/' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/\" class=\"btn btn-block btn-outline-secondary\" role=\"button\">\n";
+					$view .= "\t\t\t\t\t<a href=\"/' . Lang::prefix() . '" . $this->moduleName . "/" . $this->classNameHyphens . "/\" class=\"btn btn-block btn-outline-secondary\" role=\"button\">\n";
 						$view .= "\t\t\t\t\t\t<span class=\"fas fa-times\"></span>\n";
 						$view .= "\t\t\t\t\t\t' . Lang::getLang('cancel') . '\n";
 					$view .= "\t\t\t\t\t</a>\n";
@@ -492,8 +492,8 @@ final class CodeGenerator {
 			if (!empty($this->filters)) {
 				foreach ($this->filters as $filterKey) {
 					$list .= "\t\t\$selected" . ucfirst($filterKey) . " = null;\n";
-					$list .= "\t\tif (isset(\$_SESSION['building']['room']['filters']['$filterKey'])) {\n";
-						$list .= "\t\t\t\$selected" . ucfirst($filterKey) . " = \$_SESSION['building']['room']['filters']['$filterKey'];\n";
+					$list .= "\t\tif (isset(\$_SESSION['" . $this->moduleName . "']['$this->classNameHyphens']['filters']['$filterKey'])) {\n";
+						$list .= "\t\t\t\$selected" . ucfirst($filterKey) . " = \$_SESSION['" . $this->moduleName . "']['$this->classNameHyphens']['filters']['$filterKey'];\n";
 					$list .= "\t\t}\n";
 				}
 			}
@@ -518,10 +518,10 @@ final class CodeGenerator {
 
 				$list .= "\t\t\t<div class=\"row mb-3\">\n";
 					$list .= "\t\t\t\t<div class=\"col-12 col-md-8 col-lg-10\">\n";
-						$list .= "\t\t\t\t\t' . PaginationView::paginate(\$arg->numberOfPages,\$arg->currentPage,'/' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/') . '\n";
+						$list .= "\t\t\t\t\t' . PaginationView::paginate(\$arg->numberOfPages,\$arg->currentPage,'/' . Lang::prefix() . '" . $this->moduleName . "/" . $this->classNameHyphens . "/') . '\n";
 					$list .= "\t\t\t\t</div>\n";
 					$list .= "\t\t\t\t<div class=\"col-12 col-md-4 col-lg-2\">\n";
-						$list .= "\t\t\t\t\t<a href=\"/' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/create/\" class=\"btn btn-block btn-outline-success btn-sm\"><span class=\"fas fa-plus\"></span> ' . Lang::getLang('create') . '</a>\n";
+						$list .= "\t\t\t\t\t<a href=\"/' . Lang::prefix() . '" . $this->moduleName . "/" . $this->classNameHyphens . "/create/\" class=\"btn btn-block btn-outline-success btn-sm\"><span class=\"fas fa-plus\"></span> ' . Lang::getLang('create') . '</a>\n";
 					$list .= "\t\t\t\t</div>\n";
 				$list .= "\t\t\t</div>\n\n";
 
@@ -543,7 +543,7 @@ final class CodeGenerator {
 
 				$list .= "\t\t\t<div class=\"row\">\n";
 					$list .= "\t\t\t\t<div class=\"col-12 col-md-8 col-lg-10\">\n";
-						$list .= "\t\t\t\t\t' . PaginationView::paginate(\$arg->numberOfPages,\$arg->currentPage,'/' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/') . '\n";
+						$list .= "\t\t\t\t\t' . PaginationView::paginate(\$arg->numberOfPages,\$arg->currentPage,'/' . Lang::prefix() . '" . $this->moduleName . "/" . $this->classNameHyphens . "/') . '\n";
 					$list .= "\t\t\t\t</div>\n";
 				$list .= "\t\t\t</div>\n\n";
 
@@ -608,14 +608,14 @@ final class CodeGenerator {
 
 							$rows .= "\t\t\t\t\t<td class=\"text-center text-nowrap\">\n";
 
-								$rows .= "\t\t\t\t\t\t<a href=\"/' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/update/' . \$r['";
+								$rows .= "\t\t\t\t\t\t<a href=\"/' . Lang::prefix() . '" . $this->moduleName . "/" . $this->classNameHyphens . "/update/' . \$r['";
 									if (!empty($keys)) { $rows .= implode("'] . '/' . \$r['", $keys); }
 								$rows .= "'] . '/\" class=\"btn btn-sm btn-outline-primary\">\n";
 									$rows .= "\t\t\t\t\t\t\t<span class=\"far fa-edit\"></span>\n";
 									$rows .= "\t\t\t\t\t\t\t' . Lang::getLang('update') . '\n";
 								$rows .= "\t\t\t\t\t\t</a>\n";
 
-								$rows .= "\t\t\t\t\t\t<a href=\"/' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/confirm-delete/' . \$r['";
+								$rows .= "\t\t\t\t\t\t<a href=\"/' . Lang::prefix() . '" . $this->moduleName . "/" . $this->classNameHyphens . "/confirm-delete/' . \$r['";
 									if (!empty($keys)) { $rows .= implode("'] . '/' . \$r['", $keys); }
 								$rows .= "'] . '/\" class=\"btn btn-sm btn-outline-danger\">\n";
 									$rows .= "\t\t\t\t\t\t\t<span class=\"far fa-trash-alt\"></span>\n";
@@ -698,7 +698,7 @@ final class CodeGenerator {
 			$view .= "\t\t}\n\n";
 
 			$view .= "\t\t\$form = '\n\n";
-				$view .= "\t\t\t<form id=\"" . $this->classNameUnderscore . "_confirm_delete_form\" method=\"post\" action=\"/' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/delete/'.";
+				$view .= "\t\t\t<form id=\"" . $this->classNameUnderscore . "_confirm_delete_form\" method=\"post\" action=\"/' . Lang::prefix() . '" . $this->moduleName . "/" . $this->classNameHyphens . "/delete/'.";
 			$view .= "$" . implode(".'/'.$",$keys) . ".'/\">\n\n";
 
 			foreach ($keys AS $keyName) {
@@ -746,7 +746,7 @@ final class CodeGenerator {
 			$view .= "\t\t\t<div class=\"form-row\">\n\n";
 
 				$view .= "\t\t\t\t<div class=\"form-group col-12 col-sm-4 col-lg-3\">\n";
-					$view .= "\t\t\t\t\t<a href=\"/' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/\" class=\"btn btn-block btn-outline-secondary\" role=\"button\">\n";
+					$view .= "\t\t\t\t\t<a href=\"/' . Lang::prefix() . '" . $this->moduleName . "/" . $this->classNameHyphens . "/\" class=\"btn btn-block btn-outline-secondary\" role=\"button\">\n";
 						$view .= "\t\t\t\t\t\t<span class=\"fas fa-arrow-left\"></span>\n";
 						$view .= "\t\t\t\t\t\t' . Lang::getLang('returnToList') . '\n";
 					$view .= "\t\t\t\t\t</a>\n";
@@ -760,7 +760,7 @@ final class CodeGenerator {
 				$view .= "\t\t\t\t</div>\n\n";
 
 				$view .= "\t\t\t\t<div class=\"form-group col-12 col-sm-4 col-lg-3\">\n";
-					$view .= "\t\t\t\t\t<a href=\"/' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/\" class=\"btn btn-block btn-outline-secondary\" role=\"button\">\n";
+					$view .= "\t\t\t\t\t<a href=\"/' . Lang::prefix() . '" . $this->moduleName . "/" . $this->classNameHyphens . "/\" class=\"btn btn-block btn-outline-secondary\" role=\"button\">\n";
 						$view .= "\t\t\t\t\t\t<span class=\"fas fa-times\"></span>\n";
 						$view .= "\t\t\t\t\t\t' . Lang::getLang('cancel') . '\n";
 					$view .= "\t\t\t\t\t</a>\n";
@@ -832,7 +832,7 @@ final class CodeGenerator {
 			$view .= "\tprivate array \$errors;\n";
 			$view .= "\tprivate array \$messages;\n\n";
 
-			$view .= "\tpublic function __construct(\$loc = array(), \$input = array(), \$modules = array()) {\n\n";
+			$view .= "\tpublic function __construct(array \$loc = array(), array \$input = array(), array \$modules = array()) {\n\n";
 
 				$view .= "\t\t\$this->loc = \$loc;\n";
 				$view .= "\t\t\$this->input = \$input;\n";
@@ -848,63 +848,64 @@ final class CodeGenerator {
 				$view .= "\t\t\$input = \$this->input;\n";
 				$view .= "\t\t\$modules = \$this->modules;\n\n";
 
-				$view .= "\t\tif (\$loc[2] == '" . $this->classNameHyphens . "') {\n\n";
+				$view .= "\t\tif (\$loc[0] == '" . $this->moduleName . "' && \$loc[1] == '" . $this->classNameHyphens . "') {\n\n";
 
-					$view .= "\t\t\t// /" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/create/\n";
-					$view .= "\t\t\tif (\$loc[3] == 'create' && isset(\$input['" . $this->moduleName . "-" . $this->classNameHyphens . "-create'])) {\n\n";
+					$view .= "\t\t\t// /" . $this->moduleName . "/" . $this->classNameHyphens . "/create/\n";
+					$view .= "\t\t\tif (\$loc[2] == 'create' && isset(\$input['" . $this->moduleName . "-" . $this->classNameHyphens . "-create'])) {\n\n";
 
 
-						$view .= "\t\t\t\t// \$this->errors = \$this->validateBuildingRoomCreate(\$input);\n\n";
+						$view .= "\t\t\t\t// \$this->errors = \$this->validate" . ucfirst($this->moduleName) . $this->className . "Create(\$input);\n\n";
 
 						$view .= "\t\t\t\tif (empty(\$this->errors)) {\n\n";
 
 							$view .= "\t\t\t\t\t\$" . lcfirst($this->className) . " = new " . $this->className  . "();\n";
 							$view .= "\t\t\t\t\tforeach (\$input AS \$property => \$value) { if (property_exists(\$" . lcfirst($this->className) . ", \$property)) { \$" . lcfirst($this->className) . "->\$property = \$value; } }\n";
-							$view .= "\t\t\t\t\t" . $this->className  . "::insert(\$" . lcfirst($this->className) . ", true, 'building_');\n";
-							$view .= "\t\t\t\t\t\$successURL = '/' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/';\n";
+							$view .= "\t\t\t\t\t" . $this->className  . "::insert(\$" . lcfirst($this->className) . ", true, '" . $this->moduleName . "');\n";
+							$view .= "\t\t\t\t\t\$successURL = '/' . Lang::prefix() . '" . $this->moduleName . "/" . $this->classNameHyphens . "/';\n";
 							$view .= "\t\t\t\t\theader(\"Location: \$successURL\");\n\n";
 
 						$view .= "\t\t\t\t}\n\n";
 
 					$view .= "\t\t\t}\n\n";
 
-					$view .= "\t\t\t// /" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/update/<" . implode('>/<',$keys) . ">/\n";
-					$view .= "\t\t\tif (\$loc[3] == 'update' && is_numeric(\$loc[4]) && isset(\$input['" . $this->moduleName . "-" . $this->classNameHyphens . "-update'])) {\n\n";
+					$view .= "\t\t\t// /" . $this->moduleName . "/" . $this->classNameHyphens . "/update/<" . implode('>/<',$keys) . ">/\n";
+					$view .= "\t\t\tif (\$loc[2] == 'update' && is_numeric(\$loc[3]) && isset(\$input['" . $this->moduleName . "-" . $this->classNameHyphens . "-update'])) {\n\n";
 
-						$view .= "\t\t\t\t// \$this->errors = \$this->validateBuildingRoomUpdate(";
+						$view .= "\t\t\t\t// \$this->errors = \$this->validate" . ucfirst($this->moduleName) . $this->className . "Update(";
 							foreach ($keys AS $keyName) { $view .= "\$" . $keyName . ", "; }
 						$view .= "\$input);\n\n";
 
 						$view .= "\t\t\t\tif (empty(\$this->errors)) {\n\n";
 
-							$view .= "\t\t\t\t\t\$" . lcfirst($this->className) . " = new " . $this->className  . "(\$loc[4]);\n";
-							$view .= "\t\t\t\t\t\$room->updated = date('Y-m-d H:i:s');\n";
+							$view .= "\t\t\t\t\t\$" . lcfirst($this->className) . " = new " . $this->className  . "(\$loc[3]);\n";
+							$view .= "\t\t\t\t\t\$" . lcfirst($this->className) . "->updated = date('Y-m-d H:i:s');\n";
 							$view .= "\t\t\t\t\tforeach (\$input AS \$property => \$value) { if (property_exists(\$" . lcfirst($this->className) . ", \$property)) { \$" . lcfirst($this->className) . "->\$property = \$value; } }\n";
 							$updateConditions = array();
-							$u = 4;
+							$u = 3;
 							foreach ($keys AS $keyName) {
 								$updateConditions[] = "'" . $keyName . "' => \$loc[" . $u . "]";
 								$u++;
 							}
 							$view .= "\t\t\t\t\t\$conditions = array(" . (implode(', ', $updateConditions)) . ");\n";
-							$view .= "\t\t\t\t\tRoom::update(\$" . lcfirst($this->className) . ", \$conditions, true, false, '" . $this->moduleName . "_');\n\n";
+							$view .= "\t\t\t\t\t" . $this->className . "::update(\$" . lcfirst($this->className) . ", \$conditions, true, false, '" . $this->moduleName . "_');\n";
+							$view .= "\t\t\t\t\t\$this->>messages[] = Lang::getLang('" . $this->moduleName . $this->className . "SuccessfullyUpdated');\n\n";
 
 						$view .= "\t\t\t\t}\n\n";
 
 					$view .= "\t\t\t}\n\n";
 
-					$view .= "\t\t\t// /" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/delete/<" . implode('>/<',$keys) . ">/\n";
-					$view .= "\t\t\tif (\$loc[3] == 'delete' && is_numeric(\$loc[4]) && isset(\$input['" . $this->moduleName . "-" . $this->classNameHyphens . "-delete'])) {\n\n";
+					$view .= "\t\t\t// /" . $this->moduleName . "/" . $this->classNameHyphens . "/delete/<" . implode('>/<',$keys) . ">/\n";
+					$view .= "\t\t\tif (\$loc[2] == 'delete' && is_numeric(\$loc[3]) && isset(\$input['" . $this->moduleName . "-" . $this->classNameHyphens . "-delete'])) {\n\n";
 
-						$view .= "\t\t\t\t// \$this->errors = \$this->validateBuildingRoomDelete(";
+						$view .= "\t\t\t\t// \$this->errors = \$this->validate" . ucfirst($this->moduleName) . $this->className . "Delete(";
 							foreach ($keys AS $keyName) { $view .= "\$" . $keyName . ", "; }
 						$view .= "\$input);\n\n";
 
 						$view .= "\t\t\t\tif (empty(\$this->errors)) {\n\n";
 
-							$view .= "\t\t\t\t\t\$" . lcfirst($this->className) . " = new " . $this->className  . "(\$loc[4]);\n";
-							$view .= "\t\t\t\t\t\$room->markAsDeleted();\n";
-							$view .= "\t\t\t\t\t\$successURL = '/' . Lang::prefix() . '" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/';\n";
+							$view .= "\t\t\t\t\t\$" . lcfirst($this->className) . " = new " . $this->className  . "(\$loc[3]);\n";
+							$view .= "\t\t\t\t\t\$" . lcfirst($this->className) . "->markAsDeleted();\n";
+							$view .= "\t\t\t\t\t\$successURL = '/' . Lang::prefix() . '" . $this->moduleName . "/" . $this->classNameHyphens . "/';\n";
 							$view .= "\t\t\t\t\theader(\"Location: \$successURL\");\n\n";
 
 						$view .= "\t\t\t\t}\n\n";
@@ -924,17 +925,17 @@ final class CodeGenerator {
 
 			$view .= "\t}\n\n";
 
-			$view .= "\tprivate function validateBuildingRoomCreate(\$input) {\n";
+			$view .= "\tprivate function validate" . ucfirst($this->moduleName) . $this->className . "Create(\$input) {\n";
 				$view .= "\t\t// if () { \$this->errors['errorKey'][] == Lang::getLang('errorDescription'); }\n";
 			$view .= "\t}\n\n";
 
-			$view .= "\tprivate function validateBuildingRoomUpdate(";
+			$view .= "\tprivate function validate" . ucfirst($this->moduleName) . $this->className . "Update(";
 				foreach ($keys AS $keyName) { $view .= "\$" . $keyName . ", "; }
 			$view .= "\$input) {\n";
 				$view .= "\t\t// if () { \$this->errors['errorKey'][] == Lang::getLang('errorDescription'); }\n";
 			$view .= "\t}\n\n";
 
-			$view .= "\tprivate function validateBuildingRoomDelete(";
+			$view .= "\tprivate function validate" . ucfirst($this->moduleName) . $this->className . "Delete(";
 				foreach ($keys AS $keyName) { $view .= "\$" . $keyName . ", "; }
 			$view .= "\$input) {\n";
 				$view .= "\t\t// if () { \$this->errors['errorKey'][] == Lang::getLang('errorDescription'); }\n";
@@ -974,7 +975,7 @@ final class CodeGenerator {
 
 		$instanceParamComponents = array();
 		$locConditionComponents = array();
-		for ($i = 4; $i < count($keys) + 4; $i++) {
+		for ($i = 3; $i < count($keys) + 3; $i++) {
 			$instanceParamComponents[] = "\$loc[" . $i . "]";
 			$locConditionComponents[] = "is_numeric(\$loc[" . $i . "])";
 		}
@@ -989,7 +990,7 @@ final class CodeGenerator {
 			$view .= "\tprivate array \$errors;\n";
 			$view .= "\tprivate array \$messages;\n\n";
 
-			$view .= "\tpublic function __construct(\$loc = array(), \$input = array(), \$modules = array(), \$errors = array(), \$messages = array()) {\n\n";
+			$view .= "\tpublic function __construct(array \$loc = array(), array \$input = array(), array \$modules = array(), array \$errors = array(), array \$messages = array()) {\n\n";
 
 				$view .= "\t\t\$this->loc = \$loc;\n";
 				$view .= "\t\t\$this->input = \$input;\n";
@@ -1008,27 +1009,27 @@ final class CodeGenerator {
 		\$errors = \$this->errors;
 		\$messages = \$this->messages;
 
-		if (\$loc[2] == '" . $this->classNameHyphens . "') {
+		if (\$loc[0] == '" . $this->moduleName . "' && \$loc[1] == '" . $this->classNameHyphens . "') {
 
 			\$view = new " . ucfirst($this->moduleName) . $this->className . "View(\$loc, \$input, \$modules, \$errors, \$messages);
 			\$panko = new BreadcrumbsView(\$loc, array('highlight'), array(), array('" . $this->moduleName . "', 'admin'));
 
-			// /" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/create/
-			if (\$loc[3] == 'create') {
+			// /" . $this->moduleName . "/" . $this->classNameHyphens . "/create/
+			if (\$loc[2] == 'create') {
 				return \$panko->breadcrumbs() . \$view->" . $this->moduleName . $this->className . "Form('create');
 			}
 
-			// /" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/update/" . $keyURL . "/
-			if (\$loc[3] == 'update' && " . $locConditions .") {
+			// /" . $this->moduleName . "/" . $this->classNameHyphens . "/update/" . $keyURL . "/
+			if (\$loc[2] == 'update' && " . $locConditions .") {
 				return \$panko->breadcrumbs() . \$view->" . $this->moduleName . $this->className . "Form('update', " . $instanceParameters . ");
 			}
 
-			// /" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/confirm-delete/" . $keyURL . "/
-			if (\$loc[3] == 'confirm-delete' && " . $locConditions .") {
+			// /" . $this->moduleName . "/" . $this->classNameHyphens . "/confirm-delete/" . $keyURL . "/
+			if (\$loc[2] == 'confirm-delete' && " . $locConditions .") {
 				return \$panko->breadcrumbs() . \$view->" . $this->moduleName . $this->className . "ConfirmDelete(" . $instanceParameters . ");
 			}
 
-			// /" . $this->moduleName . "/admin/" . $this->classNameHyphens . "/
+			// /" . $this->moduleName . "/" . $this->classNameHyphens . "/
 			\$arg = new " . ucfirst($this->moduleName) . $this->className . "ListParameters();
 			if (isset(\$_SESSION['" . $this->moduleName . "']['" . $this->classNameHyphens . "']['filters'])) {
 				foreach (\$_SESSION['" . $this->moduleName . "']['" . $this->classNameHyphens . "']['filters'] AS \$filterKey => \$filterValue) {
@@ -1042,8 +1043,8 @@ final class CodeGenerator {
 			\$arg->limit = 25;
 			\$arg->offset = 0;
 
-			if (is_numeric(\$loc[3]) && \$loc[3] <= \$arg->numberOfPages) {
-				\$currentPage = \$loc[3];
+			if (is_numeric(\$loc[2]) && \$loc[2] <= \$arg->numberOfPages) {
+				\$currentPage = \$loc[2];
 				\$arg->currentPage = \$currentPage;
 				\$arg->offset = 25 * (\$currentPage- 1);
 			}

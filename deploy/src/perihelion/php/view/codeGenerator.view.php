@@ -63,7 +63,7 @@ final class CodeGeneratorView {
 				array('container-fluid', 'mb-3'),
 				'',
 				array('col-12'),
-				'admin.' . lcfirst($arg->className) . '.state.controller.php',
+				lcfirst($arg->className) . '.state.controller.php',
 				$body,
 				true,
 				true
@@ -77,7 +77,7 @@ final class CodeGeneratorView {
 				array('container-fluid', 'mb-3'),
 				'',
 				array('col-12'),
-				'admin.' . lcfirst($arg->className) . '.view.controller.php',
+				lcfirst($arg->className) . '.view.controller.php',
 				$body,
 				true,
 				true
