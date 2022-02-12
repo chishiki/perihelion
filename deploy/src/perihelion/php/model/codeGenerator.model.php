@@ -347,7 +347,7 @@ final class CodeGenerator {
 			$view .= "\tprivate array \$errors;\n";
 			$view .= "\tprivate array \$messages;\n\n";
 
-			$view .= "\tpublic function __construct(\$loc = array(), \$input = array(), \$modules = array(), \$errors = array(), \$messages = array()) {\n\n";
+			$view .= "\tpublic function __construct(array \$loc = array(), array \$input = array(), array \$modules = array(), array \$errors = array(), array \$messages = array()) {\n\n";
 
 				$view .= "\t\t\$this->loc = \$loc;\n";
 				$view .= "\t\t\$this->input = \$input;\n";
@@ -599,11 +599,11 @@ final class CodeGenerator {
 						$rows .= ">\n";
 
 							foreach ($keyCols AS $keyName) {
-								$rows .= "\t\t\t\t\t<th scope=\"row\" class=\"text-center " . $this->moduleName . "-" . $this->classNameHyphens . "-list-cell\" data-cell-" . StringUtilities::camelToHyphen($keyName) . "=\"' . \$r['" . $keyName . "'] . '\">' .\$r['" . $keyName . "'] . '</th>\n";
+								$rows .= "\t\t\t\t\t<th scope=\"row\" class=\"text-center " . $this->moduleName . "-" . $this->classNameHyphens . "-list-cell\" data-cell-" . StringUtilities::camelToHyphen($keyName) . "=\"' . \$r['" . $keyName . "'] . '\">' . \$r['" . $keyName . "'] . '</th>\n";
 							}
 
 							foreach ($fieldCols AS $fieldName) {
-								$rows .= "\t\t\t\t\t<td class=\"text-center " . $this->moduleName . "-" . $this->classNameHyphens . "-list-cell\" data-cell-" . StringUtilities::camelToHyphen($fieldName) . "=\"' . \$r['" . $fieldName . "'] . '\">' .\$r['" . $fieldName . "'] . '</td>\n";
+								$rows .= "\t\t\t\t\t<td class=\"text-center " . $this->moduleName . "-" . $this->classNameHyphens . "-list-cell\" data-cell-" . StringUtilities::camelToHyphen($fieldName) . "=\"' . \$r['" . $fieldName . "'] . '\">' . \$r['" . $fieldName . "'] . '</td>\n";
 							}
 
 							$rows .= "\t\t\t\t\t<td class=\"text-center text-nowrap\">\n";
@@ -824,7 +824,7 @@ final class CodeGenerator {
 		$keys = array();
 		foreach ($this->fieldArray['keys'] AS $keyName => $key) { $keys[] = $keyName; }
 
-		$view = "final class Admin" . $this->className . "StateController {\n\n";
+		$view = "final class " . ucfirst($this->moduleName) . ucfirst($this->className) . "StateController {\n\n";
 
 			$view .= "\tprivate array \$loc;\n";
 			$view .= "\tprivate array \$input;\n";
@@ -888,7 +888,7 @@ final class CodeGenerator {
 							}
 							$view .= "\t\t\t\t\t\$conditions = array(" . (implode(', ', $updateConditions)) . ");\n";
 							$view .= "\t\t\t\t\t" . $this->className . "::update(\$" . lcfirst($this->className) . ", \$conditions, true, false, '" . $this->moduleName . "_');\n";
-							$view .= "\t\t\t\t\t\$this->>messages[] = Lang::getLang('" . $this->moduleName . $this->className . "SuccessfullyUpdated');\n\n";
+							$view .= "\t\t\t\t\t\$this->messages[] = Lang::getLang('" . $this->moduleName . $this->className . "SuccessfullyUpdated');\n\n";
 
 						$view .= "\t\t\t\t}\n\n";
 
@@ -982,7 +982,7 @@ final class CodeGenerator {
 		$locConditions = implode(" && ", $locConditionComponents);
 		$instanceParameters = implode(", ", $instanceParamComponents);
 
-		$view = "final class Admin" . $this->className . "ViewController {\n\n";
+		$view = "final class " . ucfirst($this->moduleName) . ucfirst($this->className) . "ViewController {\n\n";
 
 			$view .= "\tprivate array \$loc;\n";
 			$view .= "\tprivate array \$input;\n";
@@ -1012,7 +1012,7 @@ final class CodeGenerator {
 		if (\$loc[0] == '" . $this->moduleName . "' && \$loc[1] == '" . $this->classNameHyphens . "') {
 
 			\$view = new " . ucfirst($this->moduleName) . $this->className . "View(\$loc, \$input, \$modules, \$errors, \$messages);
-			\$panko = new BreadcrumbsView(\$loc, array('highlight'), array(), array('" . $this->moduleName . "', 'admin'));
+			\$panko = new BreadcrumbsView(\$loc, array('highlight'), array(), array('" . $this->moduleName . "'));
 
 			// /" . $this->moduleName . "/" . $this->classNameHyphens . "/create/
 			if (\$loc[2] == 'create') {
