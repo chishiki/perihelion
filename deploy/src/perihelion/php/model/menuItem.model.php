@@ -72,13 +72,10 @@ class MenuItem extends ORM {
 
 		$thisUrlArray = array();
 		if (
-			$this->menuItemURL != ''
-			&& $this->menuItemURL != '/'
+			!in_array($this->menuItemURL,array('', '/'))
 			&& strpos($this->menuItemURL, 'http') !== 0
-			&& !$this->hasChildren()
-			&& $this->menuItemURL != '#'
 		) {
-			$thisUrlArray = explode('/',$this->menuItemURL);
+			$thisUrlArray = explode('/', $this->menuItemURL);
 		}
 		return $thisUrlArray;
 

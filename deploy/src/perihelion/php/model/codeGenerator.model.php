@@ -860,7 +860,7 @@ final class CodeGenerator {
 
 							$view .= "\t\t\t\t\t\$" . lcfirst($this->className) . " = new " . $this->className  . "();\n";
 							$view .= "\t\t\t\t\tforeach (\$input AS \$property => \$value) { if (property_exists(\$" . lcfirst($this->className) . ", \$property)) { \$" . lcfirst($this->className) . "->\$property = \$value; } }\n";
-							$view .= "\t\t\t\t\t" . $this->className  . "::insert(\$" . lcfirst($this->className) . ", true, '" . $this->moduleName . "');\n";
+							$view .= "\t\t\t\t\t" . $this->className  . "::insert(\$" . lcfirst($this->className) . ", true, '" . $this->moduleName . "_');\n";
 							$view .= "\t\t\t\t\t\$successURL = '/' . Lang::prefix() . '" . $this->moduleName . "/" . $this->classNameHyphens . "/';\n";
 							$view .= "\t\t\t\t\theader(\"Location: \$successURL\");\n\n";
 
