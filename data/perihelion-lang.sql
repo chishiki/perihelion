@@ -861,7 +861,8 @@ REPLACE INTO `perihelion_Lang` VALUES
 ('codeGeneratorScopeGlobal', 'Global', 0, 'グローバル', 0, @now),
 ('codeGeneratorScopeSite', 'Site', 0, 'サイト', 0, @now),
 ('codeGeneratorExtendsORM', 'Extends ORM', 0, 'ORM継承', 0, @now),
-('codeGeneratorCompile', 'Compile', 0, 'コンパイル', 0, @now);
+('codeGeneratorCompile', 'Compile', 0, 'コンパイル', 0, @now),
+('reset', 'Reset', 0, 'リセット', 0, @now);
 
 -- ('xxxxxxx', 'xxxxxxx', 0, 'xxxxxxx', 0, @now);
 
