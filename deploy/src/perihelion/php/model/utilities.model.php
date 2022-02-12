@@ -46,7 +46,16 @@ final class DateUtilities {
 		return $timezone_list;
 		
 	}
-	
+
+	public static function localize($datetime, $format = null) : string {
+
+		$dt = new DateTime($datetime);
+		if (!is_null($format)) { return $dt->format($format); }
+		if ($_SESSION['lang'] == 'ja') { return $dt->format('Y年n月j日'); }
+		return $datetime;
+
+	}
+
 }
 
 final class ModuleUtilities {
