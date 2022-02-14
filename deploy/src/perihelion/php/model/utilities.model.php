@@ -242,6 +242,10 @@ final class StringUtilities {
 		return $str;
 	}
 
+	public static function truncate(string $string, int $maxLength): string {
+		return mb_strimwidth($string, 0, $maxLength, '...');
+	}
+
 }
 
 final class UUID {
