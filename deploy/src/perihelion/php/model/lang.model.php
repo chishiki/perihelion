@@ -142,4 +142,8 @@ class Lang extends ORM {
 	
 }
 
+function lang($langKey) : string {
+	return Lang::getLang($langKey);
+}
+
 ?>
