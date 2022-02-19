@@ -46,33 +46,54 @@ class ORM {
 	}
 	
 	public static function update($object, $conditions, $audit = true, $verbose = false, $tablePrefix = 'perihelion_') {
-		
-		$objectName = get_class($object);
 
+		$objectName = get_class($object);
 		$objectVariableArray = get_object_vars($object);
 		$tableName = $tablePrefix . $objectName;
-		// if (!self::tableExists($tableName)) { die("ORM::update($objectName) => A '$tableName' table does not exist OR the table is empty."); }
 		
-		$scooby = array();
-		foreach ($conditions AS $condition => $value) { $scooby[] = "$condition = :$condition"; }
-		$scoobyString =  implode(' AND ', $scooby);
+		$conditionArray = array();
+		foreach ($conditions AS $condition => $value) {
+			$conditionArray[] = "$condition = :" . (is_null($value)?"NULL":$condition);
+		}
+		$whereConditions =  implode(" AND ", $conditionArray);
 		
-		$shaggy = array();
-		foreach ($objectVariableArray AS $property => $value) { $shaggy[] = "$property = :$property"; }
-		$shaggyString =  implode(', ', $shaggy);
+		$assignmentArray = array();
+		foreach ($objectVariableArray AS $property => $value) {
+			if (is_null($value)) {
+				$assignmentArray[] = "$property = NULL";
+			} else {
+				$assignmentArray[] = "$property = :$property";
+			}
+		}
+		$assignmentList =  implode(", ", $assignmentArray);
 		
-		$query = "UPDATE $tableName SET $shaggyString WHERE $scoobyString LIMIT 1";
+		$query = "
+			UPDATE
+				$tableName
+			SET
+				$assignmentList
+			WHERE
+				$whereConditions
+			LIMIT 1
+		";
 
 		$nucleus = Nucleus::getInstance();
 		$statement = $nucleus->database->prepare($query);
-		
-		foreach ($conditions AS $condition => $value) { $attribute = ':' . $condition; $statement->bindValue($attribute, $value); }
+
+		foreach ($conditions AS $condition => $value) {
+			if (!is_null($value)) {
+				$attribute = ':' . $condition;
+				$statement->bindValue($attribute, $value);
+			}
+		}
 		foreach ($objectVariableArray AS $property => $value) {
 			if ($property == 'updated') {
 				$updatedDT = new DateTime();
-				$attribute = ':' . $property; $statement->bindValue($attribute, $updatedDT->format('Y-m-d H:i:s'));
-			} else {
-				$attribute = ':' . $property; $statement->bindValue($attribute, $value);
+				$attribute = ':updated';
+				$statement->bindValue($attribute, $updatedDT->format('Y-m-d H:i:s'));
+			} elseif (!is_null($value)) {
+				$attribute = ':' . $property;
+				$statement->bindValue($attribute, $value);
 			}
 		}
 
@@ -84,8 +105,8 @@ class ORM {
 		// ENABLE TOGGLE VERBOSE LOGGING HERE (EACH UPDATED VALUE LOGGED INDIVIDUALLY)
 		
 		if ($audit) {
+
 			$ioa = new Audit();
-			unset($ioa->auditID);
 			$ioa->auditAction = 'update';
 			$ioa->auditObject = $objectName;
 			$conditionsTemp = array_values($conditions);
@@ -94,6 +115,7 @@ class ORM {
 			if ($objectName == 'User' && isset($object->userPassword)) { $object->userPassword = 'RemovedByORM'; }
 			$ioa->auditNote = json_encode($object);
 			Audit::createAuditEntry($ioa);
+
 		}
 		
 	}
@@ -143,16 +165,6 @@ class ORM {
 		}
 		
 	}
-
-	/*
-	private static function tableExists($tableName) {
-
-		$nucleus = Nucleus::getInstance();
-		$result = $nucleus->database->query("SHOW TABLES LIKE '$tableName'");
-		if ($result !== false && $result->rowCount() > 0) { return true; } else { return false; }
-		
-	}
-	*/
 
 }
 
