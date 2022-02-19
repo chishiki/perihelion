@@ -44,7 +44,9 @@ class ORM {
 		if($returnID) { return $auditObjectID; }
 		
 	}
-	
+
+	// public static function insertMulti() { }
+
 	public static function update($object, $conditions, $audit = true, $verbose = false, $tablePrefix = 'perihelion_') {
 
 		$objectName = get_class($object);
@@ -119,6 +121,8 @@ class ORM {
 		}
 		
 	}
+
+	// public static function updateMulti() { }
 
 	public static function delete($object, $conditions, $audit = true , $tablePrefix = 'perihelion_', $limit = 1) { // $limit = null (no limit)
 		
