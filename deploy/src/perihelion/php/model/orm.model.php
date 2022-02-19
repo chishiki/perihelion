@@ -48,7 +48,6 @@ class ORM {
 	public static function update($object, $conditions, $audit = true, $verbose = false, $tablePrefix = 'perihelion_') {
 
 		$objectName = get_class($object);
-
 		$objectVariableArray = get_object_vars($object);
 		$tableName = $tablePrefix . $objectName;
 		
@@ -56,7 +55,7 @@ class ORM {
 		foreach ($conditions AS $condition => $value) {
 			$conditionArray[] = "$condition = :" . (is_null($value)?"NULL":$condition);
 		}
-		$whereConditions =  implode("\n\t\t\t\tAND ", $conditionArray);
+		$whereConditions =  implode(" AND ", $conditionArray);
 		
 		$assignmentArray = array();
 		foreach ($objectVariableArray AS $property => $value) {
@@ -66,7 +65,7 @@ class ORM {
 				$assignmentArray[] = "$property = :$property";
 			}
 		}
-		$assignmentList =  implode(",\n\t\t\t\t", $assignmentArray);
+		$assignmentList =  implode(", ", $assignmentArray);
 		
 		$query = "
 			UPDATE
@@ -106,8 +105,8 @@ class ORM {
 		// ENABLE TOGGLE VERBOSE LOGGING HERE (EACH UPDATED VALUE LOGGED INDIVIDUALLY)
 		
 		if ($audit) {
+
 			$ioa = new Audit();
-			unset($ioa->auditID);
 			$ioa->auditAction = 'update';
 			$ioa->auditObject = $objectName;
 			$conditionsTemp = array_values($conditions);
@@ -116,6 +115,7 @@ class ORM {
 			if ($objectName == 'User' && isset($object->userPassword)) { $object->userPassword = 'RemovedByORM'; }
 			$ioa->auditNote = json_encode($object);
 			Audit::createAuditEntry($ioa);
+
 		}
 		
 	}
