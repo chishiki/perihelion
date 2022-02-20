@@ -25,7 +25,7 @@ INSERT INTO `perihelion_Content` VALUES
     'home', -- entrySeoURL
     0, -- contentCategoryID
     'page', -- contentCategoryType
-    0, -- entryPublished
+    1, -- entryPublished
     '1973-12-18', -- entryPublishStartDate
     '2073-12-18', -- entryPublishEndDate
     'Index', -- entryTitleEnglish
