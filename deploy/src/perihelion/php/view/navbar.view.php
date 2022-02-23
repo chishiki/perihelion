@@ -47,7 +47,7 @@ class NavBarView {
 
 					foreach ($items AS $item) {
 
-						$h .= "<li class=\"nav-item " . (!empty($item['classes'])?implode(' ', $item['classes']):'') . "\">\n";
+						$h .= '<li class="nav-item' . (!empty($item['classes'])?' '.implode(' ', $item['classes']):'') . '" data-classes="' . implode('|', $item['classes']) . '" data-url-array="' . implode('|', $item['urlArray']) . '">';
 
 							$h .= '<a href="' . $item['url'] . '"';
 
@@ -74,7 +74,7 @@ class NavBarView {
 										$h .= '<a class="dropdown-item';
 											if ($child['disabled']) { $h .= ' disabled'; }
 											if (!empty($child['classes'])) { $h .= ' '.implode(' ', $child['classes']); }
-										$h .= '" href="' . $child['url'] . '">' . $child['anchor'] . '</a>';
+										$h .= '" href="' . $child['url'] . '" data-classes="' . implode('|', $item['classes']) . '" data-url-array="' . implode('|', $child['urlArray']) . '">' . $child['anchor'] . '</a>';
 									}
 
 

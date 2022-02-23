@@ -61,13 +61,14 @@ final class NavBar {
 
 			$navBarItem['id'] = $menuItemID;
 			$navBarItem['url'] = $menuItem->getURL();
+			$navBarItem['urlArray'] = $menuItemUrlArray;
 			$navBarItem['anchor'] = $menuItem->getAnchorText();
 			$navBarItem['disabled'] = $menuItem->menuItemDisabled;
 			$navBarItem['classes'] = array();
-			$navBarItem['classes'][] = $menuItem->menuItemClasses;
+			if (!empty($menuItem->menuItemClasses)) { $navBarItem['classes'][] = $menuItem->menuItemClasses; }
 			$parentIsActive = false;
 
-			if ($urlArray == $menuItemUrlArray) { $parentIsActive = true; }
+			if ($urlArray == $menuItemUrlArray && !empty($urlArray)) { $parentIsActive = true; }
 
 			if ($menuItem->hasChildren()) {
 
