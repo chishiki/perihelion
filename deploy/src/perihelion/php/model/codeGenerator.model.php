@@ -531,7 +531,7 @@ final class CodeGenerator {
 							$list .= "\t\t\t\t\t\t<thead class\"thead-light\">\n";
 								$list .= "\t\t\t\t\t\t\t<tr>\n";
 									foreach ($cols AS $colName) {
-										$list .= "\t\t\t\t\t\t\t\t<th scope=\"col\" class=\"text-center text-nowrap\">' . Lang::getLang('" . $this->moduleName . $this->className . ucfirst($colName) . "') . '</th>\n";
+										$list .= "\t\t\t\t\t\t\t\t<th scope=\"col\" class=\"text-center text-nowrap\">' . Lang::getLang('" . $colName . "') . '</th>\n";
 									}
 									$list .= "\t\t\t\t\t\t\t\t<th scope=\"col\" class=\"text-center text-nowrap\">' . Lang::getLang('action') . '</th>\n";
 								$list .= "\t\t\t\t\t\t\t</tr>\n";
