@@ -195,6 +195,11 @@ final class CodeGenerator {
 				$class .= "\t\t// WHERE\n";
 				$class .= "\t\t\$wheres = array();\n";
 				$class .= "\t\t\$wheres[] = '" . $this->tableName . ".deleted = 0';\n";
+				if ($this->scope == 'global') {
+					$class .= "\t\tif (!is_null(\$arg->siteID)) { \$wheres[] = '" . $this->tableName . ".siteID = :siteID'; }\n";
+				} else {
+					$class .= "\t\t\$wheres[] = '" . $this->tableName . ".siteID = :siteID';\n";
+				}
 				foreach ($this->fieldArray['keys'] AS $keyName => $key) {
 					$class .= "\t\tif (!is_null(\$arg->" . $keyName . ")) { \$wheres[] = '" . $this->tableName . "." . $keyName . " = :" . $keyName . "'; }\n";
 				}
@@ -224,6 +229,11 @@ final class CodeGenerator {
 				$class .= "\t\t// PREPARE QUERY, BIND PARAMS, EXECUTE QUERY\n";
 				$class .= "\t\t\$nucleus = Nucleus::getInstance();\n";
 				$class .= "\t\t\$statement = \$nucleus->database->prepare(\$query);\n";
+				if ($this->scope == 'global') {
+					$class .= "\t\tif (!is_null(\$arg->siteID)) { \$statement->bindParam(':siteID', \$arg->siteID, PDO::PARAM_INT); }\n";
+				} else {
+					$class .= "\t\t\$statement->bindParam(':siteID', \$_SESSION['siteID'], PDO::PARAM_INT);\n";
+				}
 				foreach ($this->fieldArray['keys'] AS $keyName => $key) {
 					$class .= "\t\tif (!is_null(\$arg->" . $keyName . ")) { \$statement->bindParam(':" . $keyName . "', \$arg->" . $keyName . ", PDO::" . ($key['type']=="int"?"PARAM_INT":"PARAM_STR") . "); }\n";
 				}
@@ -262,7 +272,7 @@ final class CodeGenerator {
 			foreach ($this->fieldArray['keys'] AS $keyName => $key) {
 				$class .= "\tpublic ?" . ($key['type']=="int"?"int":"string") . " $" . $keyName . ";\n";
 			}
-			$class .= "\tpublic ?int \$siteID;\n";
+			if ($this->scope == 'global') { $class .= "\tpublic ?int \$siteID;\n"; }
 			$class .= "\tpublic ?int \$creator;\n";
 			$class .= "\tpublic ?string \$created;\n";
 			$class .= "\tpublic ?string \$updated;\n";
@@ -288,7 +298,7 @@ final class CodeGenerator {
 				foreach ($this->fieldArray['keys'] AS $keyName => $key) {
 					$class .= "\t\t\$this->" . $keyName . " = null;\n";
 				}
-				$class .= "\t\t\$this->siteID = null;\n";
+				if ($this->scope == 'global') { $class .= "\t\t\$this->siteID = null;\n"; }
 				$class .= "\t\t\$this->creator = null;\n";
 				$class .= "\t\t\$this->created = null;\n";
 				$class .= "\t\t\$this->updated = null;\n";
