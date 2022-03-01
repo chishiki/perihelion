@@ -63,7 +63,7 @@ class Audit {
 		
 	}
 
-	public static function getAuditTrailArray($siteID, $auditUserID, $auditObject, $startDate, $endDate, $limit = '250') { // admin|manager
+	public static function getAuditTrailArray($siteID, $auditUserID, $auditObject, $auditObjectID, $startDate, $endDate, $auditAction, $limit = '250') { // admin|manager
 
 		$auditTrailArray = array();
 		
@@ -73,8 +73,10 @@ class Audit {
 		if ($siteID) { $where[] = "siteID = :siteID"; }
 		if ($auditUserID) { $where[] = "auditUserID = :auditUserID"; }
 		if ($auditObject) { $where[] = "auditObject = :auditObject"; }
+		if ($auditObjectID) { $where[] = "auditObjectID = :auditObjectID"; }
 		if ($startDate) { $where[] = "auditDateTime >= :startDate"; $startDate = $startDate . ' 00:00:00'; }
 		if ($endDate) { $where[] = "auditDateTime <= :endDate"; $endDate = $endDate . ' 23:59:59'; }
+		if ($auditAction) { $where[] = "auditAction = :auditAction"; }
 
 		$whereClause = '';
 		if (!empty($where)) { $whereClause = 'WHERE ' . implode(' AND ',$where); }
@@ -86,8 +88,10 @@ class Audit {
 		if ($siteID) { $statement->bindParam(':siteID', $siteID, PDO::PARAM_INT); }
 		if ($auditUserID) { $statement->bindParam(':auditUserID', $auditUserID, PDO::PARAM_INT); }
 		if ($auditObject) { $statement->bindParam(':auditObject', $auditObject, PDO::PARAM_STR); }
+		if ($auditObjectID) { $statement->bindParam(':auditObjectID', $auditObjectID, PDO::PARAM_INT); }
 		if ($startDate) { $statement->bindParam(':startDate', $startDate, PDO::PARAM_STR); }
 		if ($endDate) { $statement->bindParam(':endDate', $endDate, PDO::PARAM_STR); }
+		if ($auditAction) { $statement->bindParam(':auditAction', $auditAction, PDO::PARAM_STR); }
 
 		$statement->execute();
 

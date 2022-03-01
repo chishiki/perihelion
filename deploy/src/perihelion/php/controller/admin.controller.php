@@ -42,8 +42,10 @@ final class AdminController implements StateControllerInterface {
 			if (isset($this->inputArray['siteID'])) { $_SESSION['admin']['audit']['siteID'] = $this->inputArray['siteID']; }
 			if (isset($this->inputArray['userID'])) { $_SESSION['admin']['audit']['userID'] = $this->inputArray['userID']; }
 			if (isset($this->inputArray['auditObject'])) { $_SESSION['admin']['audit']['auditObject'] = $this->inputArray['auditObject']; }
+			if (isset($this->inputArray['auditObjectID'])) { $_SESSION['admin']['audit']['auditObjectID'] = $this->inputArray['auditObjectID']; }
 			if (isset($this->inputArray['startDate'])) { $_SESSION['admin']['audit']['startDate'] = $this->inputArray['startDate']; }
 			if (isset($this->inputArray['endDate'])) { $_SESSION['admin']['audit']['endDate'] = $this->inputArray['endDate']; }
+			if (isset($this->inputArray['auditAction'])) { $_SESSION['admin']['audit']['auditAction'] = $this->inputArray['auditAction']; }
 
 		}
 

@@ -28,10 +28,11 @@ class AdminViewController {
 			if (!empty($_SESSION['admin']['audit']['siteID'])) { $siteID = $_SESSION['admin']['audit']['siteID']; } else { $siteID = null; }
 			if (!empty($_SESSION['admin']['audit']['userID'])) { $userID = $_SESSION['admin']['audit']['userID']; } else { $userID = null; }
 			if (!empty($_SESSION['admin']['audit']['auditObject'])) { $auditObject = $_SESSION['admin']['audit']['auditObject']; } else { $auditObject = null; }
+			if (!empty($_SESSION['admin']['audit']['auditObjectID'])) { $auditObjectID = $_SESSION['admin']['audit']['auditObjectID']; } else { $auditObjectID = null; }
 			if (!empty($_SESSION['admin']['audit']['startDate'])) { $startDate = $_SESSION['admin']['audit']['startDate']; } else { $startDate = null; }
 			if (!empty($_SESSION['admin']['audit']['endDate'])) { $endDate = $_SESSION['admin']['audit']['endDate']; } else { $endDate = null; }
-
-			return $menu->adminSubMenu() . $view->auditTrail('admin', $siteID, $userID, $auditObject, $startDate, $endDate);
+			if (!empty($_SESSION['admin']['audit']['auditAction'])) { $auditAction = $_SESSION['admin']['audit']['auditAction']; } else { $auditAction = null; }
+			return $menu->adminSubMenu() . $view->auditTrail('admin', $siteID, $userID, $auditObject, $auditObjectID, $startDate, $endDate, $auditAction);
 
 		}
 		

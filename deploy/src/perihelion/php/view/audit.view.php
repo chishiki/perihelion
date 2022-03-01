@@ -14,14 +14,14 @@ class AuditView {
 		
 	}
 	
-	public function auditTrail($type, $siteID = null, $userID = null, $auditObject = null, $startDate = null, $endDate = null) { // manager|admin
+	public function auditTrail($type, $siteID = null, $userID = null, $auditObject = null, $auditObjectID = null, $startDate = null, $endDate = null, $auditAction = null) { // manager|admin
 
 		if (!in_array($type, array('admin','manager'))) { die('do not pass go do not collect &dollar;200'); }
 
-		$auditTrail = $this->auditTrailFilters($type, $siteID, $userID, $auditObject, $startDate, $endDate) . '
+		$auditTrail = $this->auditTrailFilters($type, $siteID, $userID, $auditObject, $auditObjectID, $startDate, $endDate, $auditAction) . '
 			<div class="table-responsive">
 				<table class="table table-striped table-sm">
-					<tbody>' . $this->auditTrailRows($type, $siteID, $userID, $auditObject, $startDate, $endDate) . '</tbody>
+					<tbody>' . $this->auditTrailRows($type, $siteID, $userID, $auditObject, $auditObjectID, $startDate, $endDate, $auditAction) . '</tbody>
 				</table>
 			</div>
 		';
@@ -31,11 +31,11 @@ class AuditView {
 		
 	}
 
-	private function auditTrailFilters($type, $siteID, $userID, $auditObject, $startDate, $endDate) {
+	private function auditTrailFilters($type, $siteID, $userID, $auditObject, $auditObjectID,$startDate, $endDate, $auditAction) {
 
 		$siteFilter = '';
 		if ($type == 'admin') {
-			$siteFilter = '<div class="col-12 col-xl-2 mb-2">' . SiteView::sitesDropdown($siteID) . '</div>';
+			$siteFilter = '<div class="col-12 col-xl-1 mb-2">' . SiteView::sitesDropdown($siteID) . '</div>';
 		}
 
 		$filters = '
@@ -54,8 +54,16 @@ class AuditView {
 							<input type="date" name="endDate" class="form-control" value="' . ($endDate?$endDate:'') . '">
 						</div>
 					</div>
-					<div class="col-12 col-xl-2 mb-2">' . UserView::userDropdown($userID) . '</div>
-					<div class="col-12 col-xl-2 mb-2">' . self::auditObjectDropdown($auditObject) . '</div>
+					<div class="col-12 col-xl-1 mb-2">' . UserView::userDropdown($userID) . '</div>
+					<div class="col-8 col-xl-2 mb-2">' . self::auditObjectDropdown($auditObject) . '</div>
+					<div class="col-4 col-xl-1 mb-2"><input type="text" name="auditObjectID" class="form-control" value="' . ($auditObjectID?$auditObjectID:'') . '"></div>
+					<div class="col-12 col-xl-1 mb-2">
+						<select name="auditAction" class="form-control">
+							<option value="">Action</option>
+							<option value="create"' . ($auditAction=='create'?' selected':'') . '>Create</option>
+							<option value="update"' . ($auditAction=='update'?' selected':'') . '>Update</option>
+						</select>
+					</div>
 					<div class="col-12 col-xl-2 mb-2"><button type="submit" class="form-control btn btn-primary">' . Lang::getLang('filter') . '</button></div>
 				</div>
 			</form>
@@ -65,9 +73,9 @@ class AuditView {
 
 	}
 
-	private function auditTrailRows($type, $siteID, $userID, $auditObject, $startDate, $endDate) {
+	private function auditTrailRows($type, $siteID, $userID, $auditObject, $auditObjectID, $startDate, $endDate, $auditAction) {
 
-		$auditTrail = Audit::getAuditTrailArray($siteID, $userID, $auditObject, $startDate, $endDate, 100);
+		$auditTrail = Audit::getAuditTrailArray($siteID, $userID, $auditObject, $auditObjectID, $startDate, $endDate, $auditAction, 250);
 
 		$rows = '';
 
