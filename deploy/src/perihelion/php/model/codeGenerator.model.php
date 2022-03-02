@@ -243,6 +243,7 @@ final class CodeGenerator {
 				foreach ($this->fieldArray['fields'] AS $fieldName => $field) {
 					$class .= "\t\tif (!is_null(\$arg->" . $fieldName . ")) { \$statement->bindParam(':" . $fieldName . "', \$arg->" . $fieldName . ", PDO::" . ($field['type']=="int"?"PARAM_INT":"PARAM_STR") . "); }\n";
 				}
+				$class .= "\t\t\$statement->setFetchMode(PDO::FETCH_ASSOC);\n";
 				$class .= "\t\t\$statement->execute();\n\n";
 
 				$class .= "\t\t// WRITE QUERY RESULTS TO ARRAY\n";
