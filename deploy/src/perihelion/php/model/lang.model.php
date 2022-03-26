@@ -142,8 +142,8 @@ class Lang extends ORM {
 	
 }
 
-function lang($langKey) : string {
-	return Lang::getLang($langKey);
+function lang($langKey, $langSelector = 'session') : string {
+	return Lang::getLang($langKey, $langSelector);
 }
 
 ?>
