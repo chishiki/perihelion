@@ -31,7 +31,9 @@ ALTER TABLE perihelion_AccountRecovery ENGINE = InnoDB;
 ALTER TABLE perihelion_Audit ENGINE = InnoDB;
 ALTER TABLE perihelion_BlacklistIP ENGINE = InnoDB;
 ALTER TABLE perihelion_BlacklistWord ENGINE = InnoDB;
+ALTER TABLE perihelion_BlacklistDomain ENGINE = InnoDB;
 ALTER TABLE perihelion_Carousel ENGINE = InnoDB;
+ALTER TABLE perihelion_CarouselPanel ENGINE = InnoDB;
 ALTER TABLE perihelion_Contact ENGINE = InnoDB;
 ALTER TABLE perihelion_ContactForm ENGINE = InnoDB;
 ALTER TABLE perihelion_Content ENGINE = InnoDB;
@@ -154,9 +156,9 @@ ALTER TABLE `perihelion_Content`
 /* @chishiki 2021-06-20 */
 
 SET @now := now();
-INSERT INTO perihelion_Lang VALUES ('scripts', 'Scripts', 0, 'スクリプト', 0, @now);
-INSERT INTO perihelion_Lang VALUES ('createContent', 'Create Content', 0, 'コンテント新規作成', 0, @now);
-INSERT INTO perihelion_Lang VALUES ('contentCategoryType', 'Content Type', 0, 'コンテントタイプ', 0, @now);
+REPLACE INTO perihelion_Lang VALUES ('scripts', 'Scripts', 0, 'スクリプト', 0, @now);
+REPLACE INTO perihelion_Lang VALUES ('createContent', 'Create Content', 0, 'コンテント新規作成', 0, @now);
+REPLACE INTO perihelion_Lang VALUES ('contentCategoryType', 'Content Type', 0, 'コンテントタイプ', 0, @now);
 
 /* @chishiki 2021-07-12 */
 
@@ -166,7 +168,7 @@ UPDATE `perihelion_Content` SET `contentClasses` = '{"id":null,"container":null,
 /* @siramsay 2021-08-25 */
 SET @now := now();
 REPLACE INTO `perihelion_Lang` VALUES
-('select', 'Select', 0, '選択する', 0, @now);
+('select', 'Select', 0, '選択する', 0, @now),
 ('pleaseEnterValidCSS', 'Please Enter Valid CSS', 0, '有効なCSSを入力してください', 0, @now),
 ('validCSSOnly', 'valid CSS only', 0, '有効なCSSのみ', 0, @now),
 ('pleaseEnterThemeName', 'Please Enter a Theme Name', 0, 'テーマ名を入力してください', 0, @now);
