@@ -31,6 +31,7 @@
 
 .red { color:#ff0000; }
 .blue { color:#00008b; }
+.lightgray, .lightgrey { color:#D3D3D3; }
 .gray, .grey { color:#808080; }
 
 .lightgray-background, lightgray-background { background-color:LightGray; }
@@ -42,31 +43,64 @@
 .bottom-border { border-bottom:1px solid #000; }
 
 .pt-none { padding-top:0; }
+.pt-2, .pt-2px { padding-top:2px; }
+.pt-3, .pt-3px { padding-top:3px; }
 .pt-5, .pt-5px { padding-top:5px; }
 .pt-10, .pt-10px { padding-top:10px; }
 .pt-20, .pt-20px { padding-top:20px; }
 
-.pb-none  { margin-bottom:0; }
-.pb-5, .pb-5px { margin-bottom:5px; }
-.pb-10, .pb-10px { margin-bottom:10px; }
+.pb-none  { padding-bottom:0; }
+.pb-2, .pb-2px { padding-bottom:2px; }
+.pb-3, .pb-3px { padding-bottom:3px; }
+.pb-5, .pb-5px { padding-bottom:5px; }
+.pb-10, .pb-10px { padding-bottom:10px; }
+.pb-20, .pb-20px { padding-bottom:20px; }
+
+.pr-none  { padding-right:0; }
+.pr-2, .pr-2px { padding-right:2px; }
+.pr-3, .pr-3px { padding-right:3px; }
+.pr-5, .pr-5px { padding-right:5px; }
+.pr-10, .pr-10px { padding-right:10px; }
+.pr-20, .pr-20px { padding-right:20px; }
+
+.pl-none  { padding-left:0; }
+.pl-2, .pl-2px { padding-left:2px; }
+.pl-3, .pl-3px { padding-left:3px; }
+.pl-5, .pl-5px { padding-left:5px; }
+.pl-10, .pl-10px { padding-left:10px; }
+.pl-20, .pl-20px { padding-left:20px; }
+
+.pb-none  { padding-bottom:0; }
+.pb-2, .pb-2px { padding-bottom:2px; }
+.pb-3, .pb-3px { padding-bottom:3px; }
+.pb-5, .pb-5px { padding-bottom:5px; }
+.pb-10, .pb-10px { padding-bottom:10px; }
 .pb-20, .pb-20px { padding-bottom:20px; }
 
 .mt-none  { margin-top:0; }
+.mt-2, .mt-2px { margin-top:2px; }
+.mt-3, .mt-3px { margin-top:3px; }
 .mt-5, .mt-5px { margin-top:5px; }
 .mt-10, .mt-10px { margin-top:10px; }
 .mt-20, .mt-20px { margin-top:20px; }
 
 .mb-none  { margin-bottom:0; }
+.mb-2, .mb-2px { margin-bottom:2px; }
+.mb-3, .mb-3px { margin-bottom:3px; }
 .mb-5, .mb-5px { margin-bottom:5px; }
 .mb-10, .mb-10px { margin-bottom:10px; }
 .mb-20, .mb-20px { margin-bottom:20px; }
 
 .mr-none  { margin-right:0; }
+.mr-2, .mr-2px { margin-right:2px; }
+.mr-3, .mr-3px { margin-right:3px; }
 .mr-5, .mr-5px { margin-right:5px; }
 .mr-10, .mr-10px { margin-right:10px; }
 .mr-20, .mr-20px { margin-right:20px; }
 
 .ml-none  { margin-left:0; }
+.ml-2, .ml-2px { margin-left:2px; }
+.ml-3, .ml-3px { margin-left:3px; }
 .ml-5, .ml-5px { margin-left:5px; }
 .ml-10, .ml-10px { margin-left:10px; }
 .ml-20, .ml-20px { margin-left:20px; }
