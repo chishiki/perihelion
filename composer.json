@@ -27,6 +27,7 @@
   },
   "require": {
     "php": ">=7.4",
+    "ext-mbstring": "*",
     "aws/aws-sdk-php": "3.*",
     "mpdf/mpdf": "8.*",
     "geoip2/geoip2": "2.*",
