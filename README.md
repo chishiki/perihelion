@@ -11,6 +11,7 @@ Perihelion is an open-source web application framework. https://perihelion.xyz/
 ### VERSION HISTORY
 
 * 0.1.0-alpha *November 20, 2020*
+* 0.2.0-beta *April 7, 2022*
 
 ----
 
