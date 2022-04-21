@@ -472,9 +472,9 @@ final class ImageFetch {
 		return $this->imageID;
 	}
 
-	public function getImageSrc() {
+	public function getImageSrc($width = null) {
 		$image = new Image($this->imageID);
-		return $image->src();
+		return $image->src($width);
 	}
 
 	public function getImagePath() {
