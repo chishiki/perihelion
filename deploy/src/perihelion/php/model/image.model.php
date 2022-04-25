@@ -417,11 +417,40 @@ final class ImageUploader {
 				$cond = array('imageID' =>  $imageID);
 				Image::update($image, $cond);
 
-				move_uploaded_file($img['tmp_name'], $newFilePath);
+				if (in_array($extension,array('jpeg','jpg'))) {
+					self::processJPG($img['tmp_name'], $newFilePath);
+				} else {
+					move_uploaded_file($img['tmp_name'], $newFilePath);
+				}
 
 			}
 
 		}
+
+	}
+
+	private static function processJPG($imageTmpName, $newFilePath) {
+
+		$jpg = imagecreatefromstring(file_get_contents($imageTmpName));
+
+
+		// fix mobile device rotation issues
+		$exif = exif_read_data($imageTmpName);
+		if (!empty($exif['Orientation'])) {
+			switch ($exif['Orientation']) {
+				case 8:
+					$jpg = imagerotate($jpg,90,0);
+					break;
+				case 3:
+					$jpg = imagerotate($jpg,180,0);
+					break;
+				case 6:
+					$jpg = imagerotate($jpg,-90,0);
+					break;
+			}
+		}
+
+		imagejpeg($jpg, $newFilePath);
 
 	}
 
