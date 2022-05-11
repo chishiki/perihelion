@@ -11,10 +11,6 @@ class CSVController {
 		$this->urlArray = $urlArray;
 		$this->inputArray = $inputArray;
 		$this->moduleArray = $moduleArray;
-		
-		$authorizedRoles = array('siteAdmin','siteManager','siteAccountant','siteStaff');
-		$role = Auth::getUserRole();
-		if (!in_array($role,$authorizedRoles)) { die("You do not have permissions sufficient to export this data."); }
 
 	}
 
