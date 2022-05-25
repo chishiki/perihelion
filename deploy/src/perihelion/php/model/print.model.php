@@ -61,12 +61,13 @@ class PerihelionMPDF {
 				'perihelion/assets/fonts',
 			]),
 			'fontdata' => [
+				'ipa_gothic' => ['R' => 'ipag.ttf'],
 				'takao_pgothic' => ['R' => 'TakaoPGothic.ttf'],
 				'takao_gothic' => ['R' => 'TakaoGothic.ttf'],
 				'takao_pmincho' => ['R' => 'TakaoPMincho.ttf'],
 				'takao_mincho' => ['R' => 'TakaoMincho.ttf']
 			],
-			'default_font' => 'takao_pgothic',
+			'default_font' => 'ipa_gothic',
 			'tempDir' => sys_get_temp_dir()
 		]);
 		$this->mpdf->autoScriptToLang = true;
