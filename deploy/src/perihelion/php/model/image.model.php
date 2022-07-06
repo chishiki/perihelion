@@ -525,6 +525,7 @@ final class ImageMostRecent {
 
 		$whereClause = array();
 		$whereClause[] = 'siteID = :siteID';
+		$whereClause[] = 'deleted = 0';
 		$whereClause[] = 'imageObject = :imageObject';
 		if ($imageObjectID) { $whereClause[] = 'imageObjectID = :imageObjectID'; }
 
