@@ -56,6 +56,8 @@ final class Content extends ORM {
 	public $contentMetaDescriptionJapanese;
 	public $contentLock;
 	public $contentClasses;
+	public $includeOnSitemap;
+	public $authenticatedUsersOnly;
 
 	public function __construct($contentID = null) {
 
@@ -90,6 +92,8 @@ final class Content extends ORM {
 		$this->contentMetaDescriptionJapanese = '';
 		$this->contentLock = 0;
 		$this->contentClasses = '{"id":null,"container":"container","row":"row","col":"col-12"}';
+		$this->includeOnSitemap = 1;
+		$this->authenticatedUsersOnly = 0;
 
 		if ($contentID) {
 

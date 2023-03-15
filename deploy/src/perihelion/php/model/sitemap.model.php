@@ -1,5 +1,6 @@
 <?php
 
+/*
 class Sitemap {
 
 	private $xml;
@@ -16,7 +17,7 @@ class Sitemap {
 			$this->xml .= "\t<url><loc>http://" . $siteURL . "/register/</loc></url>\n";
 			$this->xml .= "\t<url><loc>http://" . $siteURL . "/account-recovery/</loc></url>\n";
 			
-			$query = "SELECT * FROM perihelion_Content WHERE contentPublished = 1 ORDER BY contentSubmissionDateTime DESC";
+			$query = "SELECT * FROM perihelion_Content WHERE contentPublished = 1 AND includeOnSitemap = 1 ORDER BY contentSubmissionDateTime DESC";
 			$core = Core::getInstance();
 			$statement = $core->database->prepare($query);
 			$statement->execute();
@@ -35,5 +36,6 @@ class Sitemap {
 	}
 	
 }
+*/
 
 ?>
