@@ -9,7 +9,7 @@ CREATE TABLE `perihelion_Person` (
   `created` datetime NOT NULL,
   `updated` datetime NULL,
   `deleted` int NOT NULL,
-  `personObject` varchar NOT NULL,
+  `personObject` varchar(50) NOT NULL,
   `personObjectID` int NULL,
   `personLastNameEnglish` varchar(255) NULL,
   `personFirstNameEnglish` varchar(255) NULL,
