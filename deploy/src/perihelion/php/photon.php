@@ -127,7 +127,7 @@ require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/view/note.view.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/view/page.view.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/view/pagination.view.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/view/panel.view.php');
-// require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/view/person.view.php');
+require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/view/person.view.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/view/print.view.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/view/profile.view.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/view/seo.view.php');

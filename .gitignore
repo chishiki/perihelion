@@ -6,7 +6,6 @@
 
 # DATA
 
-/data/*
 !/data/perihelion-*
 !/data/updates/
 

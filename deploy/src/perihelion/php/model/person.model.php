@@ -29,6 +29,12 @@ CREATE TABLE `perihelion_Person` (
   `personEmail1` varchar(100) NULL,
   `personEmail2` varchar(100) NULL,
   `personEmail3` varchar(100) NULL,
+  `personAcceptsEmail` int NOT NULL,
+  `personGender` varchar(6) NOT NULL,
+  `personBirthday` date DEFAULT NULL,
+  `personAgeGroup` varchar(20) DEFAULT NULL,
+  `personGuardian` varchar(255) DEFAULT NULL,
+  `personActive` int NOT NULL,
   PRIMARY KEY (`personID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -62,6 +68,12 @@ final class Person extends ORM {
 	public ?string $personEmail1;
 	public ?string $personEmail2;
 	public ?string $personEmail3;
+	public ?int $personAcceptsEmail;
+	public ?string $personGender;
+	public ?string $personBirthday;
+	public ?string $personAgeGroup;
+	public ?string $personGuardian;
+	public ?int $personActive;
 
 	public function __construct($personID = null) {
 
@@ -93,6 +105,12 @@ final class Person extends ORM {
 		$this->personEmail1 = null;
 		$this->personEmail2 = null;
 		$this->personEmail3 = null;
+		$this->personAcceptsEmail = null;
+		$this->personGender = null;
+		$this->personBirthday = null;
+		$this->personAgeGroup = null;
+		$this->personGuardian = null;
+		$this->personActive = null;
 
 		if (!is_null($personID)) {
 
@@ -163,6 +181,12 @@ final class PerihelionPersonList {
 		if (!is_null($arg->personEmail1)) { $wheres[] = 'perihelion_Person.personEmail1 = :personEmail1'; }
 		if (!is_null($arg->personEmail2)) { $wheres[] = 'perihelion_Person.personEmail2 = :personEmail2'; }
 		if (!is_null($arg->personEmail3)) { $wheres[] = 'perihelion_Person.personEmail3 = :personEmail3'; }
+		if (!is_null($arg->personAcceptsEmail)) { $wheres[] = 'perihelion_Person.personAcceptsEmail = :personAcceptsEmail'; }
+		if (!is_null($arg->personGender)) { $wheres[] = 'perihelion_Person.personGender = :personGender'; }
+		if (!is_null($arg->personBirthday)) { $wheres[] = 'perihelion_Person.personBirthday = :personBirthday'; }
+		if (!is_null($arg->personAgeGroup)) { $wheres[] = 'perihelion_Person.personAgeGroup = :personAgeGroup'; }
+		if (!is_null($arg->personGuardian)) { $wheres[] = 'perihelion_Person.personGuardian = :personGuardian'; }
+		if (!is_null($arg->personActive)) { $wheres[] = 'perihelion_Person.personActive = :personActive'; }
 		$where = ' WHERE ' . implode(' AND ', $wheres);
 
 		// SELECTOR
@@ -209,6 +233,13 @@ final class PerihelionPersonList {
 		if (!is_null($arg->personEmail1)) { $statement->bindParam(':personEmail1', $arg->personEmail1, PDO::PARAM_STR); }
 		if (!is_null($arg->personEmail2)) { $statement->bindParam(':personEmail2', $arg->personEmail2, PDO::PARAM_STR); }
 		if (!is_null($arg->personEmail3)) { $statement->bindParam(':personEmail3', $arg->personEmail3, PDO::PARAM_STR); }
+		if (!is_null($arg->personAcceptsEmail)) { $statement->bindParam(':personAcceptsEmail', $arg->personAcceptsEmail, PDO::PARAM_INT); }
+		if (!is_null($arg->personGender)) { $statement->bindParam(':personGender', $arg->personGender, PDO::PARAM_STR); }
+		if (!is_null($arg->personBirthday)) { $statement->bindParam(':personBirthday', $arg->personBirthday, PDO::PARAM_STR); }
+		if (!is_null($arg->personAgeGroup)) { $statement->bindParam(':personAgeGroup', $arg->personAgeGroup, PDO::PARAM_STR); }
+		if (!is_null($arg->personGuardian)) { $statement->bindParam(':personGuardian', $arg->personGuardian, PDO::PARAM_STR); }
+		if (!is_null($arg->personActive)) { $statement->bindParam(':personActive', $arg->personActive, PDO::PARAM_INT); }
+
 		$statement->setFetchMode(PDO::FETCH_ASSOC);
 		$statement->execute();
 
@@ -258,6 +289,12 @@ final class PerihelionPersonListParameters {
 	public ?string $personEmail1;
 	public ?string $personEmail2;
 	public ?string $personEmail3;
+	public ?int $personAcceptsEmail;
+	public ?string $personGender;
+	public ?string $personBirthday;
+	public ?string $personAgeGroup;
+	public ?string $personGuardian;
+	public ?int $personActive;
 
 	// view parameters
 	public ?int $currentPage;
@@ -296,6 +333,12 @@ final class PerihelionPersonListParameters {
 		$this->personEmail1 = null;
 		$this->personEmail2 = null;
 		$this->personEmail3 = null;
+		$this->personAcceptsEmail = null;
+		$this->personGender = null;
+		$this->personBirthday = null;
+		$this->personAgeGroup = null;
+		$this->personGuardian = null;
+		$this->personActive = null;
 
 		// view parameters
 		$this->currentPage = null;

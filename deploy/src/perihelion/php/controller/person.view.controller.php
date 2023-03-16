@@ -29,6 +29,12 @@ CREATE TABLE `perihelion_Person` (
   `personEmail1` varchar(100) NULL,
   `personEmail2` varchar(100) NULL,
   `personEmail3` varchar(100) NULL,
+  `personAcceptsEmail` int NOT NULL,
+  `personGender` varchar(6) NOT NULL,
+  `personBirthday` date DEFAULT NULL,
+  `personAgeGroup` varchar(20) DEFAULT NULL,
+  `personGuardian` varchar(255) DEFAULT NULL,
+  `personActive` int NOT NULL,
   PRIMARY KEY (`personID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
