@@ -65,19 +65,16 @@ final class PerihelionPersonView {
 		bool $card = false
 	):string {
 
-		$hidden = '<input type="hidden" name="type" value="' . $type . '">';
-		if ($type == 'update') {
-			$hidden .= '<input type="hidden" name="personID" value="' . $person->personID . '">';
-		}
-		$hidden .= '<input type="hidden" name="personObject" value="' . $person->personObject . '">';
-		$hidden .= '<input type="hidden" name="personObjectID" value="' . $person->personObjectID . '">';
-
 		$form = '
 
 			<form id="person_' . $type . '_form" method="post" action="' . ($formAction?:'') . '">
 
-				' . $hidden . '
+				<input type="hidden" name="type" value="' . $type . '">
+				<input type="hidden" name="personID" value="' . ($person->personID?:'') . '">
+				<input type="hidden" name="personObject" value="' . ($person->personObject?:'') . '">
+				<input type="hidden" name="personObjectID" value="' . ($person->personObjectID?:'') . '">
 	
+				<!--
 				<div class="form-row">
 	
 					<div class="form-group col-9 col-sm-9 col-md-8 col-lg-6 col-xl-4">
@@ -87,23 +84,24 @@ final class PerihelionPersonView {
 	
 					<div class="form-group col-3 col-sm-3 col-md-4 col-lg-2 col-xl-1">
 						<label for="person_object_id">' . Lang::getLang('personObjectID') . '</label>
-						<input type="number" id="person_object_id" class="form-control" name="personObjectID" value="' . $person->personObjectID . '" readonly>
+						<input type="number" id="person_object_id" class="form-control" name="personObjectID" value="' . ($person->personObjectID?:'') . '" readonly>
 					</div>
 					
 				</div>
 				
 				<hr />
+				-->
 				
 				<div class="form-row">
 	
 					<div class="form-group col-12 col-sm-6 col-lg-4">
 						<label for="person_last_name_english">' . Lang::getLang('personLastNameEnglish') . '</label>
-						<input type="text" id="person_last_name_english" class="form-control" name="personLastNameEnglish" value="' . $person->personLastNameEnglish . '">
+						<input type="text" id="person_last_name_english" class="form-control" name="personLastNameEnglish" value="' . ($person->personLastNameEnglish?:'') . '">
 					</div>
 	
 					<div class="form-group col-12 col-sm-6 col-lg-4">
 						<label for="person_first_name_english">' . Lang::getLang('personFirstNameEnglish') . '</label>
-						<input type="text" id="person_first_name_english" class="form-control" name="personFirstNameEnglish" value="' . $person->personFirstNameEnglish . '">
+						<input type="text" id="person_first_name_english" class="form-control" name="personFirstNameEnglish" value="' . ($person->personFirstNameEnglish?:'') . '">
 					</div>
 					
 				</div>
@@ -112,12 +110,12 @@ final class PerihelionPersonView {
 	
 					<div class="form-group col-12 col-sm-6 col-lg-4">
 						<label for="person_last_name_japanese">' . Lang::getLang('personLastNameJapanese') . '</label>
-						<input type="text" id="person_last_name_japanese" class="form-control" name="personLastNameJapanese" value="' . $person->personLastNameJapanese . '">
+						<input type="text" id="person_last_name_japanese" class="form-control" name="personLastNameJapanese" value="' . ($person->personLastNameJapanese?:'') . '">
 					</div>
 	
 					<div class="form-group col-12 col-sm-6 col-lg-4">
 						<label for="person_first_name_japanese">' . Lang::getLang('personFirstNameJapanese') . '</label>
-						<input type="text" id="person_first_name_japanese" class="form-control" name="personFirstNameJapanese" value="' . $person->personFirstNameJapanese . '">
+						<input type="text" id="person_first_name_japanese" class="form-control" name="personFirstNameJapanese" value="' . ($person->personFirstNameJapanese?:'') . '">
 					</div>
 					
 				</div>
@@ -126,12 +124,12 @@ final class PerihelionPersonView {
 	
 					<div class="form-group col-12 col-sm-6 col-lg-4">
 						<label for="person_last_name_japanese_reading">' . Lang::getLang('personLastNameJapaneseReading') . '</label>
-						<input type="text" id="person_last_name_japanese_reading" class="form-control" name="personLastNameJapaneseReading" value="' . $person->personLastNameJapaneseReading . '">
+						<input type="text" id="person_last_name_japanese_reading" class="form-control" name="personLastNameJapaneseReading" value="' . ($person->personLastNameJapaneseReading?:'') . '">
 					</div>
 	
 					<div class="form-group col-12 col-sm-6 col-lg-4">
 						<label for="person_first_name_japanese_reading">' . Lang::getLang('personFirstNameJapaneseReading') . '</label>
-						<input type="text" id="person_first_name_japanese_reading" class="form-control" name="personFirstNameJapaneseReading" value="' . $person->personFirstNameJapaneseReading . '">
+						<input type="text" id="person_first_name_japanese_reading" class="form-control" name="personFirstNameJapaneseReading" value="' . ($person->personFirstNameJapaneseReading?:'') . '">
 					</div>
 	
 				</div>
@@ -146,7 +144,7 @@ final class PerihelionPersonView {
 							<div class="input-group-prepend"><span class="input-group-text">
 								<span class="fas fa-user-tie"></span>
 							</div>
-							<input type="text" id="person_job_title" class="form-control" name="personJobTitle" value="' . $person->personJobTitle . '">
+							<input type="text" id="person_job_title" class="form-control" name="personJobTitle" value="' . ($person->personJobTitle?:'') . '">
 						</div>
 					</div>
 	
@@ -156,7 +154,7 @@ final class PerihelionPersonView {
 							<div class="input-group-prepend"><span class="input-group-text">
 								<span class="fas fa-network-wired"></span>
 							</div>
-							<input type="text" id="person_division" class="form-control" name="personDivision" value="' . $person->personDivision . '">
+							<input type="text" id="person_division" class="form-control" name="personDivision" value="' . ($person->personDivision?:'') . '">
 						</div>
 					</div>
 	
@@ -166,7 +164,7 @@ final class PerihelionPersonView {
 							<div class="input-group-prepend"><span class="input-group-text">
 								<span class="fas fa-building"></span>
 							</div>
-							<input type="text" id="person_office" class="form-control" name="personOffice" value="' . $person->personOffice . '">
+							<input type="text" id="person_office" class="form-control" name="personOffice" value="' . ($person->personOffice?:'') . '">
 						</div>
 					</div>
 					
@@ -182,7 +180,7 @@ final class PerihelionPersonView {
 							<div class="input-group-prepend"><span class="input-group-text">
 								<span class="fas fa-mobile-alt"></span>
 							</div>
-							<input type="tel" id="person_mobile_telephone" class="form-control" name="personMobileTelephone" value="' . $person->personMobileTelephone . '">
+							<input type="tel" id="person_mobile_telephone" class="form-control" name="personMobileTelephone" value="' . ($person->personMobileTelephone?:'') . '">
 						</div>
 					</div>
 	
@@ -192,7 +190,7 @@ final class PerihelionPersonView {
 							<div class="input-group-prepend"><span class="input-group-text">
 								<span class="fas fa-phone"></span>
 							</div>
-							<input type="tel" id="person_office_telephone" class="form-control" name="personOfficeTelephone" value="' . $person->personOfficeTelephone . '">
+							<input type="tel" id="person_office_telephone" class="form-control" name="personOfficeTelephone" value="' . ($person->personOfficeTelephone?:'') . '">
 						</div>
 					</div>
 					
@@ -202,7 +200,7 @@ final class PerihelionPersonView {
 							<div class="input-group-prepend"><span class="input-group-text">
 								<span class="fas fa-phone"></span>
 							</div>
-							<input type="tel" id="person_home_telephone" class="form-control" name="personHomeTelephone" value="' . $person->personHomeTelephone . '">
+							<input type="tel" id="person_home_telephone" class="form-control" name="personHomeTelephone" value="' . ($person->personHomeTelephone?:'') . '">
 						</div>
 						
 					</div>
@@ -213,7 +211,7 @@ final class PerihelionPersonView {
 							<div class="input-group-prepend"><span class="input-group-text">
 								<span class="fas fa-fax"></span>
 							</div>
-							<input type="tel" id="person_fax" class="form-control" name="personFax" value="' . $person->personFax . '">
+							<input type="tel" id="person_fax" class="form-control" name="personFax" value="' . ($person->personFax?:'') . '">
 						</div>
 					</div>
 					
@@ -229,7 +227,7 @@ final class PerihelionPersonView {
 							<div class="input-group-prepend"><span class="input-group-text">
 								<span class="far fa-envelope"></span>
 							</div>
-							<input type="email" id="person_email1" class="form-control" name="personEmail1" value="' . $person->personEmail1 . '">
+							<input type="email" id="person_email1" class="form-control" name="personEmail1" value="' . ($person->personEmail1?:'') . '">
 						</div>
 					</div>
 	
@@ -239,7 +237,7 @@ final class PerihelionPersonView {
 							<div class="input-group-prepend"><span class="input-group-text">
 								<span class="far fa-envelope"></span>
 							</div>
-							<input type="email" id="person_email2" class="form-control" name="personEmail2" value="' . $person->personEmail2 . '">
+							<input type="email" id="person_email2" class="form-control" name="personEmail2" value="' . ($person->personEmail2?:'') . '">
 						</div>
 					</div>
 	
@@ -249,7 +247,7 @@ final class PerihelionPersonView {
 							<div class="input-group-prepend"><span class="input-group-text">
 								<span class="far fa-envelope"></span>
 							</div>
-							<input type="email" id="person_email3" class="form-control" name="personEmail3" value="' . $person->personEmail3 . '">
+							<input type="email" id="person_email3" class="form-control" name="personEmail3" value="' . ($person->personEmail3?:'') . '">
 						</div>
 					</div>
 	
@@ -276,7 +274,7 @@ final class PerihelionPersonView {
 							<div class="input-group-prepend"><span class="input-group-text">
 								<span class="fas fa-desktop"></span>
 							</div>
-							<input type="url" id="person_homepage" class="form-control" name="personHomepage" value="' . $person->personHomepage . '" placeholder="http://example.com/">
+							<input type="url" id="person_homepage" class="form-control" name="personHomepage" value="' . ($person->personHomepage?:'') . '" placeholder="http://example.com/">
 						</div>
 					</div>
 					
@@ -288,7 +286,7 @@ final class PerihelionPersonView {
 	
 					<div class="form-group col-12">
 						<label for="person_memo">' . Lang::getLang('personMemo') . '</label>
-						<textarea id="person_memo" class="form-control" name="personMemo">' . $person->personMemo . '</textarea>
+						<textarea id="person_memo" class="form-control" name="personMemo">' . ($person->personMemo?:'') . '</textarea>
 					</div>
 	
 				</div>
@@ -309,28 +307,14 @@ final class PerihelionPersonView {
 				<hr />
 	
 				<div class="form-row">
-	
-					<div class="form-group col-12 col-sm-4 col-lg-3">
-						<a href="/' . Lang::prefix() . 'perihelion/person/" class="btn btn-block btn-outline-secondary" role="button">
-							<span class="fas fa-arrow-left"></span>
-							' . Lang::getLang('returnToList') . '
-						</a>
-					</div>
-	
-					<div class="form-group col-12 col-sm-4 col-lg-3 offset-lg-3">
+
+					<div class="form-group col-12 col-sm-4 offset-sm-8 col-lg-3 offset-lg-9">
 						<button type="submit" name="perihelion-person-' . $type . '" class="btn btn-block btn-outline-'. ($type=='create'?'success':'primary') . '">
 							<span class="far fa-save"></span>
-							' . Lang::getLang($type) . '
+							' . Lang::getLang($type.'Person') . '
 						</button>
 					</div>
-	
-					<div class="form-group col-12 col-sm-4 col-lg-3">
-						<a href="/' . Lang::prefix() . 'perihelion/person/" class="btn btn-block btn-outline-secondary" role="button">
-							<span class="fas fa-times"></span>
-							' . Lang::getLang('cancel') . '
-						</a>
-					</div>
-	
+
 				</div>
 
 			</form>
@@ -513,10 +497,13 @@ final class PerihelionPersonView {
 
 			<div class="row mb-3">
 				<div class="col-12 col-md-8 col-lg-10">
-					' . PaginationView::paginate($arg->numberOfPages,$arg->currentPage,'/' . Lang::prefix() . 'perihelion/person/') . '
+					' . PaginationView::paginate($arg->numberOfPages, $arg->currentPage, $arg->baseURL) . '
 				</div>
 				<div class="col-12 col-md-4 col-lg-2">
-					<a href="/' . Lang::prefix() . 'perihelion/person/create/" class="btn btn-block btn-outline-success btn-sm"><span class="fas fa-plus"></span> ' . Lang::getLang('create') . '</a>
+					<a href="' . $arg->baseURL . 'create/" class="btn btn-block btn-outline-success btn-sm">
+						<span class="fas fa-plus"></span>
+						' . Lang::getLang('create') . '
+					</a>
 				</div>
 			</div>
 
@@ -526,26 +513,10 @@ final class PerihelionPersonView {
 						<thead class"thead-light">
 							<tr>
 								<th scope="col" class="text-center text-nowrap">' . Lang::getLang('personID') . '</th>
-								<th scope="col" class="text-center text-nowrap">' . Lang::getLang('personObject') . '</th>
-								<th scope="col" class="text-center text-nowrap">' . Lang::getLang('personObjectID') . '</th>
-								<th scope="col" class="text-center text-nowrap">' . Lang::getLang('personLastNameEnglish') . '</th>
-								<th scope="col" class="text-center text-nowrap">' . Lang::getLang('personFirstNameEnglish') . '</th>
-								<th scope="col" class="text-center text-nowrap">' . Lang::getLang('personLastNameJapanese') . '</th>
-								<th scope="col" class="text-center text-nowrap">' . Lang::getLang('personFirstNameJapanese') . '</th>
-								<th scope="col" class="text-center text-nowrap">' . Lang::getLang('personLastNameJapaneseReading') . '</th>
-								<th scope="col" class="text-center text-nowrap">' . Lang::getLang('personFirstNameJapaneseReading') . '</th>
-								<th scope="col" class="text-center text-nowrap">' . Lang::getLang('personJobTitle') . '</th>
-								<th scope="col" class="text-center text-nowrap">' . Lang::getLang('personDivision') . '</th>
-								<th scope="col" class="text-center text-nowrap">' . Lang::getLang('personOffice') . '</th>
+								<th scope="col" class="text-center text-nowrap">' . Lang::getLang('personName') . '</th>
+								<th scope="col" class="text-center text-nowrap">' . Lang::getLang('personEmail') . '</th>
+								<th scope="col" class="text-center text-nowrap">' . Lang::getLang('personTelephone') . '</th>
 								<th scope="col" class="text-center text-nowrap">' . Lang::getLang('personHomepage') . '</th>
-								<th scope="col" class="text-center text-nowrap">' . Lang::getLang('personHomeTelephone') . '</th>
-								<th scope="col" class="text-center text-nowrap">' . Lang::getLang('personMobileTelephone') . '</th>
-								<th scope="col" class="text-center text-nowrap">' . Lang::getLang('personOfficeTelephone') . '</th>
-								<th scope="col" class="text-center text-nowrap">' . Lang::getLang('personFax') . '</th>
-								<th scope="col" class="text-center text-nowrap">' . Lang::getLang('personMemo') . '</th>
-								<th scope="col" class="text-center text-nowrap">' . Lang::getLang('personEmail1') . '</th>
-								<th scope="col" class="text-center text-nowrap">' . Lang::getLang('personEmail2') . '</th>
-								<th scope="col" class="text-center text-nowrap">' . Lang::getLang('personEmail3') . '</th>
 								<th scope="col" class="text-center text-nowrap">' . Lang::getLang('action') . '</th>
 							</tr>
 						</thead>
@@ -556,14 +527,24 @@ final class PerihelionPersonView {
 
 			<div class="row">
 				<div class="col-12 col-md-8 col-lg-10">
-					' . PaginationView::paginate($arg->numberOfPages,$arg->currentPage,'/' . Lang::prefix() . 'perihelion/person/') . '
+					' . PaginationView::paginate($arg->numberOfPages, $arg->currentPage, $arg->baseURL) . '
 				</div>
 			</div>
 
 		';
 
-		$card = new CardView('perihelion_person_list',array('container-fluid'),'',array('col-12'),Lang::getLang('perihelionPersonList'), $list);
-		return $card->card();
+		if ($arg->card) {
+
+			$card = new CardView('perihelion_person_list',array('container-fluid'),'',array('col-12'),Lang::getLang('perihelionPersonList'), $list);
+			return $card->card();
+
+		}  else {
+
+			return $list;
+
+		}
+
+
 
 	}
 
@@ -574,38 +555,43 @@ final class PerihelionPersonView {
 
 		$rows = '';
 
-		foreach ($results AS $r) {
+		foreach ($results AS $p) {
 
-			$rows .= '
+			$person = new Person($p->personID);
 
-				<tr id="perihelion_person_key_' . $r['personID'] . '" class="perihelion-person-list-row" data-row-person-id="' . $r['personID'] . '">
-					<th scope="row" class="text-center perihelion-person-list-cell" data-cell-person-id="' . $r['personID'] . '">' . $r['personID'] . '</th>
-					<td class="text-center perihelion-person-list-cell" data-cell-person-object="' . $r['personObject'] . '">' . $r['personObject'] . '</td>
-					<td class="text-center perihelion-person-list-cell" data-cell-person-object-id="' . $r['personObjectID'] . '">' . $r['personObjectID'] . '</td>
-					<td class="text-center perihelion-person-list-cell" data-cell-person-last-name-english="' . $r['personLastNameEnglish'] . '">' . $r['personLastNameEnglish'] . '</td>
-					<td class="text-center perihelion-person-list-cell" data-cell-person-first-name-english="' . $r['personFirstNameEnglish'] . '">' . $r['personFirstNameEnglish'] . '</td>
-					<td class="text-center perihelion-person-list-cell" data-cell-person-last-name-japanese="' . $r['personLastNameJapanese'] . '">' . $r['personLastNameJapanese'] . '</td>
-					<td class="text-center perihelion-person-list-cell" data-cell-person-first-name-japanese="' . $r['personFirstNameJapanese'] . '">' . $r['personFirstNameJapanese'] . '</td>
-					<td class="text-center perihelion-person-list-cell" data-cell-person-last-name-japanese-reading="' . $r['personLastNameJapaneseReading'] . '">' . $r['personLastNameJapaneseReading'] . '</td>
-					<td class="text-center perihelion-person-list-cell" data-cell-person-first-name-japanese-reading="' . $r['personFirstNameJapaneseReading'] . '">' . $r['personFirstNameJapaneseReading'] . '</td>
-					<td class="text-center perihelion-person-list-cell" data-cell-person-job-title="' . $r['personJobTitle'] . '">' . $r['personJobTitle'] . '</td>
-					<td class="text-center perihelion-person-list-cell" data-cell-person-division="' . $r['personDivision'] . '">' . $r['personDivision'] . '</td>
-					<td class="text-center perihelion-person-list-cell" data-cell-person-office="' . $r['personOffice'] . '">' . $r['personOffice'] . '</td>
-					<td class="text-center perihelion-person-list-cell" data-cell-person-homepage="' . $r['personHomepage'] . '">' . $r['personHomepage'] . '</td>
-					<td class="text-center perihelion-person-list-cell" data-cell-person-home-telephone="' . $r['personHomeTelephone'] . '">' . $r['personHomeTelephone'] . '</td>
-					<td class="text-center perihelion-person-list-cell" data-cell-person-mobile-telephone="' . $r['personMobileTelephone'] . '">' . $r['personMobileTelephone'] . '</td>
-					<td class="text-center perihelion-person-list-cell" data-cell-person-office-telephone="' . $r['personOfficeTelephone'] . '">' . $r['personOfficeTelephone'] . '</td>
-					<td class="text-center perihelion-person-list-cell" data-cell-person-fax="' . $r['personFax'] . '">' . $r['personFax'] . '</td>
-					<td class="text-center perihelion-person-list-cell" data-cell-person-memo="' . $r['personMemo'] . '">' . $r['personMemo'] . '</td>
-					<td class="text-center perihelion-person-list-cell" data-cell-person-email1="' . $r['personEmail1'] . '">' . $r['personEmail1'] . '</td>
-					<td class="text-center perihelion-person-list-cell" data-cell-person-email2="' . $r['personEmail2'] . '">' . $r['personEmail2'] . '</td>
-					<td class="text-center perihelion-person-list-cell" data-cell-person-email3="' . $r['personEmail3'] . '">' . $r['personEmail3'] . '</td>
+			$telephones = '';
+			$telephoneArray = array();
+			if ($p['personHomeTelephone']) { $telephoneArray['home'] = $p['personHomeTelephone']; }
+			if ($p['personMobileTelephone']) { $telephoneArray['mobile'] = $p['personMobileTelephone']; }
+			if ($p['personOfficeTelephone']) { $telephoneArray['office'] = $p['personOfficeTelephone']; }
+			if ($p['personFax']) { $telephoneArray['fax'] = $p['personFax']; }
+			$telArray = array();
+			foreach ($telephoneArray AS $key => $value) {
+				$telArray .= $key . ': ' . $value;
+			}
+			$telephones = join('<br />',$telArray);
+
+			$emails = '';
+			$emailArray = array();
+			if ($p['personEmail1']) { $emailArray[] = $p['personEmail1']; }
+			if ($p['personEmail2']) { $emailArray[] = $p['personEmail2']; }
+			if ($p['personEmail3']) { $emailArray[] = $p['personEmail3']; }
+			$emails = join('<br />',$emailArray);
+
+			$pows .= '
+
+				<tr id="perihelion_person_key_' . $p['personID'] . '" class="perihelion-person-list-row" data-row-person-id="' . $p['personID'] . '">
+					<th scope="row" class="text-center perihelion-person-list-cell" data-cell-person-id="' . $p['personID'] . '">' . $p['personID'] . '</th>
+					<td class="text-center perihelion-person-list-cell" data-cell-person-name="' . $person->name() . '">' . $person->name() . '</td>
+					<td class="text-left perihelion-person-list-cell" data-cell-person-email="' . join(', ',$emailArray) . '">' . $emails . '</td>
+					<td class="text-left perihelion-person-list-cell" data-cell-person-telephone="' . join(', ',$telephoneArray) . '">' . $telephones . '</td>
+					<td class="text-center perihelion-person-list-cell" data-cell-person-homepage="' . $p['personHomepage'] . '">' . $p['personHomepage'] . '</td>
 					<td class="text-center text-nowrap">
-						<a href="/' . Lang::prefix() . 'perihelion/person/update/' . $r['personID'] . '/" class="btn btn-sm btn-outline-primary">
+						<a href="' . $arg->baseURL . 'update/' . $p->personID . '/" class="btn btn-sm btn-outline-primary">
 							<span class="far fa-edit"></span>
 							' . Lang::getLang('update') . '
 						</a>
-						<a href="/' . Lang::prefix() . 'perihelion/person/confirm-delete/' . $r['personID'] . '/" class="btn btn-sm btn-outline-danger">
+						<a href="' . $arg->baseURL . 'confirm-delete/' . $p->personID . '/" class="btn btn-sm btn-outline-danger">
 							<span class="far fa-trash-alt"></span>
 							' . Lang::getLang('delete') . '
 						</a>

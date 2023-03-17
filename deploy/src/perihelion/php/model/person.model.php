@@ -362,6 +362,7 @@ final class PerihelionPersonListParameters {
 	public ?int $personActive;
 
 	// view parameters
+	public string $baseURL;
 	public ?int $currentPage;
 	public ?int $numberOfPages;
 
@@ -406,8 +407,10 @@ final class PerihelionPersonListParameters {
 		$this->personActive = null;
 
 		// view parameters
+		$this->baseURL = '/' . Lang::prefix() . 'perihelion/person/';
 		$this->currentPage = null;
 		$this->numberOfPages = null;
+		$this->card = true;
 
 		// results, order, limit, offset
 		$this->resultSet = array();

@@ -889,7 +889,9 @@ REPLACE INTO `perihelion_Lang` VALUES
 ('personBirthday', 'Birthday', 0, '生年月日', 0, @now),
 ('personAgeGroup', 'Age Group', 0, 'エージグループ', 0, @now),
 ('personGuardian', 'Guardian', 0, '保護者', 0, @now),
-('personActive', 'Active', 0, 'アクティブ', 0, @now);
+('personActive', 'Active', 0, 'アクティブ', 0, @now),
+('createPerson', 'Create', 0, '作成', 0, @now),
+('updatePerson', 'Update', 0, '更新', 0, @now);
 
 -- ('xxxxxxx', 'xxxxxxx', 0, 'xxxxxxx', 0, @now);
 
