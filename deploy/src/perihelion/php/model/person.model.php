@@ -135,6 +135,71 @@ final class Person extends ORM {
 
 	}
 
+	public function name(string $lang = null) :?string {
+
+		$japaneseNames = array();
+		if (!is_null($this->personLastNameJapanese) && $this->personLastNameJapanese != '') { $japaneseNames[] = $this->personLastNameJapanese; }
+		if (!is_null($this->personFirstNameJapanese) && $this->personFirstNameJapanese != '') { $japaneseNames[] = $this->personFirstNameJapanese; }
+
+		$englishNames = array();
+		if (!is_null($this->personLastNameEnglish) && $this->personLastNameEnglish != '') { $englishNames[] = $this->personLastNameEnglish; }
+		if (!is_null($this->personFirstNameEnglish) && $this->personFirstNameEnglish != '') { $englishNames[] = $this->personFirstNameEnglish; }
+
+		if (!is_null($lang)) {
+			if ($lang == 'en') { return join(', ', $englishNames); }
+			if ($lang == 'ja') { return join(' ', $japaneseNames); }
+		} elseif ($_SESSION['lang'] == 'ja' && (!empty($this->personLastNameJapanese) || !empty($this->personFirstNameJapanese))) {
+			return join(' ', $japaneseNames);
+		} else {
+			if (!empty($englishNames)) {
+				return join(', ', $englishNames);
+			} elseif (!empty($japaneseNames)) {
+				return join(' ', $japaneseNames);
+			}
+		}
+
+		return null;
+
+	}
+
+	public function firstName(string $lang = null) :?string {
+
+		if (!is_null($lang)) {
+			if ($lang == 'en') { return $this->personFirstNameEnglish; }
+			if ($lang == 'ja') { return $this->personFirstNameJapanese; }
+		} elseif ($_SESSION['lang'] == 'ja' && !empty($this->personFirstNameJapanese)) {
+			return $this->personFirstNameJapanese;
+		} else {
+			if (!empty($this->personFirstNameEnglish)) {
+				return $this->personFirstNameEnglish;
+			} elseif (!empty($this->personFirstNameJapanese)) {
+				return $this->personFirstNameJapanese;
+			}
+		}
+
+		return null;
+
+	}
+
+	public function lastName(string $lang = null) :?string {
+
+		if (!is_null($lang)) {
+			if ($lang == 'en') { return $this->personLastNameEnglish; }
+			if ($lang == 'ja') { return $this->personLastNameJapanese; }
+		} elseif ($_SESSION['lang'] == 'ja' && !empty($this->personLastNameJapanese)) {
+			return $this->personLastNameJapanese;
+		} else {
+			if (!empty($this->personLastNameEnglish)) {
+				return $this->personLastNameEnglish;
+			} elseif (!empty($this->personLastNameJapanese)) {
+				return $this->personLastNameJapanese;
+			}
+		}
+
+		return null;
+
+	}
+
 	public function markAsDeleted() {
 
 		$dt = new DateTime();
