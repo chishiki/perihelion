@@ -48,7 +48,7 @@ final class Person extends ORM {
 	public string $created;
 	public ?string $updated;
 	public int $deleted;
-	public string $personObject;
+	public ?string $personObject;
 	public ?int $personObjectID;
 	public ?string $personLastNameEnglish;
 	public ?string $personFirstNameEnglish;
