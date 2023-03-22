@@ -41,11 +41,18 @@ final class NoteView {
 		
 	}
 	
-	public function NotesList($baseURL, $noteObject = null, $noteObjectID = null) {
+	public function NotesList($baseURL, $noteObject = null, $noteObjectID = null, $orderBy = null) {
 
 		$arg = new NoteListArguments();
 		$arg->noteObject = $noteObject;
 		$arg->noteObjectID = $noteObjectID;
+
+		if (!is_null($orderBy) && in_array($orderBy,array('ASC','DESC'))) {
+			$arg->orderBy = array(
+				array('field' => 'noteID', 'sort' => $orderBy)
+			);
+		}
+
 		$nl = new NoteList($arg);
 		$notes = $nl->getNotes();
 
