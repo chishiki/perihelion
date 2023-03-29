@@ -7,34 +7,36 @@ CREATE TABLE `perihelion_Person` (
   `siteID` int NOT NULL,
   `creator` int NOT NULL,
   `created` datetime NOT NULL,
-  `updated` datetime NULL,
+  `updated` datetime DEFAULT NULL,
   `deleted` int NOT NULL,
   `personObject` varchar(50) NOT NULL,
-  `personObjectID` int NULL,
-  `personLastNameEnglish` varchar(255) NULL,
-  `personFirstNameEnglish` varchar(255) NULL,
-  `personLastNameJapanese` varchar(255) NULL,
-  `personFirstNameJapanese` varchar(255) NULL,
-  `personLastNameJapaneseReading` varchar(255) NULL,
-  `personFirstNameJapaneseReading` varchar(255) NULL,
-  `personJobTitle` varchar(100) NULL,
-  `personDivision` varchar(100) NULL,
-  `personOffice` varchar(100) NULL,
-  `personHomepage` varchar(255) NULL,
-  `personHomeTelephone` varchar(50) NULL,
-  `personMobileTelephone` varchar(50) NULL,
-  `personOfficeTelephone` varchar(50) NULL,
-  `personFax` varchar(50) NULL,
-  `personMemo` text NULL,
-  `personEmail1` varchar(100) NULL,
-  `personEmail2` varchar(100) NULL,
-  `personEmail3` varchar(100) NULL,
+  `personObjectID` int DEFAULT NULL,
+  `personLastNameEnglish` varchar(255) DEFAULT NULL,
+  `personFirstNameEnglish` varchar(255) DEFAULT NULL,
+  `personLastNameJapanese` varchar(255) DEFAULT NULL,
+  `personFirstNameJapanese` varchar(255) DEFAULT NULL,
+  `personLastNameJapaneseReading` varchar(255) DEFAULT NULL,
+  `personFirstNameJapaneseReading` varchar(255) DEFAULT NULL,
+  `personJobTitle` varchar(100) DEFAULT NULL,
+  `personDivision` varchar(100) DEFAULT NULL,
+  `personOffice` varchar(100) DEFAULT NULL,
+  `personHomepage` varchar(255) DEFAULT NULL,
+  `personHomeTelephone` varchar(50) DEFAULT NULL,
+  `personMobileTelephone` varchar(50) DEFAULT NULL,
+  `personOfficeTelephone` varchar(50) DEFAULT NULL,
+  `personFax` varchar(50) DEFAULT NULL,
+  `personAcceptsTelephoneCalls` int NOT NULL,
+  `personMemo` text,
+  `personEmail1` varchar(100) DEFAULT NULL,
+  `personEmail2` varchar(100) DEFAULT NULL,
+  `personEmail3` varchar(100) DEFAULT NULL,
   `personAcceptsEmail` int NOT NULL,
   `personGender` varchar(6) NOT NULL,
   `personBirthday` date DEFAULT NULL,
   `personAgeGroup` varchar(20) DEFAULT NULL,
   `personGuardian` varchar(255) DEFAULT NULL,
   `personActive` int NOT NULL,
+  `languagePreference` varchar(2) DEFAULT NULL,
   PRIMARY KEY (`personID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -65,6 +67,7 @@ final class Person extends ORM {
 	public ?string $personOfficeTelephone;
 	public ?string $personFax;
 	public ?string $personMemo;
+	public ?int $personAcceptsTelephoneCalls;
 	public ?string $personEmail1;
 	public ?string $personEmail2;
 	public ?string $personEmail3;
@@ -74,6 +77,7 @@ final class Person extends ORM {
 	public ?string $personAgeGroup;
 	public ?string $personGuardian;
 	public ?int $personActive;
+	public ?string $languagePreference;
 
 	public function __construct($personID = null) {
 
@@ -101,16 +105,18 @@ final class Person extends ORM {
 		$this->personMobileTelephone = null;
 		$this->personOfficeTelephone = null;
 		$this->personFax = null;
+		$this->personAcceptsTelephoneCalls = 0;
 		$this->personMemo = null;
 		$this->personEmail1 = null;
 		$this->personEmail2 = null;
 		$this->personEmail3 = null;
-		$this->personAcceptsEmail = null;
-		$this->personGender = null;
+		$this->personAcceptsEmail = 0;
+		$this->personGender = '';
 		$this->personBirthday = null;
 		$this->personAgeGroup = null;
 		$this->personGuardian = null;
-		$this->personActive = null;
+		$this->personActive = 1;
+		$this->languagePreference = null;
 
 		if (!is_null($personID)) {
 
@@ -242,6 +248,7 @@ final class PerihelionPersonList {
 		if (!is_null($arg->personMobileTelephone)) { $wheres[] = 'perihelion_Person.personMobileTelephone = :personMobileTelephone'; }
 		if (!is_null($arg->personOfficeTelephone)) { $wheres[] = 'perihelion_Person.personOfficeTelephone = :personOfficeTelephone'; }
 		if (!is_null($arg->personFax)) { $wheres[] = 'perihelion_Person.personFax = :personFax'; }
+		if (!is_null($arg->personAcceptsTelephoneCalls)) { $wheres[] = 'perihelion_Person.personAcceptsTelephoneCalls = :personAcceptsTelephoneCalls'; }
 		if (!is_null($arg->personMemo)) { $wheres[] = 'perihelion_Person.personMemo = :personMemo'; }
 		if (!is_null($arg->personEmail1)) { $wheres[] = 'perihelion_Person.personEmail1 = :personEmail1'; }
 		if (!is_null($arg->personEmail2)) { $wheres[] = 'perihelion_Person.personEmail2 = :personEmail2'; }
@@ -252,6 +259,7 @@ final class PerihelionPersonList {
 		if (!is_null($arg->personAgeGroup)) { $wheres[] = 'perihelion_Person.personAgeGroup = :personAgeGroup'; }
 		if (!is_null($arg->personGuardian)) { $wheres[] = 'perihelion_Person.personGuardian = :personGuardian'; }
 		if (!is_null($arg->personActive)) { $wheres[] = 'perihelion_Person.personActive = :personActive'; }
+		if (!is_null($arg->languagePreference)) { $wheres[] = 'perihelion_Person.languagePreference = :languagePreference'; }
 		$where = ' WHERE ' . implode(' AND ', $wheres);
 
 		// SELECTOR
@@ -294,6 +302,7 @@ final class PerihelionPersonList {
 		if (!is_null($arg->personMobileTelephone)) { $statement->bindParam(':personMobileTelephone', $arg->personMobileTelephone, PDO::PARAM_STR); }
 		if (!is_null($arg->personOfficeTelephone)) { $statement->bindParam(':personOfficeTelephone', $arg->personOfficeTelephone, PDO::PARAM_STR); }
 		if (!is_null($arg->personFax)) { $statement->bindParam(':personFax', $arg->personFax, PDO::PARAM_STR); }
+		if (!is_null($arg->personAcceptsTelephoneCalls)) { $statement->bindParam(':personAcceptsTelephoneCalls', $arg->personAcceptsTelephoneCalls, PDO::PARAM_INT); }
 		if (!is_null($arg->personMemo)) { $statement->bindParam(':personMemo', $arg->personMemo, PDO::PARAM_STR); }
 		if (!is_null($arg->personEmail1)) { $statement->bindParam(':personEmail1', $arg->personEmail1, PDO::PARAM_STR); }
 		if (!is_null($arg->personEmail2)) { $statement->bindParam(':personEmail2', $arg->personEmail2, PDO::PARAM_STR); }
@@ -304,6 +313,7 @@ final class PerihelionPersonList {
 		if (!is_null($arg->personAgeGroup)) { $statement->bindParam(':personAgeGroup', $arg->personAgeGroup, PDO::PARAM_STR); }
 		if (!is_null($arg->personGuardian)) { $statement->bindParam(':personGuardian', $arg->personGuardian, PDO::PARAM_STR); }
 		if (!is_null($arg->personActive)) { $statement->bindParam(':personActive', $arg->personActive, PDO::PARAM_INT); }
+		if (!is_null($arg->languagePreference)) { $statement->bindParam(':languagePreference', $arg->languagePreference, PDO::PARAM_STR); }
 
 		$statement->setFetchMode(PDO::FETCH_ASSOC);
 		$statement->execute();
@@ -327,7 +337,7 @@ final class PerihelionPersonList {
 
 }
 
-final class PerihelionPersonListParameters {
+	final class PerihelionPersonListParameters {
 
 	// list filters
 	public ?int $personID;
@@ -350,6 +360,7 @@ final class PerihelionPersonListParameters {
 	public ?string $personMobileTelephone;
 	public ?string $personOfficeTelephone;
 	public ?string $personFax;
+	public ?int $personAcceptsTelephoneCalls;
 	public ?string $personMemo;
 	public ?string $personEmail1;
 	public ?string $personEmail2;
@@ -360,6 +371,7 @@ final class PerihelionPersonListParameters {
 	public ?string $personAgeGroup;
 	public ?string $personGuardian;
 	public ?int $personActive;
+	public ?string $languagePreference;
 
 	// view parameters
 	public string $baseURL;
@@ -405,6 +417,7 @@ final class PerihelionPersonListParameters {
 		$this->personAgeGroup = null;
 		$this->personGuardian = null;
 		$this->personActive = null;
+		$this->languagePreference = null;
 
 		// view parameters
 		$this->baseURL = '/' . Lang::prefix() . 'perihelion/person/';
