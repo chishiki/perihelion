@@ -407,6 +407,7 @@ final class PerihelionPersonList {
 		$this->personMobileTelephone = null;
 		$this->personOfficeTelephone = null;
 		$this->personFax = null;
+		$this->personAcceptsTelephoneCalls = null;
 		$this->personMemo = null;
 		$this->personEmail1 = null;
 		$this->personEmail2 = null;
