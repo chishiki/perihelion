@@ -226,8 +226,8 @@ final class PerihelionPersonList {
 		if (!is_null($arg->creator)) { $wheres[] = 'perihelion_Person.creator = :creator'; }
 		if (!is_null($arg->created)) { $wheres[] = 'perihelion_Person.created = :created'; }
 		if (!is_null($arg->updated)) { $wheres[] = 'perihelion_Person.updated = :updated'; }
-		if (!is_null($arg->personObject)) { $wheres[] = 'abbott_PersonMap.personMapObject = :personObject'; }
-		if (!is_null($arg->personObjectID)) { $wheres[] = 'abbott_PersonMap.personMapObjectID = :personObjectID'; }
+		if (!is_null($arg->personObject)) { $wheres[] = 'perihelion_PersonMap.personObject = :personObject'; }
+		if (!is_null($arg->personObjectID)) { $wheres[] = 'perihelion_PersonMap.personObjectID = :personObjectID'; }
 		if (!is_null($arg->personLastNameEnglish)) { $wheres[] = 'perihelion_Person.personLastNameEnglish = :personLastNameEnglish'; }
 		if (!is_null($arg->personFirstNameEnglish)) { $wheres[] = 'perihelion_Person.personFirstNameEnglish = :personFirstNameEnglish'; }
 		if (!is_null($arg->personLastNameJapanese)) { $wheres[] = 'perihelion_Person.personLastNameJapanese = :personLastNameJapanese'; }
@@ -272,8 +272,8 @@ final class PerihelionPersonList {
 		if (!empty($orderBys)) { $orderBy = ' ORDER BY ' . implode(', ', $orderBys); }
 
 		// BUILD QUERY
-		$query = 'SELECT ' . $selector . ' FROM abbott_PersonMap ';
-		$query .= 'LEFT JOIN perihelion_Person ON abbott_PersonMap.personID = perihelion_Person.personID ';
+		$query = 'SELECT ' . $selector . ' FROM perihelion_PersonMap ';
+		$query .= 'LEFT JOIN perihelion_Person ON perihelion_PersonMap.personID = perihelion_Person.personID ';
 		$query .= $where . ' ' . $groupBy . ' ' . $orderBy;
 		if ($arg->limit) { $query .= ' LIMIT ' . ($arg->offset?$arg->offset.', ':'') . $arg->limit; }
 
