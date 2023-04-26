@@ -6,7 +6,7 @@ if (file_exists($awsAutoloaderPath)) { require($_SERVER['DOCUMENT_ROOT'] . '/per
 // https://aws.amazon.com/sdk-for-php/
 // https://docs.aws.amazon.com/sdk-for-php/v3/developer-guide/welcome.html
 // https://github.com/aws/aws-sdk-php
-	
+
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/controller/interface/state.controller.interface.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/controller/interface/view.controller.interface.php');
 
@@ -82,6 +82,7 @@ require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/model/newsletterSubscriptio
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/model/note.model.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/model/page.model.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/model/person.model.php');
+require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/model/personMap.model.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/model/phpinfo.model.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/model/print.model.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/perihelion/php/model/project.model.php');

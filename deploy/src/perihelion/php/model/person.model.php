@@ -9,8 +9,6 @@ CREATE TABLE `perihelion_Person` (
   `created` datetime NOT NULL,
   `updated` datetime DEFAULT NULL,
   `deleted` int NOT NULL,
-  `personObject` varchar(50) NOT NULL,
-  `personObjectID` int DEFAULT NULL,
   `personLastNameEnglish` varchar(255) DEFAULT NULL,
   `personFirstNameEnglish` varchar(255) DEFAULT NULL,
   `personLastNameJapanese` varchar(255) DEFAULT NULL,
@@ -50,8 +48,6 @@ final class Person extends ORM {
 	public string $created;
 	public ?string $updated;
 	public int $deleted;
-	public ?string $personObject;
-	public ?int $personObjectID;
 	public ?string $personLastNameEnglish;
 	public ?string $personFirstNameEnglish;
 	public ?string $personLastNameJapanese;
@@ -89,8 +85,6 @@ final class Person extends ORM {
 		$this->created = $dt->format('Y-m-d H:i:s');
 		$this->updated = null;
 		$this->deleted = 0;
-		$this->personObject = '';
-		$this->personObjectID = null;
 		$this->personLastNameEnglish = null;
 		$this->personFirstNameEnglish = null;
 		$this->personLastNameJapanese = null;
@@ -232,8 +226,8 @@ final class PerihelionPersonList {
 		if (!is_null($arg->creator)) { $wheres[] = 'perihelion_Person.creator = :creator'; }
 		if (!is_null($arg->created)) { $wheres[] = 'perihelion_Person.created = :created'; }
 		if (!is_null($arg->updated)) { $wheres[] = 'perihelion_Person.updated = :updated'; }
-		if (!is_null($arg->personObject)) { $wheres[] = 'perihelion_Person.personObject = :personObject'; }
-		if (!is_null($arg->personObjectID)) { $wheres[] = 'perihelion_Person.personObjectID = :personObjectID'; }
+		if (!is_null($arg->personObject)) { $wheres[] = 'abbott_PersonMap.personMapObject = :personObject'; }
+		if (!is_null($arg->personObjectID)) { $wheres[] = 'abbott_PersonMap.personMapObjectID = :personObjectID'; }
 		if (!is_null($arg->personLastNameEnglish)) { $wheres[] = 'perihelion_Person.personLastNameEnglish = :personLastNameEnglish'; }
 		if (!is_null($arg->personFirstNameEnglish)) { $wheres[] = 'perihelion_Person.personFirstNameEnglish = :personFirstNameEnglish'; }
 		if (!is_null($arg->personLastNameJapanese)) { $wheres[] = 'perihelion_Person.personLastNameJapanese = :personLastNameJapanese'; }
@@ -267,6 +261,9 @@ final class PerihelionPersonList {
 		foreach ($arg->resultSet AS $fieldAlias) { $selectorArray[] = $fieldAlias['field'] . ' AS ' . $fieldAlias['alias']; }
 		$selector = implode(', ', $selectorArray);
 
+		// GROUP BY
+		$groupBy = 'GROUP BY personID';
+
 		// ORDER BY
 		$orderBys = array();
 		foreach ($arg->orderBy AS $fieldSort) { $orderBys[] = $fieldSort['field'] . ' ' . $fieldSort['sort']; }
@@ -275,7 +272,9 @@ final class PerihelionPersonList {
 		if (!empty($orderBys)) { $orderBy = ' ORDER BY ' . implode(', ', $orderBys); }
 
 		// BUILD QUERY
-		$query = 'SELECT ' . $selector . ' FROM perihelion_Person' . $where . $orderBy;
+		$query = 'SELECT ' . $selector . ' FROM abbott_PersonMap ';
+		$query .= 'LEFT JOIN perihelion_Person ON abbott_PersonMap.personID = perihelion_Person.personID ';
+		$query .= $where . ' ' . $groupBy . ' ' . $orderBy;
 		if ($arg->limit) { $query .= ' LIMIT ' . ($arg->offset?$arg->offset.', ':'') . $arg->limit; }
 
 		// PREPARE QUERY, BIND PARAMS, EXECUTE QUERY
@@ -337,7 +336,7 @@ final class PerihelionPersonList {
 
 }
 
-	final class PerihelionPersonListParameters {
+final class PerihelionPersonListParameters {
 
 	// list filters
 	public ?int $personID;
