@@ -183,7 +183,7 @@ final class PersonMapParameters {
 
 		// results, order, limit, offset
 		$this->resultSet = array();
-		$object = new Person();
+		$object = new PersonMap();
 		foreach ($object AS $key => $value) {
 			$this->resultSet[] = array('field' => 'perihelion_PersonMap.'.$key, 'alias' => $key);
 		}
