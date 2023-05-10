@@ -222,6 +222,8 @@ final class PerihelionPersonList {
 		$wheres = array();
 		$wheres[] = 'perihelion_Person.deleted = 0';
 		$wheres[] = 'perihelion_Person.siteID = :siteID';
+		$wheres[] = 'perihelion_PersonMap.deleted = 0';
+		$wheres[] = 'perihelion_PersonMap.siteID = :siteID';
 		if (!is_null($arg->personID)) { $wheres[] = 'perihelion_Person.personID = :personID'; }
 		if (!is_null($arg->creator)) { $wheres[] = 'perihelion_Person.creator = :creator'; }
 		if (!is_null($arg->created)) { $wheres[] = 'perihelion_Person.created = :created'; }
